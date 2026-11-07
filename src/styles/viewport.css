@@ -2260,3 +2260,27 @@ html {
     -webkit-line-clamp: 4;
   }
 }
+
+/* All dealt cards share a single camera; pair origins never reflow. */
+.table-world .playing-card .corner,
+.table-world .playing-card .corner b {
+  font-size: var(--camera-rank-size, 22px);
+}
+.table-world .playing-card .corner {
+  width: var(--camera-rank-width, 27px);
+}
+.table-world {
+  will-change: transform;
+}
+
+.table-world .corner,
+.table-world .corner b {
+  transition:
+    font-size 700ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    width 700ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* A packed hand needs the space for card faces; the defender label stays visible. */
+.camera-tight .turn-label small {
+  display: none;
+}

@@ -55,7 +55,7 @@ const server = http
       [844, 390],
       [1366, 768],
     ])
-      for (const count of [6, 12, 24, 35]) {
+      for (const count of [6, 12, 24, 26, 35]) {
         const context = await browser.newContext({
           viewport: { width: w, height: h },
           isMobile: w < 1000,
@@ -90,6 +90,20 @@ const server = http
         s.phase = "attacking";
         s.discard = [];
         s.table = [];
+        if (count === 26) {
+          s.players[0].hand = Array.from({ length: 26 }, (_, i) => i + 8);
+          s.players[1].hand = [34, 35];
+          s.deck = [];
+          s.discard = [];
+          s.table = Array.from({ length: 4 }, (_, i) => ({
+            attack: i * 2,
+            defense: i * 2 + 1,
+          }));
+          s.trump = 3;
+          s.trumpCard = 35;
+          s.phase = "adding";
+          s.limit = 6;
+        }
         p.game = s;
         E.invariant(s);
         await page.addInitScript(
@@ -145,6 +159,27 @@ const server = http
           `${w}x${h}/${count}: inaccessible cards`,
         );
         assert.ok(metrics.trump);
+        if (count === 26) {
+          const readable = await page
+            .locator(".pairs .playing-card")
+            .evaluateAll((xs) =>
+              xs.every((x) => {
+                const r = x.getBoundingClientRect(),
+                  b = x.closest(".table-zone").getBoundingClientRect();
+                return (
+                  r.width >= 49 &&
+                  r.top >= b.top &&
+                  r.bottom <= b.bottom &&
+                  r.left >= b.left &&
+                  r.right <= b.right
+                );
+              }),
+            );
+          assert.ok(
+            readable,
+            `${w}x${h}: 26 cards in hand and four pairs must remain readable`,
+          );
+        }
         assert.equal(
           await page.locator('[data-action="event-gallery"]').count(),
           0,

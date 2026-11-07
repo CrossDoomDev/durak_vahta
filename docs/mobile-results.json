@@ -19,6 +19,12 @@
   },
   {
     "viewport": "360x800",
+    "cards": 26,
+    "allCardsVisibleAndTappable": true,
+    "noHandScroll": true
+  },
+  {
+    "viewport": "360x800",
     "cards": 35,
     "allCardsVisibleAndTappable": true,
     "noHandScroll": true
@@ -43,6 +49,12 @@
   },
   {
     "viewport": "390x844",
+    "cards": 26,
+    "allCardsVisibleAndTappable": true,
+    "noHandScroll": true
+  },
+  {
+    "viewport": "390x844",
     "cards": 35,
     "allCardsVisibleAndTappable": true,
     "noHandScroll": true
@@ -67,6 +79,12 @@
   },
   {
     "viewport": "412x915",
+    "cards": 26,
+    "allCardsVisibleAndTappable": true,
+    "noHandScroll": true
+  },
+  {
+    "viewport": "412x915",
     "cards": 35,
     "allCardsVisibleAndTappable": true,
     "noHandScroll": true
@@ -86,6 +104,12 @@
   {
     "viewport": "740x360",
     "cards": 24,
+    "allCardsVisibleAndTappable": true,
+    "noHandScroll": true
+  },
+  {
+    "viewport": "740x360",
+    "cards": 26,
     "allCardsVisibleAndTappable": true,
     "noHandScroll": true
   },
@@ -110,6 +134,12 @@
   {
     "viewport": "844x390",
     "cards": 24,
+    "allCardsVisibleAndTappable": true,
+    "noHandScroll": true
+  },
+  {
+    "viewport": "844x390",
+    "cards": 26,
     "allCardsVisibleAndTappable": true,
     "noHandScroll": true
   },
@@ -134,6 +164,12 @@
   {
     "viewport": "1366x768",
     "cards": 24,
+    "allCardsVisibleAndTappable": true,
+    "noHandScroll": true
+  },
+  {
+    "viewport": "1366x768",
+    "cards": 26,
     "allCardsVisibleAndTappable": true,
     "noHandScroll": true
   },

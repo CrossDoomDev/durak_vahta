@@ -229,7 +229,7 @@
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><button data-action="talk" data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs" data-game="${esc(G.gameId)}" data-round="${G.round}">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><button data-action="talk" data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
@@ -442,6 +442,11 @@
       pairs = $(".pairs");
     if (!table || !pairs) return;
     const count = pairs.querySelectorAll(".card-pair").length;
+    const hintKey = `${pairs.dataset.game}:${pairs.dataset.round}`;
+    if (cameraHintState.key !== hintKey)
+      cameraHintState = { key: hintKey, hidden: false };
+    cameraHintState.hidden ||= innerWidth < 750 && table.clientHeight < 340;
+    $(".game-scene").classList.toggle("camera-tight", cameraHintState.hidden);
     $(".game-scene").classList.toggle(
       "dense-table",
       table.clientHeight < (innerWidth < 750 ? 340 : 280) ||
@@ -449,81 +454,10 @@
     );
     layoutPairs(pairs, count);
   }
-  function layoutPairs(pairs, count) {
-    if (!count) return;
-    pairs.style.display = "block";
-    if (pairs.closest(".battle")) pairs.style.position = "relative";
-    const style = getComputedStyle(pairs);
-    const gapX = parseFloat(style.columnGap) || 0;
-    const gapY = parseFloat(style.rowGap) || 0;
-    const cols = Math.min(count, innerWidth > innerHeight ? 6 : 3);
-    const rows = Math.ceil(count / cols);
-    pairs.style.setProperty("--pair-cols", cols);
-    const battle = pairs.closest(".battle");
-    const occupied = battle
-      ? [...battle.children]
-          .filter(
-            (el) =>
-              el !== pairs &&
-              el.getClientRects().length &&
-              getComputedStyle(el).display !== "none",
-          )
-          .reduce((sum, el) => {
-            const st = getComputedStyle(el);
-            return (
-              sum +
-              el.getBoundingClientRect().height +
-              (parseFloat(st.marginTop) || 0) +
-              (parseFloat(st.marginBottom) || 0)
-            );
-          }, 0)
-      : 0;
-    const availableHeight = battle
-      ? battle.clientHeight - occupied
-      : pairs.clientHeight;
-    const width = Math.min(
-      100,
-      (pairs.clientWidth - (cols - 1) * gapX) / cols - 24,
-      ((availableHeight - (rows - 1) * gapY) / rows - 20) / 1.44,
-    );
-    pairs.style.setProperty("--pair-cols", cols);
-    pairs.style.setProperty("--table-card-width", Math.floor(width) + "px");
-    pairs.style.setProperty(
-      "--table-card-height",
-      Math.floor(width * 1.44) + "px",
-    );
-    const cw = Math.floor(width),
-      ch = Math.floor(width * 1.44);
-    const pairWidth = cw + 24,
-      pairHeight = ch + 20;
-    const top = Math.max(
-      0,
-      (availableHeight - (rows * pairHeight + (rows - 1) * gapY)) / 2,
-    );
-    pairs.querySelectorAll(".card-pair").forEach((pair, i) => {
-      const row = Math.floor(i / cols),
-        col = i % cols;
-      const inRow = Math.min(cols, count - row * cols);
-      const left =
-        (pairs.clientWidth - (inRow * pairWidth + (inRow - 1) * gapX)) / 2;
-      Object.assign(pair.style, {
-        position: "absolute",
-        boxSizing: "border-box",
-        padding: "0",
-        minHeight: "0",
-        maxHeight: pairHeight + "px",
-        minWidth: "0",
-        maxWidth: pairWidth + "px",
-        width: pairWidth + "px",
-        height: pairHeight + "px",
-        left: left + col * (pairWidth + gapX) + "px",
-        top: top + row * (pairHeight + gapY) + "px",
-      });
-      for (const card of pair.querySelectorAll(".playing-card")) {
-        card.style.width = cw + "px";
-        card.style.height = ch + "px";
-      }
-    });
+  let cameraHintState = { key: null, hidden: false };
+  const tableCamera = new VahtaTableCamera(() => P.settings);
+  function layoutPairs(pairs, count, options = {}) {
+    return tableCamera.layout(pairs, count, options);
   }
   const tableResizeObserver =
     typeof ResizeObserver === "function"
@@ -1179,6 +1113,7 @@
     clearTimeout(timer);
     audio.pause(document.hidden || paused);
     if (document.hidden) {
+      tableCamera.finish();
       motion.finish();
       persist();
     } else if (screen === "game") scheduleBot();

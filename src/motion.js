@@ -140,6 +140,7 @@
                   `.hand .playing-card[data-card="${a.card}"]`,
                 )
               : null;
+          await this.layout?.(pairs, visual.length);
           const from = this.rect(source || sourceSeat);
           const measuring = pairs.cloneNode(false),
             bounds = pairs.getBoundingClientRect();
@@ -155,7 +156,7 @@
           });
           measuring.innerHTML = this.tableHTML(visual);
           document.body.append(measuring);
-          this.layout?.(measuring, visual.length);
+          this.layout?.(measuring, visual.length, { measure: true });
           const targetEl = measuring.querySelector(
               `.playing-card[data-card="${a.card}"]`,
             ),

@@ -1,0 +1,20 @@
+[
+  {
+    "restoredTableFitsImmediately": true,
+    "viewport": "390x844",
+    "fixedSlots": true,
+    "sharedSmoothZoom": true,
+    "noZoomInDuringRound": true,
+    "coverDoesNotMoveAttack": true,
+    "resetForNextRound": true
+  },
+  {
+    "restoredTableFitsImmediately": true,
+    "viewport": "740x360",
+    "fixedSlots": true,
+    "sharedSmoothZoom": true,
+    "noZoomInDuringRound": true,
+    "coverDoesNotMoveAttack": true,
+    "resetForNextRound": true
+  }
+]

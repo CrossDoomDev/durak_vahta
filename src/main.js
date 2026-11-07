@@ -67,7 +67,7 @@
   const name = (i) => `<span data-name="${i}"></span>`,
     playerName = () => "<span data-player-name></span>";
   function sprite(sheet, index, cols, rows, classes = "", extra = "") {
-    return `<span class="sprite ${classes}" style="background-image:url('public/assets/${sheet}.webp');background-size:${cols * 100}% ${rows * 100}%;background-position:${((index % cols) / (cols - 1)) * 100}% ${(Math.floor(index / cols) / (rows - 1)) * 100}%;${extra}"></span>`;
+    return `<span class="sprite ${classes}" style="background-image:url('public/assets/${sheet}.webp?v=${globalThis.VahtaBuild?.id || "dev"}');background-size:${cols * 100}% ${rows * 100}%;background-position:${((index % cols) / (cols - 1)) * 100}% ${(Math.floor(index / cols) / (rows - 1)) * 100}%;${extra}"></span>`;
   }
   function avatar(npc, em = 0, classes = "") {
     if (npc >= 6)
@@ -119,7 +119,7 @@
     return `<main class="welcome"><div class="welcome-art">${sprite("decor", 4, 4, 3, "welcome-mark")}<span class="eyebrow">ДОРОГА ЗАКОНЧИЛАСЬ. ВАХТА НАЧАЛАСЬ.</span><h1>ДУРАК<br><em>НА ВАХТЕ</em></h1><p>За окном мороз. За столом — свои.</p></div><form id="name-form" class="paper onboarding">${avatar(5)}<span class="eyebrow">ПРОПУСК В БЫТОВКУ</span><h2>Как тебя зовут, боец?</h2><label for="player-name">Имя для коллег за столом</label><input id="player-name" name="name" autocomplete="given-name" maxlength="24" placeholder="Например, Саша" required><small id="name-help">2–24 буквы, пробелы и дефисы.</small><button class="btn primary" id="name-submit" type="submit" disabled>Поехали на вахту</button><p class="fine">Работает без интернета. Всё сохраняется только на этом устройстве.</p><p class="fine">18+ · В диалогах есть мат. Его можно отключить в настройках.</p></form></main>`;
   }
   function menu() {
-    return `${header()}<main class="menu"><section class="menu-copy"><span class="eyebrow">ЧЕСТНЫЕ КАРТЫ. НЕЧЕСТНО ДОЛГАЯ ВАХТА.</span><h1>ДУРАК<br><em>НА ВАХТЕ</em></h1><p>Чай налит. Колода перемешана.<br>Осталось выяснить, кто сегодня дежурный.</p><div class="menu-actions">${G && !G.finished ? button("Продолжить партию", "continue", "primary") : ""}${button("Новая партия", "setup", G && !G.finished ? "" : "primary")}<div class="menu-grid">${button("Колода", "gallery")}${button("Достижения", "achievements")}${button("Профиль", "profile")}${button("Настройки", "settings")}${button("Правила", "rules")}</div></div><div class="menu-foot"><span class="status-dot"></span>ОФЛАЙН · БЕЗ СТАВОК · ТОЛЬКО СВОИ</div></section><section class="menu-crew" aria-label="Коллеги по вахте"><div class="crew-pictures">${avatar(1, 1, "crew-side")}${avatar(0, 0, "crew-main")}${avatar(4, 0, "crew-side")}</div><blockquote id="menu-quote"></blockquote><small>ПАЛЫЧ · 30 ЛЕТ СТАЖА, НИ ДНЯ БЕЗ КАРТ</small></section></main>`;
+    return `${header()}<main class="menu"><section class="menu-copy"><span class="eyebrow">ЧЕСТНЫЕ КАРТЫ. НЕЧЕСТНО ДОЛГАЯ ВАХТА.</span><h1>ДУРАК<br><em>НА ВАХТЕ</em></h1><p>Чай налит. Колода перемешана.<br>Осталось выяснить, кто сегодня дежурный.</p><div class="menu-actions">${G && !G.finished ? button("Продолжить партию", "continue", "primary") : ""}${button("Новая партия", "setup", G && !G.finished ? "" : "primary")}<div class="menu-grid">${button("Колода", "gallery")}${button("Достижения", "achievements")}${button("Профиль", "profile")}${button("Настройки", "settings")}${button("Правила", "rules")}</div></div><div class="menu-foot"><span class="status-dot"></span>ОФЛАЙН · БЕЗ СТАВОК · ТОЛЬКО СВОИ <span class="build-version">v${esc(globalThis.VahtaBuild?.version || "dev")}</span></div></section><section class="menu-crew" aria-label="Коллеги по вахте"><div class="crew-pictures">${avatar(1, 1, "crew-side")}${avatar(0, 0, "crew-main")}${avatar(4, 0, "crew-side")}</div><blockquote id="menu-quote"></blockquote><small>ПАЛЫЧ · 30 ЛЕТ СТАЖА, НИ ДНЯ БЕЗ КАРТ</small></section></main>`;
   }
   function tabs(key, entries) {
     return `<nav class="tabs screen-tabs" aria-label="Разделы">${entries.map(([id, label]) => button(label, "view-tab", view[key] === id ? "primary" : "", `data-key="${key}" data-value="${id}" aria-pressed="${view[key] === id}"`)).join("")}</nav>`;
@@ -1173,7 +1173,11 @@
           const img = new Image();
           img.onload = () => resolve(true);
           img.onerror = () => resolve(false);
-          img.src = "public/assets/" + name + ".webp";
+          img.src =
+            "public/assets/" +
+            name +
+            ".webp?v=" +
+            (globalThis.VahtaBuild?.id || "dev");
         }),
     ),
   ).then((results) => {
@@ -1190,7 +1194,3 @@
   document.fonts.ready.then(layoutHands);
   if (loaded.warning) toast(loaded.warning);
 })();
-// Optional installation cache for HTTP/localhost launches; file:// needs no service worker.
-if (location.protocol === "http:" || location.protocol === "https:") {
-  navigator.serviceWorker?.register("./sw.js").catch(() => {});
-}

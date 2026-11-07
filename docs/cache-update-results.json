@@ -1,0 +1,12 @@
+{
+  "current": "2586d60e8d9d4d43",
+  "future": "4832d2fc370d02e2",
+  "scenarios": [
+    "Reproduced old HTML/JS/CSS served by legacy cache-first worker",
+    "Immediate refresh during legacy-worker migration keeps the new release",
+    "Unique release link migrates old cache without clearing profile or game",
+    "Ordinary reload bypasses stale cached root HTML and loads matching new JS/CSS",
+    "Name, XP, saved game and RNG survive both updates exactly",
+    "Newest installed release still loads offline, with matching code and styles"
+  ]
+}

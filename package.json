@@ -1,6 +1,6 @@
 {
   "name": "durak-na-vahte",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "description": "Офлайн дурак с вахтовыми происшествиями",
   "scripts": {
@@ -11,7 +11,9 @@
     "package": "node scripts/package.cjs",
     "test:mobile": "node tests/mobile.cjs",
     "test:motion": "node tests/motion.cjs",
-    "test:crew": "node tests/crew.cjs"
+    "test:crew": "node tests/crew.cjs",
+    "test:viewport": "node tests/viewport.cjs",
+    "test:results": "node tests/results-layout.cjs"
   },
   "devDependencies": {
     "playwright": "1.63.0"

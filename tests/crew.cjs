@@ -66,9 +66,16 @@ const server = http
       );
       await page.goto("http://127.0.0.1:8791/index.html");
       await page.locator('[data-action="setup"]').click();
-      assert.equal(await page.locator(".npc-card").count(), 10);
       await page.locator("#count").selectOption("2");
+      await page.locator('.screen-tabs [data-value="crew"]').click();
+
       await page.locator('[data-action="npc"][data-id="0"]').click();
+      while (
+        !(await page
+          .locator(`[data-action="npc"][data-id="${npc.id}"]`)
+          .count())
+      )
+        await page.locator('[data-action="page-next"]').click();
       await page.locator(`[data-action="npc"][data-id="${npc.id}"]`).click();
       if (npc.id === 10)
         await page.screenshot({

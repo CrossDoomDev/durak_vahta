@@ -93,21 +93,29 @@ const server = http
       "onboarding/name validation and personalized dialogue",
     );
     await page.locator('[data-action="settings"]').click();
+    await page.locator('[data-value="motion"]').click();
     await page.locator('[data-setting="fast"]').check();
+    await page.locator('[data-value="audio"]').click();
     await page.locator('[data-setting="music"]').fill("0");
     await page.locator('[data-setting="sfx"]').fill("0");
     await page.locator('[data-action="back"]').first().click();
     await page.locator('[data-action="setup"]').click();
     await page.locator("#variant").selectOption("transfer");
     await page.locator("#frequency").selectOption("mad");
-    assert.equal(await page.locator(".npc-card").count(), 10);
+    await page.locator('.screen-tabs [data-value="crew"]').click();
+    assert.equal(await page.locator(".npc-card").count(), 4);
     assert.ok(
       (await page.locator('.npc-card[data-id="2"]').textContent()).includes(
         "Монтажник",
       ),
     );
-    for (const id of [0, 1, 2, 6, 9, 10])
+    for (const id of [0, 1, 2, 6, 9, 10]) {
+      while (
+        !(await page.locator(`[data-action="npc"][data-id="${id}"]`).count())
+      )
+        await page.locator('[data-action="page-next"]').click();
       await page.locator(`[data-action="npc"][data-id="${id}"]`).click();
+    }
 
     await page.screenshot({ path: path.join(out, "02-opponents-1366.png") });
     await page.locator('[data-action="start"]').click();
@@ -187,20 +195,27 @@ const server = http
             const s = JSON.parse(localStorage.getItem("durak-vahta-v1")).game;
             return VahtaEvents.botEvent(s);
           });
-          const radio = page.locator(
-            `input[name="event-choice"][value="${choice.choice}"]`,
-          );
-          if (await radio.count()) await radio.check();
-          const target = page.locator(
-            `[data-action="event-target"][data-id="${choice.target}"]`,
-          );
-          if (await target.count()) await target.click();
-          const card = page.locator(
-            `[data-action="event-card"][data-card="${choice.card}"]`,
-          );
-          if (await card.count())
-            await card.click({ position: { x: 10, y: 10 } });
-          await page.locator('[data-action="event-accept"]').click();
+          for (let stage = 0; stage < 7; stage++) {
+            const radio = page.locator(
+              `input[name="event-choice"][value="${choice.choice}"]`,
+            );
+            if (await radio.count()) await radio.check();
+            const target = page.locator(
+              `[data-action="event-target"][data-id="${choice.target}"]`,
+            );
+            if (await target.count()) await target.click();
+            const card = page.locator(
+              `[data-action="event-card"][data-card="${choice.card}"]`,
+            );
+            if (await card.count())
+              await card.click({ position: { x: 10, y: 10 } });
+            if (await page.locator('[data-action="event-next"]').count())
+              await page.locator('[data-action="event-next"]').click();
+            else {
+              await page.locator('[data-action="event-accept"]').click();
+              break;
+            }
+          }
           continue;
         }
         if (s.actor !== 0) {
@@ -239,14 +254,17 @@ const server = http
     );
     await page.locator('.results [data-action="menu"]').click();
     await page.locator('[data-action="profile"]').first().click();
+    await page.locator('[data-value="saves"]').click();
     const dl = page.waitForEvent("download");
     await page.locator('[data-action="export"]').click();
     const d = await dl;
     const exported = await d.path();
     const raw = JSON.parse(fs.readFileSync(exported, "utf8"));
     assert.equal(raw.name, "Анна-Мария");
+    await page.locator('[data-value="identity"]').click();
     await page.locator("#profile-name").fill("Иван Петров");
     await page.locator('[data-action="save-name"]').click();
+    await page.locator('[data-value="saves"]').click();
     await page.locator("#import-file").setInputFiles({
       name: "save.json",
       mimeType: "application/json",
@@ -270,10 +288,16 @@ const server = http
       0,
     );
     await page.locator('[data-action="gallery-cards"]').click();
-    assert.equal(
-      await page.locator(".gallery-cards .playing-card").count(),
-      36,
-    );
+    const galleryIds = new Set();
+    do {
+      for (const id of await page
+        .locator(".gallery-cards .playing-card")
+        .evaluateAll((xs) => xs.map((x) => x.dataset.card)))
+        galleryIds.add(id);
+      if (await page.locator('[data-action="page-next"]').isDisabled()) break;
+      await page.locator('[data-action="page-next"]').click();
+    } while (true);
+    assert.equal(galleryIds.size, 36);
     report.scenarios.push(
       "36-card gallery; no event previews or spoiler access",
     );

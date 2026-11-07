@@ -33,6 +33,15 @@
     lastActionAt = Date.now(),
     galleryMode = "cards",
     newAchievements = [];
+  const view = {
+    setup: "conditions",
+    settings: "general",
+    profile: "identity",
+  };
+  const pageIndex = {};
+  let eventStep = 0,
+    eventKey = "",
+    profileDraft = null;
   let setup = {
     count: 4,
     npcs: [0, 1, 2],
@@ -112,14 +121,31 @@
   function menu() {
     return `${header()}<main class="menu"><section class="menu-copy"><span class="eyebrow">ЧЕСТНЫЕ КАРТЫ. НЕЧЕСТНО ДОЛГАЯ ВАХТА.</span><h1>ДУРАК<br><em>НА ВАХТЕ</em></h1><p>Чай налит. Колода перемешана.<br>Осталось выяснить, кто сегодня дежурный.</p><div class="menu-actions">${G && !G.finished ? button("Продолжить партию", "continue", "primary") : ""}${button("Новая партия", "setup", G && !G.finished ? "" : "primary")}<div class="menu-grid">${button("Колода", "gallery")}${button("Достижения", "achievements")}${button("Профиль", "profile")}${button("Настройки", "settings")}${button("Правила", "rules")}</div></div><div class="menu-foot"><span class="status-dot"></span>ОФЛАЙН · БЕЗ СТАВОК · ТОЛЬКО СВОИ</div></section><section class="menu-crew" aria-label="Коллеги по вахте"><div class="crew-pictures">${avatar(1, 1, "crew-side")}${avatar(0, 0, "crew-main")}${avatar(4, 0, "crew-side")}</div><blockquote id="menu-quote"></blockquote><small>ПАЛЫЧ · 30 ЛЕТ СТАЖА, НИ ДНЯ БЕЗ КАРТ</small></section></main>`;
   }
+  function tabs(key, entries) {
+    return `<nav class="tabs screen-tabs" aria-label="Разделы">${entries.map(([id, label]) => button(label, "view-tab", view[key] === id ? "primary" : "", `data-key="${key}" data-value="${id}" aria-pressed="${view[key] === id}"`)).join("")}</nav>`;
+  }
+  function slicePage(key, items, size) {
+    const total = Math.max(1, Math.ceil(items.length / size));
+    const page = Math.min(pageIndex[key] || 0, total - 1);
+    pageIndex[key] = page;
+    return {
+      items: items.slice(page * size, (page + 1) * size),
+      nav: `<nav class="pager" aria-label="Страницы">${button("← Назад", "page-prev", "small", `data-key="${key}" ${page === 0 ? "disabled" : ""}`)}<span aria-live="polite">${page + 1} / ${total}</span>${button("Далее →", "page-next", "small", `data-key="${key}" ${page === total - 1 ? "disabled" : ""}`)}</nav>`,
+    };
+  }
+  const lowScreen = () => innerHeight < 500;
   function setupPage() {
+    const roster = slicePage("roster", C.NPC, innerWidth >= 1000 ? 4 : 2);
     return panelPage(
-      heading(
-        "НАРЯД НА ВЕЧЕР",
-        "С кем сядем за стол?",
-        "Классические правила — отдельно. Производственный хаос — по желанию.",
-      ) +
-        `<div class="setup-layout"><section class="paper setup-controls"><h2>Условия смены</h2><label>Правила<select id="variant"><option value="standard">Подкидной</option><option value="transfer">Переводной</option></select></label><label>За столом<select id="count">${[2, 3, 4].map((n) => `<option value="${n}">${n} участника</option>`).join("")}</select></label><label>Сложность ботов<select id="difficulty"><option value="easy">Новичок</option><option value="medium">Бывалый</option><option value="hard">Палыч</option></select></label><label class="check"><input type="checkbox" id="chaos">Вахтовый беспредел</label><p class="fine">Отдельная колода из 30 происшествий. Эффекты только между раундами.</p><label>Частота происшествий<select id="frequency"><option value="rare">Редко · 2 триггера</option><option value="normal">Нормально · 4 триггера</option><option value="mad">Полный беспредел · 6 триггеров</option></select></label>${button("Начать партию", "start", "primary")}<p id="roster-help" class="fine"></p></section><section><div class="roster-top"><h2>Твоя бригада</h2>${button("Случайный состав", "random-roster", "small")}</div><div class="npc-grid">${C.NPC.map((n) => `<button class="npc-card ${setup.npcs.includes(n.id) ? "chosen" : ""}" data-action="npc" data-id="${n.id}" aria-pressed="${setup.npcs.includes(n.id)}">${avatar(n.id)}<span class="npc-info"><strong>${n.name}</strong><small>${n.job}</small><p>${n.style}</p><b>${setup.npcs.includes(n.id) ? "В бригаде" : "Выбрать"}</b></span></button>`).join("")}</div></section></div>`,
+      heading("НАРЯД НА ВЕЧЕР", "Новая партия") +
+        tabs("setup", [
+          ["conditions", "Условия"],
+          ["crew", "Бригада"],
+        ]) +
+        (view.setup === "conditions"
+          ? `<section class="paper setup-controls screen-content"><div class="form-grid"><label>Правила<select id="variant"><option value="standard">Подкидной</option><option value="transfer">Переводной</option></select></label><label>За столом<select id="count">${[2, 3, 4].map((n) => `<option value="${n}">${n} участника</option>`).join("")}</select></label><label>Боты<select id="difficulty"><option value="easy">Новичок</option><option value="medium">Бывалый</option><option value="hard">Палыч</option></select></label><label>Происшествия<select id="frequency"><option value="rare">Редко</option><option value="normal">Обычно</option><option value="mad">Беспредел</option></select></label><label class="check wide"><input type="checkbox" id="chaos">Вахтовый беспредел</label></div><p class="fine setup-note">Секретная колода: сюрпризы между раундами. Без галочки — классический дурак.</p>${button("Выбрать бригаду →", "view-tab", "", 'data-key="setup" data-value="crew"')}</section>`
+          : `<section class="roster-screen screen-content"><div class="roster-top"><h2>Выбери соперников</h2>${button("Случайно", "random-roster", "small")}</div><div class="npc-grid">${roster.items.map((n) => `<button class="npc-card ${setup.npcs.includes(n.id) ? "chosen" : ""}" data-action="npc" data-id="${n.id}" aria-pressed="${setup.npcs.includes(n.id)}"><span class="npc-portrait">${avatar(n.id)}</span><span class="npc-info"><strong>${n.name}</strong><small>${n.job}</small><p>${n.style}</p><b>${setup.npcs.includes(n.id) ? "✓ В бригаде" : "Выбрать"}</b></span></button>`).join("")}</div>${roster.nav}</section>`) +
+        `<footer class="setup-footer"><div><strong>За столом: ${setup.npcs.map((id) => esc(C.NPC.find((n) => n.id === id).name)).join(", ") || "выбери коллег"}</strong><small id="roster-help"></small></div>${button("Играть", "start", "primary")}</footer>`,
     );
   }
   function cardArt(id) {
@@ -195,7 +221,7 @@
         ),
       )
       .join("");
-    return `${header()}<main class="game-scene"><div class="game-toolbar"><span class="eyebrow">${G.options.variant === "transfer" ? "ПЕРЕВОДНОЙ" : "ПОДКИДНОЙ"} · ${G.options.chaos ? "ВАХТОВЫЙ БЕСПРЕДЕЛ" : "КЛАССИКА"} · РАУНД ${G.round}</span><div>${button("Пауза", "pause", "small")}${button("Настройки", "settings", "small")}</div></div><div class="opponents">${G.players
+    return `${header()}<main class="game-scene"><div class="game-toolbar"><span class="eyebrow">${G.options.variant === "transfer" ? "ПЕРЕВОДНОЙ" : "ПОДКИДНОЙ"} · ${G.options.chaos ? "БЕСПРЕДЕЛ" : "КЛАССИКА"} · РАУНД ${G.round}</span><div>${button("Реплики", "talk", "small")}${button("Пауза", "pause", "small")}${button("Настройки", "settings", "small")}</div></div><div class="opponents">${G.players
       .slice(1)
       .map(
         (p, j) =>
@@ -203,15 +229,20 @@
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong>${G.options.chaos ? `<div class="event-stock" aria-label="Секретная колода происшествий">${backCard(true)}<span>СОБЫТИЯ ВАХТЫ<br>Секретная колода</span></div>` : ""}</aside><div class="battle"><div class="turn-label"><strong>${nameRole}</strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><div class="speech" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></div></div><div class="discard-target" aria-label="Отбой">Отбой</div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${role(0)} · ${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Завершить подкидывание" : "Бито / больше не подкидывать", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong>${G.options.chaos ? `<div class="event-stock" aria-label="Секретная колода происшествий">${backCard(true)}<span>СОБЫТИЯ ВАХТЫ<br>Секретная колода</span></div>` : ""}</aside><div class="battle"><div class="turn-label"><strong>${nameRole}</strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><button data-action="talk" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></button></div><div class="discard-target" aria-label="Отбой">Отбой</div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${role(0)} · ${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
     if (!v) return "";
     const e = EC[v.id],
       self = G.players[v.recipient],
-      human = v.recipient === 0 && !self.out,
-      kind = v.choices.length ? eventChoice : v.kind;
+      human = v.recipient === 0 && !self.out;
+    const key = `${G.round}:${G.event.id}:${G.metrics.events.length}`;
+    if (eventKey !== key) {
+      eventKey = key;
+      eventStep = 0;
+    }
+    const kind = v.choices.length ? eventChoice : v.kind;
     const needsCard = ["give", "discard", "swap_selected", "left"].includes(
         kind,
       ),
@@ -222,7 +253,22 @@
       kind === "discard"
         ? self.hand.filter((c) => E.card(c).suit !== G.trump)
         : self.hand;
-    return `<div class="modal event-modal" role="dialog" aria-modal="true" aria-labelledby="event-title"><div class="event-picture">${sprite("events", e.id, 6, 5, "event-art")}<span class="event-seal">ПРОИЗВОДСТВЕННАЯ НЕОБХОДИМОСТЬ</span></div><section class="event-copy"><span class="eyebrow">СОБЫТИЕ ${String(e.id + 1).padStart(2, "0")} / 30 · АДРЕСАТ ${name(v.recipient)}</span><h2 id="event-title">${esc(clean(e.title))}</h2><p class="event-story">${esc(clean(e.story))}</p><div class="effect-box"><strong>Что произойдёт</strong><p>${esc(clean(e.effect))}</p></div>${self.out ? "<p>Отменено по производственной необходимости: участник уже вышел.</p>" : ""}${human && v.choices.length ? `<fieldset><legend>Выбери распоряжение</legend>${v.choices.map(([value, label]) => `<label class="choice"><input type="radio" name="event-choice" value="${value}" ${eventChoice === value ? "checked" : ""}>${label}</label>`).join("")}</fieldset>` : ""}${human && needsTarget && v.targets.length ? `<fieldset><legend>Кому достанется?</legend><div class="target-list">${v.targets.map((i) => `<button data-action="event-target" data-id="${i}" class="target ${eventTarget === i ? "chosen" : ""}">${avatar(G.players[i].npc)}${name(i)}<small>${G.players[i].hand.length} карт</small></button>`).join("")}</div></fieldset>` : ""}${human && needsCard && eligible.length ? `<fieldset><legend>Выбери свою карту</legend><div class="event-hand">${eligible.map((c) => card(c, { action: "event-card", selected: eventCard === c })).join("")}</div></fieldset>` : ""}${human && ((needsCard && !eligible.length) || (needsTarget && !v.targets.length)) ? "<p>Подходящих карт или соперников нет — эффект будет отменён.</p>" : ""}${button(human ? "Исполнить распоряжение" : "Продолжить", "event-accept", "primary", human && ((v.choices.length && !eventChoice) || (needsCard && eligible.length && !eligible.includes(eventCard)) || (needsTarget && v.targets.length && !v.targets.includes(eventTarget))) ? "disabled" : "")}<p class="fine">Эффект применяется один раз между раундами. Текущая защита не прерывается.</p></section></div>`;
+    const steps = [
+      "story",
+      ...(human && v.choices.length ? ["choice"] : []),
+      ...(human && needsTarget && v.targets.length ? ["target"] : []),
+      ...(human && needsCard && eligible.length ? ["card"] : []),
+      ...(human ? ["confirm"] : []),
+    ];
+    eventStep = Math.min(eventStep, steps.length - 1);
+    const step = steps[eventStep],
+      last = eventStep === steps.length - 1;
+    const invalid =
+      (step === "choice" && !eventChoice) ||
+      (step === "target" && !v.targets.includes(eventTarget)) ||
+      (step === "card" && !eligible.includes(eventCard));
+    const summary = `${eventChoice ? v.choices.find((c) => c[0] === eventChoice)?.[1] || "" : ""}${eventTarget != null ? " · " + G.players[eventTarget].name : ""}${eventCard != null ? " · " + E.label(eventCard) : ""}`;
+    return `<div class="modal event-modal step-${step}" role="dialog" aria-modal="true" aria-labelledby="event-title"><div class="event-picture">${sprite("events", e.id, 6, 5, "event-art")}</div><section class="event-copy"><div class="event-heading"><span class="eyebrow">ПРОИСШЕСТВИЕ · ${eventStep + 1} / ${steps.length} · ${name(v.recipient)}</span><h2 id="event-title">${esc(clean(e.title))}</h2></div><div class="event-stage">${step === "story" ? `<p class="event-story">${esc(clean(e.story))}</p><div class="effect-box"><strong>Что произойдёт</strong><p>${esc(clean(e.effect))}</p></div>${self.out ? "<p>Участник уже вышел — эффект отменён.</p>" : ""}` : step === "choice" ? `<fieldset><legend>Выбери распоряжение</legend>${v.choices.map(([value, label]) => `<label class="choice"><input type="radio" name="event-choice" value="${value}" ${eventChoice === value ? "checked" : ""}>${label}</label>`).join("")}</fieldset>` : step === "target" ? `<fieldset><legend>Кому достанется?</legend><div class="target-list">${v.targets.map((i) => `<button data-action="event-target" data-id="${i}" class="target ${eventTarget === i ? "chosen" : ""}">${avatar(G.players[i].npc)}${name(i)}<small>${G.players[i].hand.length} карт</small></button>`).join("")}</div></fieldset>` : step === "card" ? `<fieldset><legend>Выбери свою карту</legend><div class="event-hand">${eligible.map((c) => card(c, { action: "event-card", selected: eventCard === c })).join("")}</div></fieldset>` : `<div class="effect-box"><strong>Распоряжение готово</strong><p>${esc(clean(e.effect))}</p></div><p class="event-summary">${esc(summary)}</p>${(needsCard && !eligible.length) || (needsTarget && !v.targets.length) ? "<p>Нет подходящей карты или соперника. Эффект отменяется.</p>" : ""}`}</div><footer class="event-actions">${eventStep > 0 ? button("← Назад", "event-prev") : ""}${last ? button(human ? "Исполнить" : "Продолжить", "event-accept", "primary") : button("Далее →", "event-next", "primary", invalid ? "disabled" : "")}</footer></section></div>`;
   }
   function results() {
     if (!G?.finished) return menu();
@@ -235,66 +281,133 @@
   function settings() {
     return panelPage(
       heading("БЫТОВЫЕ УСЛОВИЯ", "Настройки") +
-        `<section class="paper settings-grid"><label>Юмор<select data-setting="humor"><option value="clean">Без мата</option><option value="moderate">Умеренно</option><option value="full">Настоящая вахта · 18+</option></select></label><label>Реплики коллег<select data-setting="dialogs"><option value="off">Отключены</option><option value="rare">Редко</option><option value="normal">Обычно</option></select></label><label>Музыка<input type="range" min="0" max="1" step=".05" data-setting="music"></label><label>Звуковые эффекты<input type="range" min="0" max="1" step=".05" data-setting="sfx"></label><label class="check"><input type="checkbox" data-setting="fast">Ускорить ходы ботов и анимации</label><label class="check"><input type="checkbox" data-setting="reduced">Уменьшить движение</label>${button("Выключить весь звук", "mute")}${button("Готово", "back", "primary")}<p class="fine">Режим и частота происшествий выбираются перед новой партией. В классике происшествий нет.</p></section>`,
+        tabs("settings", [
+          ["general", "Диалоги"],
+          ["motion", "Ходы"],
+          ["audio", "Звук"],
+        ]) +
+        `<section class="paper settings-grid screen-content">${view.settings === "general" ? `<label>Юмор<select data-setting="humor"><option value="clean">Без мата</option><option value="moderate">Умеренно</option><option value="full">Настоящая вахта · 18+</option></select></label><label>Реплики коллег<select data-setting="dialogs"><option value="off">Отключены</option><option value="rare">Редко</option><option value="normal">Обычно</option></select></label><p class="fine">Коллеги обращаются к тебе по имени из профиля.</p>` : view.settings === "motion" ? `<label class="check"><input type="checkbox" data-setting="fast">Ускорить ходы и анимации</label><label class="check"><input type="checkbox" data-setting="reduced">Уменьшить движение</label><p class="fine">Без ускорения карты летят по очереди. Можно проследить каждый ход.</p>` : `<label>Музыка<input type="range" min="0" max="1" step=".05" data-setting="music"></label><label>Звуковые эффекты<input type="range" min="0" max="1" step=".05" data-setting="sfx"></label>${button("Выключить весь звук", "mute")}`}</section>${button("Готово", "back", "primary page-done")}`,
     );
   }
   function profile() {
-    const st1 = P.stats.classic,
-      st2 = P.stats.chaos;
+    const avatars = slicePage(
+      "avatars",
+      Array.from({ length: 11 }, (_, i) => i),
+      6,
+    );
     return panelPage(
       heading("ЛИЧНОЕ ДЕЛО", "Твой пропуск") +
-        `<div class="profile-layout"><section class="paper"><h2>${playerName()}</h2><p>${S.rank(P.xp)} · ${P.xp} опыта</p><label for="profile-name">Имя</label><input id="profile-name" maxlength="24"><small>2–24 буквы, пробелы и дефисы.</small>${button("Сохранить имя", "save-name", "primary")}<h3>Фотография на пропуск</h3><div class="avatars">${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => `<button class="avatar-choice ${P.avatar === n ? "chosen" : ""}" data-action="avatar" data-id="${n}" aria-label="Аватар ${n + 1}">${avatar(n)}</button>`).join("")}</div></section><section class="paper"><h2>Табель партий</h2>${[
-          ["Классика", st1],
-          ["Беспредел", st2],
-        ]
-          .map(
-            ([t, s]) =>
-              `<h3>${t}</h3><div class="stats">${[
-                ["Партий", s.played],
-                ["Побед", s.wins],
-                ["Поражений", s.losses],
-                ["Ничьих", s.draws],
-                ["Серия", s.streak],
-                ["Лучшая", s.best],
-              ]
-                .map(
-                  ([k, v]) =>
-                    `<div><strong>${v}</strong><small>${k}</small></div>`,
-                )
-                .join("")}</div>`,
-          )
-          .join(
-            "",
-          )}<h3>Сохранения на этом устройстве</h3><div class="save-actions">${button("Экспорт JSON", "export")}${button("Импорт JSON", "import")}${button("Сбросить прогресс", "reset", "danger")}</div><input type="file" id="import-file" accept="application/json,.json" hidden></section></div>`,
+        tabs("profile", [
+          ["identity", "Профиль"],
+          ["stats", "Табель"],
+          ["saves", "Сохранения"],
+        ]) +
+        `<section class="paper profile-pane screen-content">${
+          view.profile === "identity"
+            ? `<div class="profile-name"><label for="profile-name">Твоё имя<input id="profile-name" maxlength="24"></label>${button("Сохранить", "save-name", "primary")}</div><p class="fine">${S.rank(P.xp)} · ${P.xp} опыта · Выбери портрет</p><div class="avatars">${avatars.items.map((n) => `<button class="avatar-choice ${P.avatar === n ? "chosen" : ""}" data-action="avatar" data-id="${n}" aria-label="Аватар ${n + 1}" aria-pressed="${P.avatar === n}">${avatar(n)}</button>`).join("")}</div>${avatars.nav}`
+            : view.profile === "stats"
+              ? [
+                  ["Классика", P.stats.classic],
+                  ["Беспредел", P.stats.chaos],
+                ]
+                  .map(
+                    ([title, st]) =>
+                      `<section class="stat-section"><h2>${title}</h2><div class="stats">${[
+                        ["Партий", st.played],
+                        ["Побед", st.wins],
+                        ["Поражений", st.losses],
+                        ["Ничьих", st.draws],
+                        ["Серия", st.streak],
+                        ["Лучшая", st.best],
+                      ]
+                        .map(
+                          ([k, v]) =>
+                            `<div><strong>${v}</strong><small>${k}</small></div>`,
+                        )
+                        .join("")}</div></section>`,
+                  )
+                  .join("")
+              : `<p>Прогресс хранится на этом устройстве. Экспортируй файл для резервной копии.</p><div class="save-actions">${button("Экспорт JSON", "export")}${button("Импорт JSON", "import")}${button("Сбросить прогресс", "reset", "danger")}</div><input type="file" id="import-file" accept="application/json,.json" hidden><p class="fine">Импорт и сброс требуют подтверждения.</p>`
+        }</section>`,
     );
   }
   function achievements() {
+    const a = slicePage("achievements", S.achievements, lowScreen() ? 1 : 2);
     return panelPage(
-      heading(
-        "ГОРДОСТЬ УЧАСТКА",
-        "Достижения",
-        "Опыт и открытия не дают преимущества в силе карт.",
-      ) +
-        `<div class="achievement-grid">${S.achievements.map(([id, title, desc], i) => `<article class="paper achievement ${P.achievements.includes(id) ? "unlocked" : ""}">${sprite("decor", [6, 7, 10, 6, 11, 7][i], 4, 3, "achievement-art")}<div><small>${P.achievements.includes(id) ? "ПОЛУЧЕНО" : "ЕЩЁ НЕ ПОЛУЧЕНО"}</small><h2>${title}</h2><p>${desc}</p></div></article>`).join("")}</div>`,
+      heading("ГОРДОСТЬ УЧАСТКА", "Достижения") +
+        `<div class="achievement-grid screen-content">${a.items.map(([id, title, desc]) => `<article class="paper achievement ${P.achievements.includes(id) ? "unlocked" : ""}">${sprite("decor", [6, 7, 10, 6, 11, 7][S.achievements.findIndex((n) => n[0] === id)], 4, 3, "achievement-art")}<div><small>${P.achievements.includes(id) ? "ПОЛУЧЕНО" : "ЕЩЁ НЕ ПОЛУЧЕНО"}</small><h2>${title}</h2><p>${desc}</p></div></article>`).join("")}</div>${a.nav}`,
     );
   }
   function gallery() {
+    const cards = slicePage(
+      "cards",
+      Array.from({ length: 36 }, (_, i) => i),
+      6,
+    );
     return panelPage(
       heading("ПРОВЕРЕНО ПО ВЕДОМОСТИ", "Игральная колода") +
-        `<div class="tabs">${button("36 игральных карт", "gallery-cards", galleryMode === "cards" ? "primary" : "")}${button("Рубашки", "gallery-backs", galleryMode === "backs" ? "primary" : "")}</div><p class="fine">Колода происшествий секретная. Что приготовила вахта, узнаешь только при открытии события.</p>` +
+        `<nav class="tabs">${button("Карты", "gallery-cards", galleryMode === "cards" ? "primary" : "")}${button("Рубашки", "gallery-backs", galleryMode === "backs" ? "primary" : "")}</nav>` +
         (galleryMode === "cards"
-          ? `<div class="gallery-cards">${Array.from({ length: 36 }, (_, i) => card(i, { action: "gallery-card" })).join("")}</div>`
-          : `<div class="paper back-select"><p>Другая рубашка открывается за любое достижение.</p>${[0, 1].map((i) => `<button data-action="back-skin" data-id="${i}" class="skin ${P.back === i ? "chosen" : ""}" ${i && !P.achievements.length ? "disabled" : ""}>${sprite(i ? "decor" : "cards", i ? 8 : 21, i ? 4 : 6, i ? 3 : 4, "back-preview")}<span>${i ? "Северный узор" : "Бытовка"} ${i && !P.achievements.length ? "· Закрыто" : ""}</span></button>`).join("")}</div>`),
+          ? `<div class="gallery-cards screen-content">${cards.items.map((c) => card(c, { action: "gallery-card" })).join("")}</div>${cards.nav}`
+          : `<div class="paper back-select screen-content"><p>Другая рубашка открывается за любое достижение.</p><div class="skin-row">${[0, 1].map((i) => `<button data-action="back-skin" data-id="${i}" class="skin ${P.back === i ? "chosen" : ""}" ${i && !P.achievements.length ? "disabled" : ""}>${sprite(i ? "decor" : "cards", i ? 8 : 21, i ? 4 : 6, i ? 3 : 4, "back-preview")}<span>${i ? "Северный узор" : "Бытовка"} ${i && !P.achievements.length ? "· Закрыто" : ""}</span></button>`).join("")}</div></div>`),
     );
   }
+  const rulePages = [
+    [
+      "Классика",
+      "36 карт, от шестёрки до туза. По 6 карт каждому. Первый ход — у обладателя младшего козыря; если козырей на руках нет, начинает первый участник.",
+    ],
+    [
+      "Классика",
+      "Покрой карту более старшей той же масти или козырем. Козырь можно побить только старшим козырем. Подкидываются достоинства, уже лежащие на столе: и атакующие, и покрывающие.",
+    ],
+    [
+      "Классика",
+      "За раунд — не больше 6 атакующих карт и не больше размера руки защитника на начало раунда. Подкидывание идёт по очереди; каждый атакующий может завершить его. «Взять» не закрывает подкидывание немедленно.",
+    ],
+    [
+      "Классика",
+      "После «бито» атакует защитник. После взятия — следующий за ним активный участник. Добирает начинавший атаку, затем остальные по часовой стрелке, защитник последним. Открытый козырь — последняя карта колоды.",
+    ],
+    [
+      "Переводной",
+      "Пока ни одна карта не покрыта, положи карту того же достоинства и нажми «Перевести». Следующий участник должен иметь достаточно карт для новой атаки. Не больше 6 атакующих карт. Вдвоём перевод тоже разрешён.",
+    ],
+    [
+      "Беспредел",
+      "Отдельная колода из 30 происшествий. В обычном стоке скрыты 2, 4 или 6 жетонов, не заменяющих игральные карты. Жетон не попадает в руку. Эффект открывается после добора, не более одного между раундами. Остальные ждут очереди. Сильные происшествия выпадают реже.",
+    ],
+    [
+      "Беспредел",
+      "Точный эффект написан на карточке. Выбирай цель и карту, если нужно. Вышедшие участники не возвращаются. Пропуск атаки не отменяет обязанность защищаться. Пустой сток не создаёт карты из воздуха.",
+    ],
+    [
+      "Управление",
+      "Выбери карту нажатием, затем кнопку атаки или непокрытую карту на столе. Все кнопки доступны с клавиатуры: Tab и Enter. Кнопка «Рассмотреть» увеличивает выбранную карту. Перетаскивание не требуется.",
+    ],
+    [
+      "Конец партии",
+      "Когда сток пуст, участники без карт выходят. Последний с картами — дурак. Если последний эпизод оставил всех без карт — ничья. При выходе игрока боты честно доигрывают партию.",
+    ],
+    [
+      "Без интернета",
+      "Все изображения, звук, правила и сохранения находятся на устройстве. Для резервной копии используй экспорт в профиле. Сбрасывать прогресс можно только после подтверждения.",
+    ],
+  ];
   function rules() {
+    const r = slicePage("rules", rulePages, 1);
     return panelPage(
       heading("БЕЗ СПОРОВ О ПРАВИЛАХ", "Как играть") +
-        `<article class="paper rules"><h2>Классика</h2><p>36 карт, от шестёрки до туза. По 6 карт каждому. Первый ход — у обладателя младшего козыря; если козырей на руках нет, начинает первый участник.</p><p>Покрой карту более старшей той же масти или козырем. Козырь можно побить только старшим козырем. Подкидываются достоинства, уже лежащие на столе: и атакующие, и покрывающие.</p><p>За раунд — не больше 6 атакующих карт и не больше размера руки защитника на начало раунда. Подкидывание идёт по очереди; каждый атакующий может завершить его. «Взять» не закрывает подкидывание немедленно.</p><p>После «бито» атакует защитник. После взятия — следующий за ним активный участник. Добирает начинавший атаку, затем остальные по часовой стрелке, защитник последним. Открытый козырь — последняя карта колоды.</p><h2>Переводной</h2><p>Пока ни одна карта не покрыта, положи карту того же достоинства и нажми «Перевести». Следующий участник должен иметь достаточно карт для новой атаки. Не больше 6 атакующих карт. Вдвоём перевод тоже разрешён.</p><h2>Беспредел</h2><p>Отдельная колода из 30 происшествий. В обычном стоке скрыты 2, 4 или 6 жетонов, не заменяющих игральные карты. Жетон не попадает в руку. Эффект открывается после добора, не более одного между раундами. Остальные ждут очереди. Сильные происшествия выпадают реже.</p><p>Точный эффект написан на карточке. Выбирай цель и карту, если нужно. Вышедшие участники не возвращаются. Пропуск атаки не отменяет обязанность защищаться. Пустой сток не создаёт карты из воздуха.</p><h2>Управление</h2><p>Выбери карту нажатием, затем кнопку атаки или непокрытую карту на столе. Все кнопки доступны с клавиатуры: Tab и Enter. Кнопка «Рассмотреть» увеличивает выбранную карту. Перетаскивание не требуется.</p><h2>Конец партии</h2><p>Когда сток пуст, участники без карт выходят. Последний с картами — дурак. Если последний эпизод оставил всех без карт — ничья. При выходе игрока боты честно доигрывают партию.</p><h2>Без интернета</h2><p>Все изображения, звук, правила и сохранения находятся на устройстве. Для резервной копии используй экспорт в профиле. Сбрасывать прогресс можно только после подтверждения.</p></article>`,
+        `<article class="paper rules screen-content"><span class="eyebrow">ПАМЯТКА ${pageIndex.rules + 1} / ${rulePages.length}</span><h2>${r.items[0][0]}</h2><p>${r.items[0][1]}</p></article>${r.nav}`,
     );
   }
   // Overlapping rows expose an opaque rank/suit strip for every card. Never scroll.
   function layoutHands() {
+    document.querySelectorAll(".npc-portrait").forEach((el) => {
+      const size = Math.min(el.clientWidth, el.clientHeight);
+      el.firstElementChild.style.width = size + "px";
+      el.firstElementChild.style.height = size + "px";
+    });
     document.querySelectorAll(".hand, .event-hand").forEach((hand) => {
       const cards = [...hand.querySelectorAll(".playing-card")];
       const width = hand.clientWidth - 8;
@@ -302,11 +415,11 @@
       const compact = innerHeight <= 600 && innerWidth > innerHeight;
       const cw = compact ? 62 : innerWidth <= 500 ? 72 : 94,
         ch = Math.round(cw * 1.44);
-      const strip = compact ? 23 : 26;
+      const strip = 24;
       const capacity = Math.max(1, Math.floor((width - cw) / strip) + 1);
       const rows = Math.ceil(cards.length / capacity);
       const perRow = Math.ceil(cards.length / rows);
-      const rowStep = compact ? 36 : 44;
+      const rowStep = compact ? 40 : 44;
       hand.style.height = ch + (rows - 1) * rowStep + 19 + "px";
       hand.style.setProperty("--fan-card-width", cw + "px");
       hand.style.setProperty("--fan-card-height", ch + "px");
@@ -322,8 +435,40 @@
         card.style.zIndex = String(row * 40 + col + 1);
       });
     });
+    layoutTable();
   }
-  window.addEventListener("resize", layoutHands);
+  function layoutTable() {
+    const table = $(".table-zone"),
+      pairs = $(".pairs");
+    if (!table || !pairs) return;
+    $(".game-scene").classList.toggle(
+      "dense-table",
+      table.clientHeight < (innerWidth < 750 ? 340 : 280),
+    );
+    const count = G?.table.length || 0;
+    if (!count) return;
+    const cols = Math.min(count, innerWidth > innerHeight ? 6 : 3);
+    const rows = Math.ceil(count / cols);
+    const width = Math.min(
+      100,
+      (pairs.clientWidth - (cols - 1) * 6) / cols - 24,
+      (pairs.clientHeight - (rows - 1) * 6) / rows / 1.44 - 16,
+    );
+    pairs.style.setProperty("--pair-cols", cols);
+    pairs.style.setProperty("--table-card-width", Math.floor(width) + "px");
+    pairs.style.setProperty(
+      "--table-card-height",
+      Math.floor(width * 1.44) + "px",
+    );
+  }
+  window.addEventListener("resize", () => {
+    // Android keyboards resize the visual viewport: preserve the active text field and draft.
+    const typing = document.activeElement?.matches(
+      "#player-name, #profile-name",
+    );
+    if (!animating && !typing && screen !== "welcome") render();
+    else layoutHands();
+  });
   function fillNames() {
     document.querySelectorAll("[data-name]").forEach((el) => {
       const i = Number(el.dataset.name);
@@ -331,7 +476,37 @@
     });
     document.querySelectorAll("[data-player-name]").forEach((el) => {
       el.textContent = P.name;
+      el.title = P.name;
     });
+  }
+  function openTalk() {
+    paused = true;
+    clearTimeout(timer);
+    audio.pause(true);
+    const entries = [
+      ...(dialog
+        ? [
+            {
+              title: G.players[dialog.who]?.name || "Бригада",
+              text: dialog.text,
+            },
+          ]
+        : []),
+      ...(G?.log || [])
+        .slice(-10)
+        .reverse()
+        .map((text) => ({ title: "Журнал смены", text: clean(text) })),
+    ];
+    const r = slicePage(
+      "talk",
+      entries.length
+        ? entries
+        : [{ title: "Бригада", text: "Чай налит. Карты на стол!" }],
+      1,
+    );
+    const e = r.items[0];
+    $("#overlay").innerHTML =
+      `<div class="modal compact-modal talk-modal" role="dialog" aria-modal="true"><h2>${esc(e.title)}</h2><p>${esc(e.text)}</p>${r.nav}${button("К игре", "unpause", "primary")}</div>`;
   }
   function render() {
     if (animating) return;
@@ -363,9 +538,9 @@
           : C.dialogue("start", 0, P.name, P.settings.humor);
     if (screen === "setup") {
       for (const k of ["count", "variant", "difficulty", "frequency"])
-        $("#" + k).value = setup[k];
-      $("#chaos").checked = setup.chaos;
-      $("#frequency").disabled = !setup.chaos;
+        if ($("#" + k)) $("#" + k).value = setup[k];
+      if ($("#chaos")) $("#chaos").checked = setup.chaos;
+      if ($("#frequency")) $("#frequency").disabled = !setup.chaos;
       $("#roster-help").textContent =
         `Выбрано ${setup.npcs.length}. Нужно ${setup.count - 1} соперника.`;
       document.querySelector('[data-action="start"]').disabled =
@@ -376,7 +551,8 @@
         if (el.type === "checkbox") el.checked = P.settings[el.dataset.setting];
         else el.value = P.settings[el.dataset.setting];
       });
-    if (screen === "profile") $("#profile-name").value = P.name;
+    if (screen === "profile" && $("#profile-name"))
+      $("#profile-name").value = profileDraft ?? P.name;
     if (screen === "game" && G && !G.finished) {
       const log = $("#game-log");
       for (const text of G.log.slice(-5)) {
@@ -540,6 +716,10 @@
     lastDialog = -9;
     recent = [];
     newAchievements = [];
+    eventStep = 0;
+    eventKey = "";
+    eventChoice = "";
+    eventTarget = eventCard = null;
     paused = false;
     persist();
     show("game");
@@ -579,6 +759,23 @@
   function handle(action, el) {
     if (animating) return;
     switch (action) {
+      case "talk":
+        pageIndex.talk = 0;
+        openTalk();
+        break;
+      case "view-tab":
+        view[el.dataset.key] = el.dataset.value;
+        render();
+        break;
+      case "page-prev":
+      case "page-next":
+        pageIndex[el.dataset.key] = Math.max(
+          0,
+          (pageIndex[el.dataset.key] || 0) + (action === "page-next" ? 1 : -1),
+        );
+        if (el.dataset.key === "talk") openTalk();
+        else render();
+        break;
       case "menu":
         if (G && !G.finished) persist();
         paused = false;
@@ -625,7 +822,7 @@
         const i = Number(el.dataset.id);
         setup.npcs = setup.npcs.includes(i)
           ? setup.npcs.filter((n) => n !== i)
-          : [...setup.npcs, i];
+          : [...setup.npcs.slice(0, setup.count - 2), i];
         render();
         break;
       }
@@ -677,6 +874,14 @@
       case "close-modal":
         render();
         break;
+      case "event-next":
+        eventStep++;
+        render();
+        break;
+      case "event-prev":
+        eventStep = Math.max(0, eventStep - 1);
+        render();
+        break;
       case "event-target":
         eventTarget = Number(el.dataset.id);
         render();
@@ -721,6 +926,7 @@
           return;
         }
         P.name = value;
+        profileDraft = null;
         dialog = null;
         if (G) G.players[0].name = value;
         persist();
@@ -751,6 +957,7 @@
           "Имя, достижения, статистика и текущая партия будут удалены. Сначала можно сделать экспорт.",
           () => {
             P = S.fresh();
+            profileDraft = null;
             G = null;
             persist();
             show("welcome");
@@ -794,6 +1001,7 @@
   });
   document.addEventListener("input", (e) => {
     const el = e.target;
+    if (el.id === "profile-name") profileDraft = el.value;
     if (el.id === "player-name") {
       $("#name-submit").disabled = !E.validName(el.value);
       return;
@@ -838,6 +1046,7 @@
           "Текущий прогресс заменится данными выбранного файла.",
           () => {
             P = imported;
+            profileDraft = null;
             G = P.game;
             persist();
             show(P.name ? "menu" : "welcome");
@@ -925,6 +1134,7 @@
     persist();
   }
   render();
+  document.fonts.ready.then(layoutHands);
   if (loaded.warning) toast(loaded.warning);
 })();
 // Optional installation cache for HTTP/localhost launches; file:// needs no service worker.

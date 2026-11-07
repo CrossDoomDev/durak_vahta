@@ -1,0 +1,2159 @@
+/* Every screen owns the viewport. Long collections use explicit pages, never a scroll area. */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+#app {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 60px minmax(0, 1fr);
+}
+#app > header {
+  height: 60px;
+  min-height: 0;
+  padding: 7px 3vw;
+}
+header .brand-mark {
+  width: 38px;
+  height: 38px;
+}
+header .brand {
+  font-size: 20px;
+}
+header .profile-chip .avatar {
+  width: 34px;
+  height: 34px;
+}
+button,
+input,
+select {
+  font-size: 14px;
+}
+.btn,
+.btn.small {
+  min-height: 42px;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+.btn.back {
+  margin: 0;
+}
+.btn:focus-visible {
+  outline-offset: 1px;
+}
+input:not([type="checkbox"]):not([type="range"]),
+select {
+  min-height: 44px;
+  padding: 8px 10px;
+  font-size: 16px;
+}
+label {
+  font-size: 14px;
+}
+.paper {
+  padding: 20px;
+}
+.page {
+  width: 100%;
+  max-width: 1100px;
+  height: 100%;
+  min-height: 0;
+  padding: 14px 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.page > .back {
+  position: absolute;
+  top: 14px;
+  right: 24px;
+  z-index: 1;
+}
+.section-heading {
+  flex: none;
+  margin: 0;
+  padding-right: 100px;
+}
+.section-heading .eyebrow {
+  font-size: 10px;
+  margin: 0 0 4px;
+}
+.section-heading h1 {
+  font-size: 32px;
+  margin: 0;
+  line-height: 1.1;
+}
+.section-heading > p {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+.screen-content {
+  flex: 1;
+  min-height: 0;
+}
+.tabs,
+.screen-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  flex: none;
+}
+.tabs .btn {
+  flex: 1;
+  padding: 8px;
+}
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex: none;
+  min-height: 44px;
+}
+.pager span {
+  min-width: 56px;
+  text-align: center;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.pager .btn {
+  min-width: 104px;
+}
+.page-done {
+  align-self: stretch;
+  flex: none;
+}
+/* A two-step new-game screen keeps both controls and portraits comfortably sized. */
+.setup-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  max-width: 720px;
+  width: 100%;
+  align-self: center;
+}
+.setup-controls h2 {
+  display: none;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.form-grid > label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+}
+.form-grid .check {
+  flex-direction: row;
+  align-items: center;
+}
+.wide {
+  grid-column: 1/-1;
+}
+.setup-note {
+  margin: 0;
+  font-size: 14px;
+}
+.setup-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
+  min-height: 62px;
+  border-top: 1px solid #ddbb7840;
+  padding-top: 10px;
+}
+.setup-footer > div {
+  flex: 1;
+  min-width: 0;
+}
+.setup-footer strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+}
+.setup-footer small {
+  display: block;
+  font-size: 13px;
+}
+.setup-footer .btn {
+  min-width: 110px;
+}
+.roster-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.roster-top {
+  margin: 0;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+.roster-top h2 {
+  font-size: 19px;
+  margin: 0;
+}
+.npc-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.npc-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.npc-card > .avatar {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: auto;
+  flex: 1;
+  border-radius: 0;
+}
+.npc-info {
+  flex: none;
+  padding: 12px;
+}
+.npc-info strong {
+  font-size: 19px;
+  line-height: 1.2;
+}
+.npc-info small {
+  font-size: 13px;
+}
+.npc-info p {
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 10px 0;
+}
+.npc-info b {
+  font-size: 13px;
+}
+/* Profile, reference screens and collections retain every item through paging. */
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  justify-content: center;
+  max-width: 720px;
+  width: 100%;
+  align-self: center;
+}
+.settings-grid label {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.settings-grid .check {
+  flex-direction: row;
+  align-items: center;
+}
+.settings-grid .fine {
+  margin: 0;
+  font-size: 14px;
+}
+.profile-pane {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+.profile-pane > p {
+  margin: 0;
+}
+.profile-name {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+.profile-name label {
+  flex: 1;
+  min-width: 0;
+}
+.profile-name input {
+  width: 100%;
+  display: block;
+  margin: 4px 0 0;
+}
+.profile-name .btn {
+  min-height: 44px;
+}
+.avatars {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  min-height: 0;
+  align-self: center;
+  width: 100%;
+  max-width: 690px;
+}
+.avatar-choice {
+  padding: 4px;
+  border-radius: 12px;
+  min-width: 0;
+}
+.avatar-choice .avatar {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  max-height: 120px;
+  border-radius: 8px;
+}
+.stat-section h2 {
+  font-size: 21px;
+  margin: 0 0 8px;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin: 0;
+}
+.stats > div {
+  padding: 8px 4px;
+}
+.stats strong {
+  font-size: 25px;
+}
+.stats small {
+  font-size: 13px;
+}
+.save-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.achievement-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.achievement {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 0;
+}
+.achievement-art {
+  width: 80px;
+  height: 80px;
+}
+.achievement h2 {
+  font-size: 23px;
+  margin: 8px 0;
+}
+.achievement p {
+  font-size: 15px;
+  margin: 0;
+}
+.gallery-cards {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  justify-items: center;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+}
+.gallery-cards .playing-card {
+  width: min(100%, 122px);
+  height: auto;
+  aspect-ratio: 1/1.44;
+}
+.back-select {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+.back-select > p {
+  margin: 0;
+}
+.skin-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  min-height: 0;
+}
+.skin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+}
+.back-preview {
+  width: 95px;
+  height: 137px;
+}
+.rules {
+  width: 100%;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.rules h2 {
+  font-size: 26px;
+  margin: 12px 0;
+}
+.rules p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 760px;
+}
+/* Home and onboarding are compositions instead of long vertical documents. */
+.welcome {
+  grid-row: 1/-1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 24px 5vw;
+  gap: 24px;
+}
+.welcome-art h1 {
+  font-size: clamp(38px, 6vw, 76px);
+  margin: 12px 0;
+}
+.welcome-art p {
+  margin: 0;
+}
+.welcome-mark {
+  width: 100px;
+  height: 100px;
+}
+.onboarding {
+  max-width: 480px;
+  margin: auto;
+  width: 100%;
+  padding: 24px;
+}
+.onboarding .avatar {
+  width: 52px;
+  height: 52px;
+  margin: 0 0 8px;
+}
+.onboarding h2 {
+  font-size: 26px;
+  margin: 8px 0 18px;
+}
+.onboarding .btn {
+  margin: 14px 0;
+  width: 100%;
+}
+.onboarding p {
+  margin: 5px 0;
+}
+.menu {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 20px 5vw;
+  gap: 30px;
+  align-items: center;
+}
+.menu h1 {
+  font-size: clamp(42px, 7vw, 86px);
+  line-height: 0.98;
+  margin: 16px 0;
+}
+.menu-copy > p {
+  font-size: 16px;
+  margin: 16px 0;
+}
+.menu-actions {
+  max-width: 480px;
+}
+.menu-actions > .btn {
+  min-height: 46px;
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+.menu-grid {
+  gap: 10px;
+}
+.menu-grid .btn {
+  min-height: 42px;
+  font-size: 14px;
+}
+.menu-foot {
+  margin-top: 16px;
+  font-size: 10px;
+}
+.menu-crew {
+  max-width: 500px;
+}
+.crew-pictures {
+  height: 210px;
+}
+.crew-pictures .avatar {
+  width: 140px;
+  height: 180px;
+}
+.crew-pictures .crew-main {
+  width: 165px;
+  height: 210px;
+}
+.menu-crew blockquote {
+  font-size: 20px;
+  margin: 16px 0 8px;
+}
+/* The match has its own chrome: opponents, table and hand share one frame. */
+body[data-screen="game"] #app {
+  grid-template-rows: minmax(0, 1fr);
+}
+body[data-screen="game"] #app > header {
+  display: none;
+}
+body[data-screen="game"] .game-scene {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 8px 16px;
+  gap: 8px;
+}
+.game-toolbar {
+  flex: none;
+  height: 42px;
+  margin: 0;
+  gap: 12px;
+}
+.game-toolbar .eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+.game-toolbar > div {
+  gap: 8px;
+}
+.opponents {
+  flex: none;
+  width: 100%;
+  height: 66px;
+  max-width: 1000px;
+  margin: 0 auto;
+  gap: 14px;
+  flex-wrap: nowrap;
+}
+.opponent {
+  flex: 1;
+  min-width: 0;
+  gap: 10px;
+  padding: 6px 10px;
+}
+.opponent .avatar {
+  width: 48px;
+  height: 48px;
+}
+.opponent > div {
+  min-width: 0;
+}
+.opponent strong {
+  font-size: 14px;
+  line-height: 1.15;
+}
+.opponent small,
+.opponent .hand-count {
+  font-size: 12px;
+  line-height: 1.25;
+}
+.table-zone {
+  min-height: 0;
+  overflow: hidden;
+  grid-template-columns: 118px minmax(0, 1fr);
+  gap: 14px;
+  padding: 12px;
+  border-radius: 24px;
+}
+.table-log {
+  display: none;
+}
+.battle {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.turn-label {
+  flex: none;
+  margin: 0 0 6px;
+}
+.turn-label strong {
+  font-size: 17px;
+}
+.turn-label small {
+  font-size: 12px;
+  line-height: 1.25;
+}
+.pairs {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--pair-cols, 3), minmax(0, 1fr));
+  gap: 8px;
+  align-content: center;
+  justify-items: center;
+}
+.pairs:has(.table-empty) {
+  display: flex;
+}
+.card-pair {
+  width: calc(var(--table-card-width, 70px) + 24px);
+  height: calc(var(--table-card-height, 101px) + 20px);
+  padding: 0;
+}
+.pairs .playing-card {
+  width: var(--table-card-width, 70px);
+  height: var(--table-card-height, 101px);
+}
+.card-pair > .defense-card {
+  left: 24px;
+  top: 20px;
+  transform: none;
+}
+.pair-slot {
+  left: 26px;
+  top: calc(var(--table-card-height, 101px) - 5px);
+  font-size: 10px;
+}
+.playing-card .corner,
+.playing-card .corner b {
+  font-size: clamp(14px, 22cqw, 25px);
+}
+.speech {
+  flex: none;
+  color: #f7eedc;
+  width: 100%;
+  max-width: none;
+  text-align: left;
+  border: 0;
+  border-left: 2px solid #d3ae6c;
+  padding: 8px 10px;
+  margin: 6px 0 0;
+}
+.speech p {
+  font-size: 14px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.speech strong {
+  font-size: 12px;
+}
+.speech .avatar {
+  width: 34px;
+  height: 34px;
+}
+.dense-table .speech {
+  display: none;
+}
+.table-empty {
+  font-size: 14px;
+}
+.table-empty small {
+  font-size: 12px;
+}
+.table-emblem {
+  width: 65px;
+  height: 65px;
+}
+.stocks {
+  min-height: 0;
+  padding: 0;
+  gap: 4px;
+}
+.stocks > strong {
+  font-size: 13px;
+}
+.event-stock {
+  font-size: 10px;
+}
+.event-stock > span {
+  font-size: 10px;
+  line-height: 1.2;
+}
+.human-zone {
+  padding: 0;
+  flex: none;
+}
+.human-caption {
+  min-height: 44px;
+  margin: 0;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+.human-caption > .avatar {
+  width: 36px;
+  height: 36px;
+}
+.human-caption strong {
+  font-size: 14px;
+}
+.human-caption small {
+  font-size: 12px;
+}
+.game-actions {
+  flex: 1;
+  justify-content: flex-end;
+  margin: 0;
+  width: auto;
+  gap: 8px;
+  min-height: 44px;
+  flex-wrap: nowrap;
+}
+.game-actions .btn {
+  min-height: 42px;
+  font-size: 14px;
+  padding: 8px 16px;
+}
+.hand-help {
+  display: none;
+}
+.hand {
+  margin: 0;
+}
+.discard-target {
+  right: 12px;
+  bottom: 5px;
+  font-size: 10px;
+}
+/* Modal content is staged, including large event hands. No inner scrollbars. */
+#overlay {
+  overflow: hidden;
+  padding: 12px;
+}
+.modal {
+  max-height: 100%;
+  overflow: hidden;
+}
+.compact-modal {
+  width: min(100%, 600px);
+  padding: 24px;
+}
+.compact-modal h2 {
+  font-size: 26px;
+  margin: 0 0 12px;
+}
+.compact-modal p {
+  font-size: 16px;
+}
+.compact-modal .btn {
+  margin: 4px;
+}
+.inspect-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+}
+.inspect-modal > .playing-card {
+  width: 150px;
+  height: 216px;
+}
+.inspect-modal h2,
+.inspect-modal p {
+  margin: 0;
+}
+.event-modal {
+  width: min(100%, 1000px);
+  height: min(100%, 650px);
+  max-height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+.event-picture {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.event-picture .event-art {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  min-height: 0;
+}
+.event-copy {
+  padding: 24px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.event-heading {
+  flex: none;
+}
+.event-heading .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.event-copy h2 {
+  font-size: 28px;
+  margin: 8px 0 0;
+}
+.event-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+.event-story,
+.event-copy .event-story {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+}
+.event-copy .effect-box {
+  padding: 14px;
+  margin: 0;
+}
+.event-copy .effect-box p {
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 6px 0 0;
+}
+.event-copy fieldset {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+}
+.event-copy legend {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.event-copy .choice {
+  padding: 12px;
+  margin: 8px 0;
+  font-size: 15px;
+}
+.event-actions {
+  flex: none;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.event-actions .btn {
+  min-width: 112px;
+}
+.event-summary {
+  font-size: 16px;
+}
+.target-list {
+  justify-content: center;
+}
+.target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+.target .avatar {
+  width: 70px;
+  height: 70px;
+}
+.talk-modal .pager {
+  margin: 12px 0;
+}
+.results {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.results .result-badge {
+  width: 70px;
+  height: 70px;
+}
+.results .section-heading {
+  padding: 0;
+  text-align: center;
+}
+.results .section-heading h1 {
+  font-size: 32px;
+}
+.results .section-heading p {
+  font-size: 14px;
+}
+.results h2,
+.results p,
+.results blockquote {
+  margin: 0;
+}
+.results > h2 {
+  font-size: 23px;
+}
+.results blockquote {
+  font-size: 17px;
+}
+.result-players {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+}
+.result-players article {
+  flex: 1;
+  max-width: 170px;
+  min-width: 0;
+}
+.result-players .avatar {
+  width: 72px;
+  height: 72px;
+}
+.result-players strong {
+  font-size: 14px;
+}
+.result-players small {
+  font-size: 12px;
+}
+.result-actions {
+  margin: 0;
+  display: flex;
+  gap: 12px;
+}
+@media (max-width: 750px) {
+  #app {
+    grid-template-rows: 54px minmax(0, 1fr);
+  }
+  #app > header {
+    height: 54px;
+    padding: 5px 12px;
+  }
+  header .brand {
+    font-size: 17px;
+    gap: 6px;
+  }
+  header .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+  header .brand small {
+    font-size: 8px;
+    margin-top: 4px;
+    letter-spacing: 3px;
+  }
+  header .header-note {
+    display: none;
+  }
+  header .profile-chip {
+    gap: 6px;
+    font-size: 12px;
+  }
+  header .profile-chip small {
+    font-size: 11px;
+  }
+  header .profile-chip .avatar {
+    width: 30px;
+    height: 30px;
+  }
+  .page {
+    padding: 12px;
+    gap: 10px;
+  }
+  .page > .back {
+    top: 12px;
+    right: 12px;
+  }
+  .section-heading h1 {
+    font-size: 27px;
+  }
+  .section-heading .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+  .paper {
+    padding: 16px;
+  }
+  .npc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .npc-info {
+    padding: 12px 10px;
+  }
+  .npc-info strong {
+    font-size: 20px;
+  }
+  .npc-info small {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .npc-info p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .setup-footer {
+    gap: 10px;
+  }
+  .setup-footer strong {
+    font-size: 13px;
+  }
+  .setup-footer small {
+    font-size: 12px;
+  }
+  .setup-footer .btn {
+    min-width: 92px;
+  }
+  .roster-top h2 {
+    font-size: 17px;
+  }
+  .avatars {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 360px;
+    flex: 1;
+    align-items: center;
+  }
+  .avatar-choice .avatar {
+    max-width: 100px;
+    max-height: 100px;
+  }
+  .profile-name {
+    gap: 8px;
+  }
+  .profile-name .btn {
+    padding: 8px 12px;
+  }
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .stats strong {
+    font-size: 22px;
+  }
+  .stats > div {
+    padding: 6px 3px;
+  }
+  .save-actions {
+    flex-direction: column;
+  }
+  .achievement-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+  }
+  .achievement {
+    gap: 12px;
+  }
+  .achievement h2 {
+    font-size: 21px;
+  }
+  .achievement p {
+    font-size: 14px;
+  }
+  .achievement-art {
+    width: 65px;
+    height: 65px;
+  }
+  .gallery-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+  }
+  .gallery-cards .playing-card {
+    max-width: 100px;
+  }
+  .rules p {
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .welcome {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: 16px;
+  }
+  .welcome-art {
+    text-align: center;
+  }
+  .welcome-mark {
+    display: none;
+  }
+  .welcome-art h1 {
+    font-size: 44px;
+    margin: 8px 0;
+  }
+  .welcome-art .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+  .welcome-art p {
+    font-size: 14px;
+  }
+  .onboarding {
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .onboarding .avatar {
+    display: none;
+  }
+  .onboarding h2 {
+    font-size: 24px;
+    margin: 8px 0 16px;
+  }
+  .menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    padding: 16px 24px;
+  }
+  .menu-copy {
+    width: 100%;
+  }
+  .menu h1 {
+    font-size: 52px;
+    margin: 12px 0;
+  }
+  .menu-copy > p {
+    font-size: 15px;
+    margin: 12px 0;
+  }
+  .menu-copy > .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+  .menu-crew {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .crew-pictures {
+    height: 64px;
+    min-width: 90px;
+    width: 90px;
+  }
+  .crew-pictures .crew-side {
+    display: none;
+  }
+  .crew-pictures .crew-main {
+    width: 64px;
+    height: 64px;
+    transform: none;
+  }
+  .menu-crew blockquote {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+  }
+  .menu-crew > small {
+    display: none;
+  }
+  body[data-screen="game"] .game-scene {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+  .game-toolbar {
+    height: 42px;
+    gap: 6px;
+  }
+  .game-toolbar .eyebrow {
+    font-size: 10px;
+    line-height: 1.3;
+    max-width: 120px;
+  }
+  .game-toolbar > div {
+    gap: 5px;
+  }
+  .game-toolbar .btn {
+    padding: 8px;
+    font-size: 12px;
+    min-height: 40px;
+  }
+  .opponents {
+    height: 58px;
+    gap: 5px;
+  }
+  .opponent {
+    padding: 5px;
+    gap: 5px;
+    border-radius: 8px;
+  }
+  .opponent .avatar {
+    width: 32px;
+    height: 40px;
+  }
+  .opponent strong {
+    font-size: 12px;
+  }
+  .opponent small {
+    font-size: 10px;
+  }
+  .opponent .hand-count {
+    font-size: 12px;
+  }
+  .table-zone {
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 6px;
+    padding: 10px 8px;
+    border-radius: 18px;
+  }
+  .stock-pile {
+    width: 78px;
+    height: 88px;
+    margin: 0;
+  }
+  .stock-pile > .back-card {
+    width: 51px;
+    height: 73px;
+    top: 10px;
+  }
+  .stock-pile > .trump-show {
+    width: 51px;
+    height: 73px;
+    left: 25px;
+  }
+  .empty-trump {
+    width: 51px;
+    height: 73px;
+  }
+  .stocks > strong {
+    font-size: 12px;
+  }
+  .event-stock {
+    position: static;
+    width: auto;
+    margin-top: 10px;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .event-stock .back-card {
+    width: 32px;
+    height: 46px;
+  }
+  .event-stock > span {
+    display: block;
+    font-size: 9px;
+  }
+  .pairs {
+    gap: 6px;
+  }
+  .turn-label strong {
+    font-size: 15px;
+  }
+  .turn-label small {
+    font-size: 12px;
+  }
+  .human-caption {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    min-height: 44px;
+  }
+  .human-caption > .avatar {
+    display: none;
+  }
+  .human-caption > div:not(.game-actions) {
+    font-size: 12px;
+  }
+  .human-caption strong {
+    font-size: 13px;
+  }
+  .human-caption small {
+    font-size: 11px;
+  }
+  .game-actions {
+    gap: 5px;
+    min-height: 44px;
+  }
+  .game-actions .btn {
+    min-height: 42px;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .speech p {
+    font-size: 13px;
+  }
+  .speech .avatar {
+    display: none;
+  }
+  .table-empty small {
+    font-size: 11px;
+  }
+  .table-emblem {
+    width: 54px;
+    height: 54px;
+  }
+  .event-modal {
+    display: flex;
+    flex-direction: column;
+    height: min(100%, 740px);
+    max-width: 520px;
+  }
+  .event-picture {
+    flex: none;
+    height: 140px;
+    width: 100%;
+  }
+  .event-picture .event-art {
+    height: 140px;
+    width: 140px;
+    margin: auto;
+  }
+  .event-copy {
+    flex: 1;
+    padding: 16px;
+    gap: 12px;
+  }
+  .event-copy h2 {
+    font-size: 25px;
+  }
+  .event-copy .event-story {
+    font-size: 15px;
+  }
+  .event-copy .effect-box p {
+    font-size: 14px;
+  }
+  .event-modal:not(.step-story) .event-picture {
+    display: none;
+  }
+  .event-copy .target .avatar {
+    width: 62px;
+    height: 62px;
+  }
+  .results {
+    gap: 12px;
+  }
+  .results .section-heading h1 {
+    font-size: 30px;
+  }
+  .results > h2 {
+    font-size: 21px;
+  }
+  .result-players {
+    gap: 6px;
+  }
+  .result-players .avatar {
+    width: 60px;
+    height: 60px;
+  }
+  .result-players strong {
+    font-size: 12px;
+  }
+  .results blockquote {
+    font-size: 15px;
+  }
+}
+@media (max-height: 700px) and (orientation: portrait) {
+  .menu {
+    gap: 10px;
+    padding: 12px 20px;
+  }
+  .menu h1 {
+    font-size: 42px;
+    margin: 8px 0;
+  }
+  .menu-copy > p {
+    margin: 8px 0;
+    font-size: 14px;
+  }
+  .menu-foot {
+    margin-top: 8px;
+  }
+  .menu-crew {
+    display: none;
+  }
+  .welcome {
+    gap: 12px;
+  }
+  .welcome-art h1 {
+    font-size: 36px;
+  }
+  .welcome-art p {
+    display: none;
+  }
+  .onboarding {
+    padding: 16px;
+  }
+  .onboarding .fine {
+    font-size: 11px;
+  }
+  .onboarding h2 {
+    margin-bottom: 12px;
+  }
+  .npc-info p {
+    margin: 6px 0;
+  }
+  .form-grid {
+    gap: 12px;
+  }
+  .setup-controls {
+    gap: 12px;
+  }
+  .event-picture,
+  .event-picture .event-art {
+    height: 95px;
+  }
+  .event-picture .event-art {
+    width: 95px;
+  }
+  .results .result-badge {
+    display: none;
+  }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  #app {
+    grid-template-rows: 44px minmax(0, 1fr);
+  }
+  #app > header {
+    height: 44px;
+    padding: 3px 16px;
+  }
+  header .brand-mark {
+    width: 30px;
+    height: 30px;
+  }
+  header .brand {
+    font-size: 17px;
+  }
+  header .brand small {
+    font-size: 8px;
+    margin-top: 3px;
+  }
+  header .profile-chip .avatar {
+    width: 28px;
+    height: 28px;
+  }
+  header .profile-chip small {
+    display: none;
+  }
+  .page {
+    padding: 8px 16px;
+    gap: 8px;
+  }
+  .page > .back {
+    top: 8px;
+    right: 16px;
+    min-height: 36px;
+    padding: 5px 14px;
+  }
+  .section-heading h1 {
+    font-size: 24px;
+  }
+  .section-heading .eyebrow,
+  .section-heading > p {
+    display: none;
+  }
+  .tabs .btn {
+    min-height: 38px;
+    padding: 6px;
+  }
+  .paper {
+    padding: 12px 16px;
+  }
+  .setup-controls {
+    max-width: none;
+    gap: 8px;
+    flex-direction: row;
+    align-items: center;
+  }
+  .form-grid {
+    flex: 1;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px 12px;
+  }
+  .form-grid label {
+    font-size: 13px;
+    gap: 2px;
+  }
+  .form-grid .check {
+    grid-column: 1/-1;
+  }
+  .form-grid select {
+    min-height: 38px;
+    padding: 5px;
+    font-size: 14px;
+  }
+  .setup-controls .setup-note {
+    display: none;
+  }
+  .setup-controls > .btn {
+    max-width: 150px;
+  }
+  .setup-footer {
+    min-height: 44px;
+    padding-top: 6px;
+  }
+  .setup-footer > div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .setup-footer strong {
+    font-size: 13px;
+  }
+  .roster-screen {
+    gap: 6px;
+    position: relative;
+  }
+  .roster-top {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  .roster-top h2 {
+    display: none;
+  }
+  .roster-top .btn {
+    min-height: 38px;
+    padding: 6px 12px;
+  }
+  .npc-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .npc-card {
+    flex-direction: row;
+  }
+  .npc-card > .avatar {
+    width: 38%;
+    height: 100%;
+    flex: none;
+  }
+  .npc-info {
+    padding: 7px;
+    flex: 1;
+    min-width: 0;
+  }
+  .npc-info strong {
+    font-size: 16px;
+  }
+  .npc-info small {
+    font-size: 12px;
+  }
+  .npc-info p {
+    font-size: 12px;
+    line-height: 1.3;
+    margin: 5px 0;
+  }
+  .npc-info b {
+    font-size: 12px;
+  }
+  .pager {
+    min-height: 38px;
+    gap: 12px;
+  }
+  .pager .btn {
+    min-height: 38px;
+    padding: 5px 12px;
+  }
+  .settings-grid {
+    max-width: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+  .settings-grid > label {
+    flex: 1;
+  }
+  .settings-grid > .fine {
+    max-width: 220px;
+    font-size: 13px;
+  }
+  .page-done {
+    align-self: flex-end;
+    min-width: 150px;
+    min-height: 38px;
+  }
+  .profile-pane {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+  .profile-name {
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 250px;
+  }
+  .profile-pane > .fine {
+    display: none;
+  }
+  .avatars {
+    flex: 1;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+  .avatar-choice {
+    padding: 2px;
+  }
+  .avatar-choice .avatar {
+    max-height: 70px;
+  }
+  .profile-pane > .pager {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  body[data-screen="profile"] .profile-pane:has(.avatars) {
+    padding-bottom: 48px;
+  }
+  .stat-section {
+    flex: 1;
+  }
+  .stat-section h2 {
+    font-size: 19px;
+  }
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .stats > div {
+    padding: 2px;
+  }
+  .stats strong {
+    font-size: 22px;
+  }
+  .save-actions {
+    flex-direction: column;
+    flex: none;
+    gap: 8px;
+  }
+  .profile-pane:has(.save-actions) > p {
+    max-width: 270px;
+  }
+  .achievement-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+  .achievement {
+    padding: 12px 20px;
+  }
+  .achievement-art {
+    width: 70px;
+    height: 70px;
+  }
+  .gallery-cards {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr;
+    gap: 12px;
+  }
+  .gallery-cards .playing-card {
+    width: auto;
+    height: min(100%, 132px);
+    aspect-ratio: 1/1.44;
+    max-width: 100%;
+  }
+  .back-select {
+    flex-direction: row;
+    gap: 20px;
+  }
+  .back-select > p {
+    max-width: 180px;
+    font-size: 14px;
+  }
+  .back-preview {
+    width: 68px;
+    height: 98px;
+  }
+  .skin {
+    gap: 4px;
+    padding: 4px;
+  }
+  .skin span {
+    font-size: 12px;
+  }
+  .skin-row {
+    gap: 16px;
+  }
+  .rules h2 {
+    font-size: 21px;
+    margin: 6px 0;
+  }
+  .rules .eyebrow {
+    font-size: 10px;
+  }
+  .rules p {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .welcome {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    padding: 12px 24px;
+    gap: 20px;
+  }
+  .welcome-art h1 {
+    font-size: 44px;
+  }
+  .welcome-mark {
+    display: none;
+  }
+  .welcome-art p {
+    font-size: 14px;
+  }
+  .welcome-art .eyebrow {
+    font-size: 9px;
+  }
+  .onboarding {
+    padding: 14px;
+  }
+  .onboarding .avatar,
+  .onboarding > .eyebrow {
+    display: none;
+  }
+  .onboarding h2 {
+    font-size: 21px;
+    margin: 0 0 10px;
+  }
+  .onboarding .btn {
+    margin: 8px 0;
+    min-height: 38px;
+  }
+  .onboarding p {
+    font-size: 10px;
+  }
+  .menu {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    padding: 12px 24px;
+    gap: 25px;
+  }
+  .menu h1 {
+    font-size: 42px;
+    margin: 8px 0;
+  }
+  .menu-copy > .eyebrow {
+    display: none;
+  }
+  .menu-copy > p {
+    display: none;
+  }
+  .menu-actions > .btn {
+    min-height: 40px;
+    font-size: 15px;
+    margin-bottom: 8px;
+    padding: 6px;
+  }
+  .menu-grid {
+    gap: 8px;
+  }
+  .menu-grid .btn {
+    min-height: 38px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  .menu-foot {
+    font-size: 9px;
+    margin-top: 10px;
+  }
+  .menu-crew {
+    display: block;
+  }
+  .crew-pictures {
+    width: auto;
+    height: 150px;
+  }
+  .crew-pictures .crew-side {
+    display: inline-block;
+    width: 85px;
+    height: 110px;
+  }
+  .crew-pictures .crew-main {
+    width: 110px;
+    height: 140px;
+  }
+  .menu-crew blockquote {
+    font-size: 14px;
+    margin: 8px 0;
+  }
+  body[data-screen="game"] .game-scene {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    grid-template-rows: 44px minmax(0, 1fr) auto;
+    gap: 6px 10px;
+    padding: 6px 10px;
+  }
+  .game-toolbar {
+    grid-column: 1;
+    grid-row: 1;
+    height: 44px;
+  }
+  .game-toolbar .eyebrow {
+    display: none;
+  }
+  .game-toolbar .btn {
+    min-height: 40px;
+    font-size: 12px;
+    padding: 6px 7px;
+  }
+  .game-toolbar > div {
+    gap: 5px;
+  }
+  .opponents {
+    grid-column: 2;
+    grid-row: 1;
+    height: 44px;
+    gap: 6px;
+  }
+  .opponent {
+    padding: 3px 6px;
+    gap: 6px;
+  }
+  .opponent .avatar {
+    width: 30px;
+    height: 36px;
+  }
+  .opponent strong {
+    font-size: 12px;
+  }
+  .opponent small {
+    display: none;
+  }
+  .opponent .hand-count {
+    font-size: 12px;
+  }
+  .table-zone {
+    grid-column: 1/-1;
+    grid-row: 2;
+    grid-template-columns: 96px minmax(0, 1fr);
+    padding: 7px 10px;
+    gap: 8px;
+  }
+  .stock-pile {
+    width: 80px;
+    height: 78px;
+  }
+  .stock-pile > .back-card {
+    width: 48px;
+    height: 69px;
+    top: 8px;
+  }
+  .stock-pile > .trump-show {
+    width: 48px;
+    height: 69px;
+    left: 30px;
+  }
+  .stock-pile .corner {
+    font-size: 14px;
+  }
+  .empty-trump {
+    width: 48px;
+    height: 69px;
+  }
+  .stocks {
+    position: relative;
+    padding: 0 18px 0 0;
+    min-height: 0;
+    gap: 0;
+  }
+  .stocks > strong {
+    font-size: 11px;
+  }
+  .event-stock {
+    position: absolute;
+    right: -2px;
+    bottom: 0;
+    width: 24px;
+    margin: 0;
+  }
+  .event-stock .back-card {
+    width: 24px;
+    height: 35px;
+  }
+  .event-stock > span {
+    display: none;
+  }
+  .turn-label {
+    margin: 0 0 3px;
+  }
+  .turn-label strong {
+    font-size: 13px;
+  }
+  .turn-label small {
+    display: none;
+  }
+  .pairs {
+    gap: 6px;
+  }
+  .speech {
+    display: none;
+  }
+  .human-zone {
+    grid-column: 1/-1;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 140px;
+    gap: 12px;
+    align-items: center;
+  }
+  .human-caption {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+  .human-caption > .avatar {
+    display: none;
+  }
+  .human-caption strong {
+    font-size: 12px;
+  }
+  .human-caption small {
+    display: none;
+  }
+  .game-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+  .game-actions .btn {
+    font-size: 13px;
+    min-height: 36px;
+    padding: 5px 8px;
+  }
+  .hand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .table-empty .table-emblem {
+    width: 38px;
+    height: 38px;
+  }
+  .table-empty small {
+    display: none;
+  }
+  .discard-target {
+    font-size: 10px;
+    bottom: 3px;
+  }
+  .event-modal {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr);
+    height: 100%;
+    width: min(100%, 950px);
+  }
+  .event-picture,
+  .event-picture .event-art {
+    width: 170px;
+    height: 170px;
+  }
+  .event-modal:not(.step-story) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .event-modal:not(.step-story) .event-picture {
+    display: none;
+  }
+  .event-copy {
+    padding: 14px;
+    gap: 8px;
+  }
+  .event-copy h2 {
+    font-size: 22px;
+    margin: 3px 0 0;
+  }
+  .event-copy .event-story {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .event-copy .effect-box {
+    padding: 8px;
+  }
+  .event-copy .effect-box p {
+    font-size: 14px;
+    line-height: 1.35;
+    margin-top: 3px;
+  }
+  .event-stage {
+    gap: 8px;
+  }
+  .event-copy .choice {
+    padding: 8px 12px;
+    margin: 4px 0;
+  }
+  .event-copy fieldset legend {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .event-actions .btn {
+    min-height: 38px;
+    padding: 5px 16px;
+  }
+  .target-list .avatar {
+    width: 60px;
+    height: 60px;
+  }
+  .compact-modal {
+    padding: 16px 24px;
+  }
+  .inspect-modal {
+    flex-direction: row;
+    gap: 18px;
+  }
+  .inspect-modal > .playing-card {
+    width: 116px;
+    height: 167px;
+  }
+  .inspect-modal p {
+    max-width: 120px;
+  }
+  .results {
+    gap: 6px;
+  }
+  .results .result-badge {
+    display: none;
+  }
+  .results .section-heading h1 {
+    font-size: 26px;
+  }
+  .results .section-heading p {
+    display: none;
+  }
+  .results > h2 {
+    font-size: 18px;
+  }
+  .result-players .avatar {
+    width: 46px;
+    height: 46px;
+  }
+  .result-players article {
+    display: grid;
+    grid-template-columns: 46px 1fr;
+    gap: 0 7px;
+    text-align: left;
+    align-items: center;
+  }
+  .result-players .avatar {
+    grid-row: 1/3;
+  }
+  .result-players strong {
+    font-size: 12px;
+  }
+  .result-players small {
+    font-size: 10px;
+  }
+  .results blockquote {
+    font-size: 14px;
+  }
+  .results > p {
+    font-size: 13px;
+  }
+  .result-actions .btn {
+    min-height: 38px;
+    padding: 5px 16px;
+  }
+}
+.npc-portrait {
+  min-height: 0;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #152b25;
+  overflow: hidden;
+}
+.npc-portrait > .avatar {
+  flex: none;
+  border-radius: 0;
+  border: 0;
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  body[data-screen="game"] .game-scene {
+    grid-template-columns: 230px minmax(0, 1fr);
+  }
+  .npc-portrait {
+    flex: none;
+    width: 38%;
+    height: 100%;
+  }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .npc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+html {
+  height: 100dvh;
+}
+/* Keep editing stable when the Android keyboard takes part of the screen. */
+@media (max-height: 500px) {
+  .welcome:has(.onboarding:focus-within) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .welcome:has(.onboarding:focus-within) .welcome-art {
+    display: none;
+  }
+  .welcome:has(.onboarding:focus-within) .onboarding {
+    max-width: 480px;
+    padding: 12px;
+  }
+  .welcome:has(.onboarding:focus-within) .fine {
+    display: none;
+  }
+  .profile-pane:has(.profile-name:focus-within) .avatars,
+  .profile-pane:has(.profile-name:focus-within) > .pager,
+  .profile-pane:has(.profile-name:focus-within) > .fine {
+    display: none;
+  }
+}
+.profile-chip [data-player-name],
+.human-caption [data-player-name] {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.profile-chip > span {
+  min-width: 0;
+  max-width: 150px;
+}
+.human-caption > div:not(.game-actions) {
+  min-width: 0;
+}
+@media (max-width: 750px) {
+  .opponent small {
+    display: none;
+  }
+  .profile-chip > span {
+    max-width: 135px;
+  }
+}
+/* Changing a decision must not replay the entrance fade or flash the selected card. */
+.event-modal:not(.step-story) {
+  animation: none;
+}

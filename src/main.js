@@ -25,6 +25,7 @@
     eventCard = null,
     timer = null,
     paused = false,
+    animating = false,
     dialog = null,
     lastDialog = -9,
     recent = [],
@@ -196,11 +197,11 @@
       .slice(1)
       .map(
         (p, j) =>
-          `<article class="opponent ${G.actor === j + 1 ? "active" : ""} ${p.out ? "out" : ""}">${avatar(p.npc, emotion[j + 1] || 0)}<div><strong>${name(j + 1)}</strong><small>${role(j + 1)}</small><span class="hand-count">${p.hand.length} карт</span></div></article>`,
+          `<article data-seat="${j + 1}" class="opponent ${G.actor === j + 1 ? "active" : ""} ${p.out ? "out" : ""}">${avatar(p.npc, emotion[j + 1] || 0)}<div><strong>${name(j + 1)}</strong><small>${role(j + 1)}</small><span class="hand-count">${p.hand.length} карт</span></div></article>`,
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : ""}</div><strong>${E.stockCount(G)} в колоде</strong><small class="trump-label ${G.trump === 1 || G.trump === 2 ? "red" : "black"}">Козырь <b>${E.stockCount(G) > 0 ? E.label(G.trumpCard) : E.SUITS[G.trump]}</b></small>${G.options.chaos ? `<div class="event-stock" aria-label="Секретная колода происшествий">${backCard(true)}<span>СОБЫТИЯ ВАХТЫ<br>Секретная колода</span></div>` : ""}</aside><div class="battle"><div class="turn-label"><strong>${nameRole}</strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><div class="speech" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></div></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${role(0)} · ${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Завершить подкидывание" : "Бито / больше не подкидывать", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : ""}</div><strong>${E.stockCount(G)} в колоде</strong>${G.options.chaos ? `<div class="event-stock" aria-label="Секретная колода происшествий">${backCard(true)}<span>СОБЫТИЯ ВАХТЫ<br>Секретная колода</span></div>` : ""}</aside><div class="battle"><div class="turn-label"><strong>${nameRole}</strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><div class="speech" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></div></div><div class="discard-target" aria-label="Отбой">Отбой</div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${role(0)} · ${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Завершить подкидывание" : "Бито / больше не подкидывать", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
@@ -331,6 +332,7 @@
     });
   }
   function render() {
+    if (animating) return;
     clearTimeout(timer);
     document.body.classList.toggle("reduced", P.settings.reduced);
     document.body.classList.toggle("fast", P.settings.fast);
@@ -457,18 +459,42 @@
     selected = null;
     render();
   }
-  function act(a) {
-    if (paused || !G || screen !== "game") return;
-    const who = G.actor,
-      r = E.apply(G, who, a);
+  const motion = new VahtaMotion({
+    card,
+    back: backCard,
+    settings: () => P.settings,
+  });
+  async function act(a) {
+    if (paused || animating || !G || screen !== "game") return;
+    const before = structuredClone(G),
+      next = structuredClone(G),
+      who = G.actor;
+    const r = E.apply(next, who, a);
     if (!r.ok) {
       toast(r.error);
       return;
+    }
+    clearTimeout(timer);
+    animating = true;
+    document.body.dataset.animating = "true";
+    $("#app").inert = true;
+    // Accepted state is durable before flight. Reloading never loses/duplicates a card.
+    G = next;
+    persist();
+    try {
+      await motion.play(before, next, a);
+    } catch (error) {
+      console.warn("Card animation interrupted", error);
+    } finally {
+      animating = false;
+      document.body.dataset.animating = "false";
+      $("#app").inert = false;
     }
     afterAction(who, a);
   }
   function scheduleBot() {
     if (
+      animating ||
       paused ||
       document.hidden ||
       !G ||
@@ -484,7 +510,7 @@
           if (a) act(a);
         }
       },
-      P.settings.fast ? 90 : 650,
+      P.settings.fast ? 320 : 1000,
     );
   }
   function startGame() {
@@ -538,6 +564,7 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   function handle(action, el) {
+    if (animating) return;
     switch (action) {
       case "menu":
         if (G && !G.finished) persist();
@@ -812,8 +839,10 @@
   document.addEventListener("visibilitychange", () => {
     clearTimeout(timer);
     audio.pause(document.hidden || paused);
-    if (document.hidden) persist();
-    else if (screen === "game") scheduleBot();
+    if (document.hidden) {
+      motion.finish();
+      persist();
+    } else if (screen === "game") scheduleBot();
   });
   window.addEventListener("pagehide", persist);
   window.addEventListener("blur", () => {
@@ -828,6 +857,7 @@
     if (
       screen === "game" &&
       !paused &&
+      !animating &&
       !document.hidden &&
       G?.actor === 0 &&
       Date.now() - lastActionAt > 25000
@@ -839,7 +869,7 @@
   }, 5000);
   const overlayObserver = new MutationObserver(() => {
     const open = $("#overlay").childElementCount > 0;
-    $("#app").inert = open;
+    $("#app").inert = open || animating;
   });
   overlayObserver.observe($("#overlay"), { childList: true });
   document.addEventListener("keydown", (e) => {
@@ -877,6 +907,10 @@
         "Не загружена часть графики. Проверьте, что папка public/assets распакована рядом с index.html.",
       );
   });
+  if (G?.finished) {
+    S.finish(P, G);
+    persist();
+  }
   render();
   if (loaded.warning) toast(loaded.warning);
 })();

@@ -1,6 +1,6 @@
 {
   "name": "durak-na-vahte",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Офлайн дурак с вахтовыми происшествиями",
   "scripts": {
@@ -9,7 +9,8 @@
     "test:browser": "node tests/browser.cjs",
     "serve": "python3 -m http.server 8080 --bind 127.0.0.1",
     "package": "node scripts/package.cjs",
-    "test:mobile": "node tests/mobile.cjs"
+    "test:mobile": "node tests/mobile.cjs",
+    "test:motion": "node tests/motion.cjs"
   },
   "devDependencies": {
     "playwright": "1.63.0"

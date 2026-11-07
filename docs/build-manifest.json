@@ -1,8 +1,8 @@
 [
   {
     "file": "index.html",
-    "bytes": 850,
-    "sha256": "c8f329e42cf1af6465e59fa90f50bed00ca18e9e9e41c87f45f5f4ab8f905291"
+    "bytes": 898,
+    "sha256": "164917f292da8ae97ab1260fb1cfd233501c220de01bf3e74d4bebfeba373ebb"
   },
   {
     "file": "public/assets/audio/button.wav",
@@ -126,17 +126,22 @@
   },
   {
     "file": "src/main.js",
-    "bytes": 48388,
-    "sha256": "4a3021df74bed8066e3a249c686c5ecf9c06cd10a84c953f862ff55cbcb16abd"
+    "bytes": 49224,
+    "sha256": "c75bb56f4887620326c5a5df9c0d3ec117460842a6f0ea4d4c168ea1b4d1320b"
+  },
+  {
+    "file": "src/motion.js",
+    "bytes": 8371,
+    "sha256": "d7a01bd2c055ef84c0c071b79d15850be3a60937f0ff3c1e7dfa2bc4af1c2869"
   },
   {
     "file": "src/styles/main.css",
-    "bytes": 45305,
-    "sha256": "2e34a6e9176bf2f3a0e9710b8a39af6a585846282c934900eaf7bfe907b9c955"
+    "bytes": 46569,
+    "sha256": "4063b8ac4f74eef8478b1783fd4a9d685c9b238047ccb6e3e73669792a6e0e62"
   },
   {
     "file": "sw.js",
-    "bytes": 1349,
-    "sha256": "81cb378e53cc137aa7b4075a7cfdb9ebc258fd902e7aaf30e1c360bd97f93b81"
+    "bytes": 1367,
+    "sha256": "44582ce60a692a828ceadc15d99a97aacc692d0c15bfc05c5733f6fdb718c863"
   }
 ]

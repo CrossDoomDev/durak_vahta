@@ -1,0 +1,6 @@
+[
+  "discard flight, turn serialization, final scoring and cleanup",
+  "take flight, turn serialization, final scoring and cleanup",
+  "replenishment flight shows backs and respects rule order",
+  "reload mid-flight preserves accepted state"
+]

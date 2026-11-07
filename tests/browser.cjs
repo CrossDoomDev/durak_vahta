@@ -127,6 +127,9 @@ const server = http
     ]) {
       await page.setViewportSize({ width: w, height: h });
       await page.waitForTimeout(150);
+      await page.waitForFunction(
+        () => document.body.dataset.animating !== "true",
+      );
       await page.screenshot({ path: path.join(out, label + ".png") });
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth > innerWidth + 2,
@@ -145,6 +148,9 @@ const server = http
     for (let attempt = 0; attempt < 4 && !won; attempt++) {
       let guard = 0;
       while (guard++ < 1500) {
+        await page.waitForFunction(
+          () => document.body.dataset.animating !== "true",
+        );
         const s = await page.evaluate(
           () => JSON.parse(localStorage.getItem("durak-vahta-v1")).game,
         );

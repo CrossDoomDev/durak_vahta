@@ -1,0 +1,118 @@
+[
+  {
+    "viewport": "360x640",
+    "pairs": 1,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "360x640",
+    "pairs": 6,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "360x800",
+    "pairs": 1,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "360x800",
+    "pairs": 6,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "390x844",
+    "pairs": 1,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "390x844",
+    "pairs": 6,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "412x915",
+    "pairs": 1,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "412x915",
+    "pairs": 6,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "740x360",
+    "pairs": 1,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "740x360",
+    "pairs": 6,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "844x390",
+    "pairs": 1,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "844x390",
+    "pairs": 6,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "1366x768",
+    "pairs": 1,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "1366x768",
+    "pairs": 6,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "1920x1080",
+    "pairs": 1,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "1920x1080",
+    "pairs": 6,
+    "eventsHidden": true,
+    "noLabelSpeechOrCardOverlap": true
+  },
+  {
+    "viewport": "360x640",
+    "hiddenEventDeckStillResolves": true
+  },
+  {
+    "viewport": "390x844",
+    "hiddenEventDeckStillResolves": true
+  },
+  {
+    "viewport": "740x360",
+    "hiddenEventDeckStillResolves": true
+  },
+  {
+    "viewport": "360x800",
+    "newPairFlightMatchesFinalGrid": true
+  },
+  {
+    "viewport": "740x360",
+    "newPairFlightMatchesFinalGrid": true
+  }
+]

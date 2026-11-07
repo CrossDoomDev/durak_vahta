@@ -131,13 +131,13 @@
   },
   {
     "file": "src/main.js",
-    "bytes": 56848,
-    "sha256": "d85b2622d2386a59767f56fd70b1d475b391e70c63ee6913cc24b221e91b618e"
+    "bytes": 58918,
+    "sha256": "adf88390c1a6d74d130eb83b7e7215d9344e0f854d86af87875383c3ef15ae34"
   },
   {
     "file": "src/motion.js",
-    "bytes": 8371,
-    "sha256": "d7a01bd2c055ef84c0c071b79d15850be3a60937f0ff3c1e7dfa2bc4af1c2869"
+    "bytes": 8951,
+    "sha256": "7b6fa1959bdbaa8454f5c16c90a4e3a9cb78873a7aaad27a418de02d086d0375"
   },
   {
     "file": "src/styles/main.css",
@@ -146,12 +146,12 @@
   },
   {
     "file": "src/styles/viewport.css",
-    "bytes": 35579,
-    "sha256": "86b631dc609e71828e62ab69d7de6019add040bccc32c14bf6b3feb0eb496835"
+    "bytes": 37206,
+    "sha256": "a0f00ea0b0e8a5f79a87499c59273fe2ae2327454f4fe1b90f6846c98060b502"
   },
   {
     "file": "sw.js",
     "bytes": 1428,
-    "sha256": "b6128297bac1354e58cb3cc98021e560c6696c23fa97787d633b478a66eb9199"
+    "sha256": "69b23678e4d4a12a40f92ac9972b1e721f6ba2e4de789ea35e6feef7f407fbf9"
   }
 ]

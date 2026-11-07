@@ -1,10 +1,11 @@
 /* Presentation-only flight queue. Never modifies the rule model. */
 (function (root) {
   class VahtaMotion {
-    constructor({ card, back, settings }) {
+    constructor({ card, back, settings, layout }) {
       this.card = card;
       this.back = back;
       this.settings = settings;
+      this.layout = layout;
       this.running = new Set();
     }
     duration(ms) {
@@ -15,15 +16,16 @@
       return el?.getBoundingClientRect();
     }
     seat(i) {
-      return document.querySelector(
-        i === 0
-          ? ".human-caption .avatar"
-          : `.opponent[data-seat="${i}"] .avatar`,
-      );
+      if (i !== 0)
+        return document.querySelector(`.opponent[data-seat="${i}"] .avatar`);
+      const avatar = document.querySelector(".human-caption .avatar");
+      return avatar?.getBoundingClientRect().width
+        ? avatar
+        : document.querySelector(".hand") ||
+            document.querySelector(".human-caption");
     }
+
     status(text) {
-      const el = document.querySelector(".turn-label strong");
-      if (el) el.textContent = text;
       this.message.textContent = text;
     }
     async wait(ms) {
@@ -106,11 +108,23 @@
       return table
         .map(
           (p) =>
-            `<div class="card-pair">${this.card(p.attack, { classes: p.defense == null ? "uncovered" : "covered" })}${p.defense != null ? this.card(p.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`,
+            `<div class="card-pair">${this.card(p.attack, { classes: p.defense == null ? "uncovered" : "covered" })}${p.defense != null ? this.card(p.defense, { classes: "defense-card" }) : ""}</div>`,
         )
         .join("");
     }
     async play(before, after, a) {
+      // Local font loading and viewport resize can otherwise move the target mid-flight.
+      await document.fonts.ready;
+      if (!document.hidden)
+        await new Promise((resolve) => {
+          const fallback = setTimeout(resolve, 80);
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              clearTimeout(fallback);
+              resolve();
+            }),
+          );
+        });
       const pairs = document.querySelector(".pairs");
       if (!pairs) return;
       const actor = before.actor,
@@ -149,11 +163,12 @@
           });
           measuring.innerHTML = this.tableHTML(visual);
           document.body.append(measuring);
+          this.layout?.(measuring, visual.length);
           const targetEl = measuring.querySelector(
               `.playing-card[data-card="${a.card}"]`,
             ),
             to = this.rect(targetEl);
-          const rotation = a.type === "defend" ? 6 : 0;
+          const rotation = 0;
           measuring.remove();
           this.status(
             `${who} ${a.type === "defend" ? "отбивается" : a.type === "transfer" ? "переводит" : "ходит"} — ${VahtaEngine.label(a.card)}`,
@@ -161,6 +176,7 @@
           if (source) source.style.visibility = "hidden";
           await this.fly(this.card(a.card), from, to, { rotation });
           pairs.innerHTML = this.tableHTML(visual);
+          this.layout?.(pairs, visual.length);
           await this.wait(250);
         } else {
           this.status(

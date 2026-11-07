@@ -635,11 +635,7 @@ body[data-screen="game"] .game-scene {
   top: 20px;
   transform: none;
 }
-.pair-slot {
-  left: 26px;
-  top: calc(var(--table-card-height, 101px) - 5px);
-  font-size: 10px;
-}
+
 .playing-card .corner,
 .playing-card .corner b {
   font-size: clamp(14px, 22cqw, 25px);
@@ -2156,4 +2152,83 @@ html {
 /* Changing a decision must not replay the entrance fade or flash the selected card. */
 .event-modal:not(.step-story) {
   animation: none;
+}
+
+/* The discard destination occupies the freed stock column, never the speech area. */
+.stocks > .discard-target {
+  position: static;
+  align-self: center;
+  min-width: 0;
+  max-width: 100%;
+  margin-top: 10px;
+  padding: 4px 7px;
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+.speech > div {
+  flex: 1;
+  min-width: 0;
+}
+.speech strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .stocks {
+    padding-right: 0;
+  }
+  .stocks > .discard-target {
+    margin-top: 5px;
+    padding: 3px 5px;
+    font-size: 11px;
+  }
+}
+/* A translated entrance used to push new speech below the table for 250 ms. */
+.speech {
+  animation: none;
+}
+.game-toolbar .mode-label,
+.game-toolbar .round-label {
+  display: block;
+}
+.game-toolbar .round-label {
+  white-space: nowrap;
+}
+/* Give the message its own row; card sizing uses only the remaining table space. */
+.battle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  justify-content: stretch;
+}
+.turn-label small {
+  min-height: 30px;
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .human-zone {
+    min-height: 140px;
+  }
+}
+.human-caption > div:not(.game-actions) small {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .human-caption > div:not(.game-actions) small {
+    display: none;
+  }
+}
+/* Explicit pair coordinates keep the cards inside their row even during DOM replacement. */
+.pairs {
+  display: block;
+  position: relative;
+}
+.pairs:has(.table-empty) {
+  display: flex;
+}
+.pairs > .card-pair {
+  position: absolute;
 }

@@ -229,7 +229,7 @@
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><button data-action="talk" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><button data-action="talk" data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
@@ -445,7 +445,7 @@
     $(".game-scene").classList.toggle(
       "dense-table",
       table.clientHeight < (innerWidth < 750 ? 340 : 280) ||
-        (innerWidth < 750 && count > 3 && table.clientHeight < 400),
+        (innerWidth < 750 && count > 3 && table.clientHeight < 430),
     );
     layoutPairs(pairs, count);
   }
@@ -631,21 +631,34 @@
         $("#dialog-text").textContent = dialog.text;
       if (G.phase !== "event") scheduleBot();
     }
-    if (screen === "results" && G?.finished)
-      $("#result-quote").textContent = C.dialogue(
-        G.result.loser === 0 ? "lose" : "win",
-        0,
-        P.name,
-        P.settings.humor,
-      );
+    if (screen === "results" && G?.finished) {
+      const loser = G.result.loser;
+      const speaker =
+        loser > 0 ? loser : G.players.findIndex((p, i) => i > 0 && p.out);
+      $("#result-quote").textContent = G.result.draw
+        ? "Никто не дурак. Сейчас главное — не начать выяснять, кто был ближе."
+        : C.dialogue(
+            loser > 0 ? "lose" : "win",
+            G.players[speaker]?.npc ?? 0,
+            P.name,
+            P.settings.humor,
+          );
+    }
     layoutHands();
     tableResizeObserver?.disconnect();
     for (const el of document.querySelectorAll(".battle, .pairs"))
       tableResizeObserver?.observe(el);
     audio.update(P.settings);
   }
-  function say(kind, who) {
-    if (P.settings.dialogs === "off" || who === 0) return;
+  function say(kind, who, target = C.otherSeat(G, who), observer = false) {
+    if (
+      P.settings.dialogs === "off" ||
+      who === 0 ||
+      !G.players[who] ||
+      !G.players[target] ||
+      target === who
+    )
+      return;
     const cooldown =
       P.settings.dialogs === "rare"
         ? 6
@@ -655,24 +668,32 @@
     if (G.sequence - lastDialog < cooldown && kind !== "win" && kind !== "lose")
       return;
     const first = Math.floor(Math.random() * 2);
-    const text = [first, 1 - first]
-      .map((v) =>
-        C.dialogue(kind, G.players[who].npc, P.name, P.settings.humor, v),
-      )
-      .find((t) => !recent.includes(t));
-    if (!text) return;
-    recent.push(text);
-    recent = recent.slice(-5);
+    const picked = [first, 1 - first]
+      .map((v) => ({
+        key: `${kind}:${G.players[who].npc}:${v}:${observer}`,
+        text: C.dialogue(
+          kind,
+          G.players[who].npc,
+          G.players[target].name,
+          P.settings.humor,
+          v,
+          observer,
+        ),
+      }))
+      .find((t) => !recent.includes(t.key));
+    if (!picked) return;
+    const text = picked.text;
+    recent.push(picked.key);
+    recent = recent.slice(-8);
     lastDialog = G.sequence;
-    dialog = { who, text };
+    dialog = { who, target, text };
     emotion[who] = ["take_many", "event_bad"].includes(kind)
       ? 2
       : ["win", "event_good", "defend"].includes(kind)
         ? 1
         : 0;
   }
-  function afterAction(who, a) {
-    const delta = G.sequence;
+  function afterAction(who, a, before) {
     lastActionAt = Date.now();
     audio.play(
       a.type === "defend" ? "cover" : a.type === "take" ? "take" : "card",
@@ -681,7 +702,10 @@
       a.type === "defend"
         ? "defend"
         : a.type === "take"
-          ? G.table.length > 1
+          ? before.table.reduce(
+              (n, p) => n + 1 + (p.defense != null ? 1 : 0),
+              0,
+            ) > 1
             ? "take_many"
             : "take_one"
           : a.type === "pass"
@@ -694,8 +718,9 @@
       G.players[who].hand.some((c) => E.card(c).suit === G.trump)
     )
       category = "trump_saved";
-    say(category, who);
-    if (G.round > 24 && G.round % 10 === 0) say("long_game", who);
+    const target = C.actionAudience(before, G, a, who);
+    say(category, who, target);
+    if (G.round > 24 && G.round % 10 === 0) say("long_game", who, target);
     if (G.finished) {
       newAchievements = S.finish(P, G);
       persist();
@@ -732,6 +757,9 @@
       toast(r.error);
       return;
     }
+    // Public provenance lets a defender answer the author of this particular attack.
+    if ((a.type === "attack" || a.type === "transfer") && next.table.length)
+      next.table.at(-1).playedBy = who;
     clearTimeout(timer);
     animating = true;
     document.body.dataset.animating = "true";
@@ -748,7 +776,7 @@
       document.body.dataset.animating = "false";
       $("#app").inert = false;
     }
-    afterAction(who, a);
+    afterAction(who, a, before);
   }
   function scheduleBot() {
     if (
@@ -965,18 +993,35 @@
       case "event-accept": {
         const v = F.spec(G),
           who = v.recipient;
-        const r = F.eventAction(
-          G,
+        const skipBefore = G.players[who].skip;
+        const eventAction =
           who === 0 && !v.cancelled
             ? { choice: eventChoice, target: eventTarget, card: eventCard }
-            : F.botEvent(G),
-        );
+            : F.botEvent(G);
+        const resolvedKind = v.choices.length ? eventAction.choice : v.kind;
+        const r = F.eventAction(G, eventAction);
         if (!r.ok) {
           toast(r.error);
           return;
         }
         const record = G.metrics.events.at(-1);
-        say(record.delta > 0 ? "event_bad" : "event_good", who === 0 ? 1 : who);
+        const category =
+          record.delta > 0 ||
+          resolvedKind === "skip" ||
+          G.players[who].skip > skipBefore
+            ? "event_bad"
+            : record.delta < 0
+              ? "event_good"
+              : "event_neutral";
+        const speaker =
+          who === 0 ? G.players.findIndex((p, i) => i > 0 && !p.out) : who;
+        if (speaker > 0 && !record.cancelled)
+          say(
+            category,
+            speaker,
+            who === 0 ? 0 : C.otherSeat(G, who),
+            who === 0,
+          );
         if (G.finished) {
           newAchievements = S.finish(P, G);
           persist();
@@ -1156,7 +1201,8 @@
       G?.actor === 0 &&
       Date.now() - lastActionAt > 25000
     ) {
-      say("idle", 1);
+      const speaker = G.players.findIndex((p, i) => i > 0 && !p.out);
+      if (speaker > 0) say("idle", speaker, 0);
       lastActionAt = Date.now();
       render();
     }

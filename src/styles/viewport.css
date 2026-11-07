@@ -2233,7 +2233,30 @@ html {
   position: absolute;
 }
 /* The defender remains distinct from the participant currently making a move. */
-.opponent.defending-player { border-color:#77d2e7; box-shadow:inset 0 0 0 1px #77d2e7; }
-.opponent.defending-player .hand-count { color:#a6edfa; font-weight:700; white-space:nowrap; font-size:11px; }
-.defender-line { display:block; color:#a6edfa; font-size:12px; line-height:15px; font-weight:600; }
-.human-zone.defending-player .hand { border-bottom:2px solid #77d2e7; }
+.opponent.defending-player {
+  border-color: #77d2e7;
+  box-shadow: inset 0 0 0 1px #77d2e7;
+}
+.opponent.defending-player .hand-count {
+  color: #a6edfa;
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: 11px;
+}
+.defender-line {
+  display: block;
+  color: #a6edfa;
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 600;
+}
+.human-zone.defending-player .hand {
+  border-bottom: 2px solid #77d2e7;
+}
+
+/* Roomier viewports show more of the punchline; full dialogue stays available on tap. */
+@media (min-height: 850px), (min-width: 1000px) {
+  .speech p {
+    -webkit-line-clamp: 4;
+  }
+}

@@ -1,0 +1,12 @@
+✔ bot speech follows the real attack, cover, transfer, pass and take recipient (8.291101ms)
+✔ missing old-save provenance falls back to attacker, never forces human or self (0.547003ms)
+✔ public attack authors survive saved games and remain attached to each individual card (4.457372ms)
+✔ 360 authored lines are unique, personalized, cleaned, and observer reactions are distinct (4.007513ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27.671528

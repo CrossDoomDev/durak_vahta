@@ -381,7 +381,7 @@ test("RNG and restore preserve future exactly; bot observation omits hidden zone
   assert.equal(obs.rng, undefined);
   assert.notEqual(obs.hand, s.players[s.actor].hand);
 });
-test("name validation, 280 occupational dialogues and safe/real swearing modes", () => {
+test("name validation, 300 occupational dialogues and safe/real swearing modes", () => {
   for (const n of ["Саша", "Анна-Мария", "John Smith", "  Иван  "])
     assert.ok(E.validName(n));
   for (const n of [
@@ -398,7 +398,7 @@ test("name validation, 280 occupational dialogues and safe/real swearing modes",
       .flat()
       .filter((t) => typeof t === "string").length +
       Object.values(C.extras).flat().length,
-    280,
+    300,
   );
   for (const category in C.phrases)
     for (const { id: i } of C.NPC) {
@@ -578,7 +578,7 @@ test("new occupational roster, varied safe dialogues and compatible saved avatar
             /геймдев|бэклог|патч|релиз|баг|код|разработк|тестиров/i,
           );
       }
-  assert.equal(unique.size, 280);
+  assert.equal(unique.size, 300);
   for (const id of [5, 6, 7, 8, 9, 10]) {
     const p = S.fresh();
     p.name = "Алексей";

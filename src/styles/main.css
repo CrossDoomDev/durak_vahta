@@ -2777,3 +2777,50 @@ body[data-animating="true"] .game-actions {
     font-size: 7px;
   }
 }
+/* After the stock is exhausted its place still remembers the trump suit. */
+.empty-trump {
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  width: 64px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff4da;
+  border: 2px solid #c29d60;
+  border-radius: 9px;
+  box-shadow:
+    inset 0 0 0 5px #e6d4aa,
+    0 3px 8px #0005;
+}
+.empty-trump span {
+  font-size: 44px;
+  line-height: 1;
+}
+.empty-trump.red {
+  color: #a91f22;
+}
+.empty-trump.black {
+  color: #122b24;
+}
+@media (max-width: 750px) {
+  .empty-trump {
+    width: 57px;
+    height: 82px;
+  }
+  .empty-trump span {
+    font-size: 39px;
+  }
+}
+@media (max-height: 600px) and (orientation: landscape) {
+  .empty-trump {
+    width: 43px;
+    height: 62px;
+    top: 0;
+    left: 0;
+  }
+  .empty-trump span {
+    font-size: 32px;
+  }
+}

@@ -100,6 +100,15 @@ const server = http
     await page.locator('[data-action="setup"]').click();
     await page.locator("#variant").selectOption("transfer");
     await page.locator("#frequency").selectOption("mad");
+    assert.equal(await page.locator(".npc-card").count(), 10);
+    assert.ok(
+      (await page.locator('.npc-card[data-id="2"]').textContent()).includes(
+        "Монтажник",
+      ),
+    );
+    for (const id of [0, 1, 2, 6, 9, 10])
+      await page.locator(`[data-action="npc"][data-id="${id}"]`).click();
+
     await page.screenshot({ path: path.join(out, "02-opponents-1366.png") });
     await page.locator('[data-action="start"]').click();
     await page.locator(".game-scene").waitFor();

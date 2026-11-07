@@ -43,7 +43,7 @@
     if (raw.name && !E.validName(raw.name)) throw Error("Неверное имя");
     p.name = (raw.name || "").trim();
     p.avatar =
-      Number.isInteger(raw.avatar) && raw.avatar >= 0 && raw.avatar <= 5
+      Number.isInteger(raw.avatar) && raw.avatar >= 0 && raw.avatar <= 10
         ? raw.avatar
         : 5;
     p.xp = Number.isFinite(raw.xp) && raw.xp >= 0 ? Math.min(raw.xp, 1e8) : 0;

@@ -1,0 +1,68 @@
+[
+  {
+    "npc": "Палыч",
+    "job": "Старший по бытовке",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Санёк",
+    "job": "Водитель вахтовки",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Артём",
+    "job": "Монтажник",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Димон",
+    "job": "Сварщик-монтажник",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Тамара Петровна",
+    "job": "Заведующая складом",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Виктор",
+    "job": "Экскаваторщик",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Нина",
+    "job": "Повариха",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Гена",
+    "job": "Охранник",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Олег",
+    "job": "Прораб",
+    "selectionAndPortrait": true
+  },
+  {
+    "npc": "Костя",
+    "job": "Разнорабочий",
+    "selectionAndPortrait": true
+  },
+  {
+    "trump": "♠",
+    "emptyStockMarker": true
+  },
+  {
+    "trump": "♥",
+    "emptyStockMarker": true
+  },
+  {
+    "trump": "♦",
+    "emptyStockMarker": true
+  },
+  {
+    "trump": "♣",
+    "emptyStockMarker": true
+  }
+]

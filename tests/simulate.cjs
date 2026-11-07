@@ -1,3 +1,4 @@
+const NPC = require("../src/content/characters.js").NPC;
 const E = require("../src/game/engine.js"),
   F = require("../src/game/events.js");
 F.setContent(require("../src/content/events.js"));
@@ -7,6 +8,20 @@ let total = 0,
 for (let seed = 1; seed <= 1000; seed++) {
   const s = E.start({
     seed,
+    names: [
+      "Вахтовик",
+      ...Array.from(
+        { length: 3 },
+        (_, i) => NPC[(seed + i * 3) % NPC.length].name,
+      ),
+    ],
+    npcs: [
+      -1,
+      ...Array.from(
+        { length: 3 },
+        (_, i) => NPC[(seed + i * 3) % NPC.length].id,
+      ),
+    ],
     count: 2 + (seed % 3),
     variant: Math.floor(seed / 3) % 2 ? "transfer" : "standard",
     chaos: Math.floor(seed / 6) % 2 !== 0,

@@ -456,6 +456,17 @@
       if (v.temperament === 4)
         value -=
           v.hand.filter((c) => card(c).rank === card(a.card).rank).length * 1.5;
+      // Public-information occupational temperaments; no access to hidden hands.
+      if (v.temperament === 6 && a.type === "attack")
+        value -=
+          v.hand.filter((c) => card(c).rank === card(a.card).rank).length * 2;
+      if (v.temperament === 7 && card(a.card).suit === v.trump) value += 9;
+      if (v.temperament === 8 && a.type === "defend")
+        value += card(a.card).suit === v.trump ? 7 : -2;
+      if (v.temperament === 9 && a.type === "attack")
+        value -= v.counts[v.defender] < 3 ? 10 : 2;
+      if (v.temperament === 10 && v.stock === 0)
+        value -= card(a.card).rank * 0.5;
       return value;
     };
     return v.legal.slice().sort((a, b) => score(a) - score(b))[0];
@@ -542,7 +553,7 @@
           p.skip > 1 ||
           !Number.isInteger(p.npc) ||
           p.npc < -1 ||
-          p.npc > 5,
+          p.npc > 10,
       )
     )
       throw Error("Повреждены участники");

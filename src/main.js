@@ -61,6 +61,8 @@
     return `<span class="sprite ${classes}" style="background-image:url('public/assets/${sheet}.webp');background-size:${cols * 100}% ${rows * 100}%;background-position:${((index % cols) / (cols - 1)) * 100}% ${(Math.floor(index / cols) / (rows - 1)) * 100}%;${extra}"></span>`;
   }
   function avatar(npc, em = 0, classes = "") {
+    if (npc >= 6)
+      return sprite("npc-extra", npc - 6 + 5 * em, 5, 4, "avatar " + classes);
     return npc === 5
       ? sprite("decor", 5, 4, 3, "avatar " + classes)
       : sprite("npc", Math.max(0, npc) + 5 * em, 5, 4, "avatar " + classes);
@@ -201,7 +203,7 @@
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : ""}</div><strong>${E.stockCount(G)} в колоде</strong>${G.options.chaos ? `<div class="event-stock" aria-label="Секретная колода происшествий">${backCard(true)}<span>СОБЫТИЯ ВАХТЫ<br>Секретная колода</span></div>` : ""}</aside><div class="battle"><div class="turn-label"><strong>${nameRole}</strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><div class="speech" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></div></div><div class="discard-target" aria-label="Отбой">Отбой</div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${role(0)} · ${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Завершить подкидывание" : "Бито / больше не подкидывать", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong>${G.options.chaos ? `<div class="event-stock" aria-label="Секретная колода происшествий">${backCard(true)}<span>СОБЫТИЯ ВАХТЫ<br>Секретная колода</span></div>` : ""}</aside><div class="battle"><div class="turn-label"><strong>${nameRole}</strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><div class="speech" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></div></div><div class="discard-target" aria-label="Отбой">Отбой</div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${role(0)} · ${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Завершить подкидывание" : "Бито / больше не подкидывать", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
@@ -241,7 +243,7 @@
       st2 = P.stats.chaos;
     return panelPage(
       heading("ЛИЧНОЕ ДЕЛО", "Твой пропуск") +
-        `<div class="profile-layout"><section class="paper"><h2>${playerName()}</h2><p>${S.rank(P.xp)} · ${P.xp} опыта</p><label for="profile-name">Имя</label><input id="profile-name" maxlength="24"><small>2–24 буквы, пробелы и дефисы.</small>${button("Сохранить имя", "save-name", "primary")}<h3>Фотография на пропуск</h3><div class="avatars">${[0, 1, 2, 3, 4, 5].map((n) => `<button class="avatar-choice ${P.avatar === n ? "chosen" : ""}" data-action="avatar" data-id="${n}" aria-label="Аватар ${n + 1}">${avatar(n)}</button>`).join("")}</div></section><section class="paper"><h2>Табель партий</h2>${[
+        `<div class="profile-layout"><section class="paper"><h2>${playerName()}</h2><p>${S.rank(P.xp)} · ${P.xp} опыта</p><label for="profile-name">Имя</label><input id="profile-name" maxlength="24"><small>2–24 буквы, пробелы и дефисы.</small>${button("Сохранить имя", "save-name", "primary")}<h3>Фотография на пропуск</h3><div class="avatars">${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => `<button class="avatar-choice ${P.avatar === n ? "chosen" : ""}" data-action="avatar" data-id="${n}" aria-label="Аватар ${n + 1}">${avatar(n)}</button>`).join("")}</div></section><section class="paper"><h2>Табель партий</h2>${[
           ["Классика", st1],
           ["Беспредел", st2],
         ]
@@ -405,8 +407,13 @@
           : 3;
     if (G.sequence - lastDialog < cooldown && kind !== "win" && kind !== "lose")
       return;
-    const text = C.dialogue(kind, G.players[who].npc, P.name, P.settings.humor);
-    if (recent.includes(text)) return;
+    const first = Math.floor(Math.random() * 2);
+    const text = [first, 1 - first]
+      .map((v) =>
+        C.dialogue(kind, G.players[who].npc, P.name, P.settings.humor, v),
+      )
+      .find((t) => !recent.includes(t));
+    if (!text) return;
     recent.push(text);
     recent = recent.slice(-5);
     lastDialog = G.sequence;
@@ -454,6 +461,9 @@
       eventChoice = "";
       eventTarget = null;
       eventCard = null;
+      G.players.forEach((p, i) => {
+        if (i > 0 && !p.out) emotion[i] = 3;
+      });
       audio.play("event");
     }
     selected = null;
@@ -515,7 +525,10 @@
   }
   function startGame() {
     if (setup.npcs.length !== setup.count - 1) return;
-    const names = [P.name, ...setup.npcs.map((i) => C.NPC[i].name)];
+    const names = [
+      P.name,
+      ...setup.npcs.map((i) => C.NPC.find((n) => n.id === i).name),
+    ];
     G = E.start({
       ...setup,
       names,
@@ -892,7 +905,7 @@
     }
   });
   Promise.all(
-    ["room", "npc", "cards", "events", "decor"].map(
+    ["room", "npc", "npc-extra", "cards", "events", "decor"].map(
       (name) =>
         new Promise((resolve) => {
           const img = new Image();

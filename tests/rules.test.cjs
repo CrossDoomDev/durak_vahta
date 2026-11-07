@@ -381,7 +381,7 @@ test("RNG and restore preserve future exactly; bot observation omits hidden zone
   assert.equal(obs.rng, undefined);
   assert.notEqual(obs.hand, s.players[s.actor].hand);
 });
-test("name validation, 70 contextual dialogues and safe/real swearing modes", () => {
+test("name validation, 280 occupational dialogues and safe/real swearing modes", () => {
   for (const n of ["Саша", "Анна-Мария", "John Smith", "  Иван  "])
     assert.ok(E.validName(n));
   for (const n of [
@@ -392,9 +392,16 @@ test("name validation, 70 contextual dialogues and safe/real swearing modes", ()
     "a".repeat(25),
   ])
     assert.equal(E.validName(n), false);
-  assert.equal(Object.values(C.phrases).flat().length, 70);
+  assert.equal(C.NPC.length, 10);
+  assert.equal(
+    Object.values(C.phrases)
+      .flat()
+      .filter((t) => typeof t === "string").length +
+      Object.values(C.extras).flat().length,
+    280,
+  );
   for (const category in C.phrases)
-    for (let i = 0; i < 5; i++) {
+    for (const { id: i } of C.NPC) {
       const t = C.dialogue(category, i, "Анна-Мария");
       assert.ok(t.includes("Анна-Мария"));
       assert.ok(!t.includes("{playerName}"));
@@ -545,4 +552,40 @@ test("restore rejects malformed event metadata and missing options", () => {
   s.phase = "event";
   s.event = { id: 999, recipient: 0 };
   assert.throws(() => E.restore(s));
+});
+test("new occupational roster, varied safe dialogues and compatible saved avatars", () => {
+  assert.deepEqual(
+    C.NPC.map((n) => n.id),
+    [0, 1, 2, 3, 4, 6, 7, 8, 9, 10],
+  );
+  assert.equal(C.NPC.find((n) => n.id === 2).job, "Монтажник");
+  const unique = new Set();
+  for (const n of C.NPC)
+    for (const category of Object.keys(C.phrases))
+      for (const variant of [0, 1]) {
+        const line = C.dialogue(category, n.id, "Алексей", "full", variant);
+        unique.add(line);
+        assert.ok(line.includes("Алексей"));
+        assert.equal(
+          C.dialogue(category, n.id, "Алексей", "clean", variant).match(
+            /блядь|нахуй|сука|пиздец|ебаться|заебало|охуел/gi,
+          ),
+          null,
+        );
+        if (n.id === 2)
+          assert.doesNotMatch(
+            line,
+            /геймдев|бэклог|патч|релиз|баг|код|разработк|тестиров/i,
+          );
+      }
+  assert.equal(unique.size, 280);
+  for (const id of [5, 6, 7, 8, 9, 10]) {
+    const p = S.fresh();
+    p.name = "Алексей";
+    p.avatar = id;
+    p.game = E.start({ seed: 17, npcs: [id, 6, 8, 10] });
+    const restored = S.validate(p);
+    assert.equal(restored.avatar, id);
+    assert.equal(restored.game.players[3].npc, 10);
+  }
 });

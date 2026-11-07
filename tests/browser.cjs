@@ -183,7 +183,8 @@ const server = http
           const card = page.locator(
             `[data-action="event-card"][data-card="${choice.card}"]`,
           );
-          if (await card.count()) await card.click();
+          if (await card.count())
+            await card.click({ position: { x: 10, y: 10 } });
           await page.locator('[data-action="event-accept"]').click();
           continue;
         }
@@ -199,7 +200,7 @@ const server = http
         if (["attack", "transfer", "defend"].includes(a.type))
           await page
             .locator(`.hand [data-action="select-card"][data-card="${a.card}"]`)
-            .click();
+            .click({ position: { x: 10, y: 10 } });
         if (a.type === "defend")
           await page
             .locator(`[data-action="cover"][data-pair="${a.pair}"]`)
@@ -245,16 +246,22 @@ const server = http
     );
     report.scenarios.push("export/import with confirmation; profile rename");
     await page.locator('[data-action="gallery"]').click();
-    await page.locator('[data-action="gallery-events"]').click();
-    assert.equal(await page.locator(".event-tile").count(), 30);
-    await page.locator(".event-tile").first().click();
-    await page.locator('[data-action="close-modal"]').click();
+    assert.equal(
+      await page.locator('[data-action="gallery-events"]').count(),
+      0,
+    );
+    assert.equal(
+      await page.locator('[data-action="gallery-event"]').count(),
+      0,
+    );
     await page.locator('[data-action="gallery-cards"]').click();
     assert.equal(
       await page.locator(".gallery-cards .playing-card").count(),
       36,
     );
-    report.scenarios.push("36-card gallery and 30 functioning event previews");
+    report.scenarios.push(
+      "36-card gallery; no event previews or spoiler access",
+    );
     const missing = await page.evaluate(
       () =>
         [...document.images].filter((i) => !i.complete || !i.naturalWidth)

@@ -126,17 +126,17 @@
   },
   {
     "file": "src/main.js",
-    "bytes": 47712,
-    "sha256": "fe4e8bf2e3249489c66cbd5d40309203c749a6db067d1395567778d909533cdf"
+    "bytes": 48388,
+    "sha256": "4a3021df74bed8066e3a249c686c5ecf9c06cd10a84c953f862ff55cbcb16abd"
   },
   {
     "file": "src/styles/main.css",
-    "bytes": 38643,
-    "sha256": "89ea461cb1ba748ef28331636f90638e8ca8bbbf993e6e7e8acd0d067be3cca6"
+    "bytes": 45305,
+    "sha256": "2e34a6e9176bf2f3a0e9710b8a39af6a585846282c934900eaf7bfe907b9c955"
   },
   {
     "file": "sw.js",
     "bytes": 1349,
-    "sha256": "0206f84caf9dc97d2b72c22786e3310714070a5113a37b780ef1a0abe74bd2b3"
+    "sha256": "81cb378e53cc137aa7b4075a7cfdb9ebc258fd902e7aaf30e1c360bd97f93b81"
   }
 ]

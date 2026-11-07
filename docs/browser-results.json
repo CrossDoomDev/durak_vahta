@@ -4,9 +4,9 @@
   "scenarios": [
     "onboarding/name validation and personalized dialogue",
     "offline service-worker reload preserves full game/RNG/events",
-    "2 complete offline UI games; actual event choices and real victory",
+    "1 complete offline UI games; actual event choices and real victory",
     "export/import with confirmation; profile rename",
-    "36-card gallery and 30 functioning event previews"
+    "36-card gallery; no event previews or spoiler access"
   ],
   "viewports": [
     "1366x768",

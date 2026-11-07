@@ -2332,3 +2332,387 @@ legend {
     max-height: 88px;
   }
 }
+/* Mobile-first card reading: ink always sits on opaque paper, never on art. */
+.playing-card {
+  container-type: inline-size;
+}
+.playing-card .corner {
+  left: 3%;
+  top: 3%;
+  width: 27%;
+  min-width: 22px;
+  padding: 2px 1px;
+  background: #fff8e5;
+  border-radius: 4px;
+  z-index: 3;
+  font-size: clamp(14px, 22cqw, 25px);
+  line-height: 1.04;
+  text-shadow: none;
+  box-shadow: 0 1px 2px #30231318;
+}
+.playing-card .corner b {
+  font-size: inherit;
+  line-height: 1.05;
+  font-weight: 700;
+}
+.playing-card.black {
+  color: #122b24;
+}
+.playing-card.red {
+  color: #a91f22;
+}
+.playing-card .corner.lower {
+  left: auto;
+  top: auto;
+  right: 3%;
+  bottom: 3%;
+}
+.playing-card .card-illustration {
+  left: 19%;
+  top: 14%;
+  width: 65%;
+  height: 72%;
+}
+.hand .not-playable {
+  filter: none;
+}
+.hand .not-playable .card-illustration {
+  filter: saturate(0.4) brightness(0.7);
+}
+.hand,
+.event-hand {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  flex-shrink: 0;
+}
+.hand .playing-card,
+.event-hand .playing-card {
+  position: absolute;
+  width: var(--fan-card-width);
+  height: var(--fan-card-height);
+  min-width: 0;
+  max-height: none;
+  aspect-ratio: auto;
+  transform: none;
+  transition: transform 0.14s;
+}
+.hand .playing-card.selected,
+.event-hand .playing-card.selected {
+  transform: translateY(-8px);
+  outline: 3px solid #ffcf72;
+  box-shadow: 0 0 18px #e8b65e66;
+}
+.hand .playing-card:hover,
+.event-hand .playing-card:hover {
+  transform: none;
+}
+.hand .playing-card.selected:hover,
+.event-hand .playing-card.selected:hover {
+  transform: translateY(-8px);
+}
+
+.human-zone {
+  min-width: 0;
+}
+.human-caption {
+  min-height: 40px;
+  height: auto;
+}
+.game-actions {
+  min-height: 40px;
+  height: auto;
+}
+.table-zone {
+  grid-template-columns: 125px minmax(0, 1fr) 145px;
+}
+.stock-pile {
+  width: 118px;
+  height: 108px;
+  transform: none;
+  margin: 0 0 5px;
+  isolation: isolate;
+}
+.stock-pile > .back-card {
+  left: 0;
+  top: 12px;
+  width: 64px;
+  height: 92px;
+  z-index: 1;
+  box-shadow: 2px 3px 0 #b69e76;
+}
+.stock-pile > .trump-show {
+  left: 51px;
+  top: 0;
+  width: 64px;
+  height: 92px;
+  transform: none;
+  z-index: 2;
+}
+.trump-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #fff8e5;
+  padding: 4px 7px;
+  border-radius: 5px;
+  color: #233b2e !important;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.trump-label b {
+  font-size: 20px;
+  color: #102b22;
+}
+.trump-label.red b {
+  color: #a91f22;
+}
+.event-stock {
+  cursor: default;
+  margin-top: 9px;
+  font-size: 8px;
+  letter-spacing: 0.3px;
+}
+.event-stock .back-card {
+  width: 37px;
+  height: 53px;
+}
+.event-stock > span {
+  line-height: 1.2;
+}
+@media (max-width: 750px) {
+  .table-zone {
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 8px;
+    padding: 12px 8px;
+  }
+  .stock-pile {
+    width: 100px;
+    height: 96px;
+    transform: none;
+    margin: 0 0 3px;
+  }
+  .stock-pile > .back-card {
+    width: 57px;
+    height: 82px;
+    top: 11px;
+  }
+  .stock-pile > .trump-show {
+    left: 41px;
+    top: 0;
+    width: 57px;
+    height: 82px;
+  }
+  .trump-label {
+    font-size: 9px;
+  }
+  .trump-label b {
+    font-size: 18px;
+  }
+  .event-stock {
+    margin-top: 7px;
+  }
+  .event-stock .back-card {
+    width: 32px;
+    height: 46px;
+  }
+  .human-caption {
+    gap: 6px;
+  }
+  .game-actions {
+    gap: 6px;
+    justify-content: flex-start;
+    margin: 2px 0 0;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .game-actions .btn {
+    min-height: 42px;
+    font-size: 12px;
+    padding: 8px 13px;
+  }
+  .hand-help {
+    white-space: normal;
+    line-height: 1.25;
+    font-size: 10px;
+    margin: 3px 0;
+  }
+  .human-zone {
+    padding-top: 5px;
+  }
+  .pairs {
+    min-height: 100px;
+    gap: 7px;
+  }
+  .pairs .playing-card {
+    width: 60px;
+    height: 87px;
+  }
+  .card-pair {
+    padding-right: 8px;
+    padding-bottom: 17px;
+  }
+  .card-pair > .defense-card {
+    left: 8px;
+    top: 17px;
+  }
+  .opponent small {
+    font-size: 9px;
+  }
+  .opponent strong {
+    font-size: 11px;
+  }
+}
+@media (max-height: 600px) and (orientation: landscape) {
+  header {
+    height: 44px;
+  }
+  .game-scene {
+    height: calc(100dvh - 44px);
+  }
+  .game-toolbar {
+    height: 28px;
+    margin-bottom: 2px;
+  }
+  .opponents {
+    height: 37px;
+    margin-bottom: 3px;
+  }
+  .opponent .avatar {
+    width: 27px;
+    height: 27px;
+  }
+  .table-zone {
+    grid-template-columns: 94px minmax(0, 1fr);
+    padding: 5px 8px;
+    gap: 8px;
+    overflow: auto;
+  }
+  .table-log {
+    display: none;
+  }
+  .stock-pile {
+    height: 66px;
+    width: 85px;
+    transform: none;
+    margin: 0;
+  }
+  .stock-pile > .back-card {
+    top: 9px;
+    width: 42px;
+    height: 60px;
+  }
+  .stock-pile > .trump-show {
+    left: 35px;
+    top: 0;
+    width: 45px;
+    height: 65px;
+  }
+  .stock-pile .corner {
+    font-size: 14px;
+    min-width: 21px;
+    padding: 1px;
+  }
+  .stocks {
+    position: relative;
+    min-height: 85px;
+    padding-right: 20px;
+    gap: 1px;
+    align-items: flex-start;
+  }
+  .stocks > strong {
+    font-size: 8px;
+    line-height: 1.2;
+  }
+  .stocks > .trump-label {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-size: 0;
+    padding: 2px 4px;
+    min-height: 18px;
+  }
+  .trump-label b {
+    font-size: 15px;
+  }
+  .event-stock {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+    width: 25px;
+  }
+  .event-stock .back-card {
+    width: 20px;
+    height: 29px;
+  }
+  .event-stock > span {
+    display: none;
+  }
+  .human-caption {
+    flex-wrap: nowrap;
+    min-height: 33px;
+    height: auto;
+  }
+  .game-actions {
+    width: auto;
+    min-height: 33px;
+    margin: 0 0 0 auto;
+    flex-wrap: nowrap;
+  }
+  .game-actions .btn {
+    min-height: 33px;
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+  .human-caption > .avatar {
+    width: 26px;
+    height: 26px;
+  }
+  .hand-help {
+    font-size: 8px;
+    white-space: normal;
+  }
+  .pairs {
+    min-height: 65px;
+    gap: 8px;
+  }
+  .pairs .playing-card {
+    width: 43px;
+    height: 62px;
+  }
+  .pairs .corner {
+    font-size: 14px;
+  }
+  .turn-label {
+    margin-bottom: 3px;
+  }
+  .turn-label small {
+    font-size: 8px;
+  }
+}
+@media (max-height: 600px) and (orientation: landscape) {
+  body[data-screen="game"] > #app > header {
+    display: none;
+  }
+  body[data-screen="game"] .game-scene {
+    height: 100dvh;
+  }
+}
+/* A selected card stays in its row's stack so it cannot hide other rank strips. */
+
+.playing-card .card-illustration {
+  left: 10%;
+  top: 22%;
+  width: 80%;
+  height: auto;
+  aspect-ratio: 1;
+}

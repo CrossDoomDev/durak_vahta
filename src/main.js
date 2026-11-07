@@ -200,7 +200,7 @@
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : ""}</div><strong>${E.stockCount(G)} в колоде</strong><small>Козырь ${E.SUITS[G.trump]}</small>${G.options.chaos ? `<button class="event-stock" data-action="event-gallery" aria-label="Просмотреть события вахты">${backCard(true)}<span>СОБЫТИЯ ВАХТЫ<br>${G.eventDeck.length} · в очереди ${G.pending.length}</span></button>` : ""}</aside><div class="battle"><div class="turn-label"><strong>${nameRole}</strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><div class="speech" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></div></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${role(0)} · ${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Завершить подкидывание" : "Бито / больше не подкидывать", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : ""}</div><strong>${E.stockCount(G)} в колоде</strong><small class="trump-label ${G.trump === 1 || G.trump === 2 ? "red" : "black"}">Козырь <b>${E.stockCount(G) > 0 ? E.label(G.trumpCard) : E.SUITS[G.trump]}</b></small>${G.options.chaos ? `<div class="event-stock" aria-label="Секретная колода происшествий">${backCard(true)}<span>СОБЫТИЯ ВАХТЫ<br>Секретная колода</span></div>` : ""}</aside><div class="battle"><div class="turn-label"><strong>${nameRole}</strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : '<span class="pair-slot">Защита</span>'}</div>`).join("") : `<div class="table-empty">${sprite("decor", 4, 4, 3, "table-emblem")}<span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><div class="speech" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) : ""}</strong><p id="dialog-text"></p></div></div></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${role(0)} · ${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Завершить подкидывание" : "Бито / больше не подкидывать", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
@@ -277,13 +277,11 @@
   }
   function gallery() {
     return panelPage(
-      heading("ПРОВЕРЕНО ПО ВЕДОМОСТИ", "Колоды и происшествия") +
-        `<div class="tabs">${button("36 игральных карт", "gallery-cards", galleryMode === "cards" ? "primary" : "")}${button("30 происшествий", "gallery-events", galleryMode === "events" ? "primary" : "")}${button("Рубашки", "gallery-backs", galleryMode === "backs" ? "primary" : "")}</div>` +
+      heading("ПРОВЕРЕНО ПО ВЕДОМОСТИ", "Игральная колода") +
+        `<div class="tabs">${button("36 игральных карт", "gallery-cards", galleryMode === "cards" ? "primary" : "")}${button("Рубашки", "gallery-backs", galleryMode === "backs" ? "primary" : "")}</div><p class="fine">Колода происшествий секретная. Что приготовила вахта, узнаешь только при открытии события.</p>` +
         (galleryMode === "cards"
           ? `<div class="gallery-cards">${Array.from({ length: 36 }, (_, i) => card(i, { action: "gallery-card" })).join("")}</div>`
-          : galleryMode === "events"
-            ? `<div class="event-gallery">${EC.map((e) => `<button class="event-tile" data-action="gallery-event" data-id="${e.id}">${sprite("events", e.id, 6, 5, "event-thumb")}<strong>${esc(clean(e.title))}</strong><small>${e.rarity === "rare" ? "Редкое происшествие" : "Происшествие"}</small></button>`).join("")}</div>`
-            : `<div class="paper back-select"><p>Другая рубашка открывается за любое достижение. Одинакова у всех игральных карт.</p>${[0, 1].map((i) => `<button data-action="back-skin" data-id="${i}" class="skin ${P.back === i ? "chosen" : ""}" ${i && !P.achievements.length ? "disabled" : ""}>${sprite(i ? "decor" : "cards", i ? 8 : 21, i ? 4 : 6, i ? 3 : 4, "back-preview")}<span>${i ? "Северный узор" : "Бытовка"} ${i && !P.achievements.length ? "· Закрыто" : ""}</span></button>`).join("")}</div>`),
+          : `<div class="paper back-select"><p>Другая рубашка открывается за любое достижение.</p>${[0, 1].map((i) => `<button data-action="back-skin" data-id="${i}" class="skin ${P.back === i ? "chosen" : ""}" ${i && !P.achievements.length ? "disabled" : ""}>${sprite(i ? "decor" : "cards", i ? 8 : 21, i ? 4 : 6, i ? 3 : 4, "back-preview")}<span>${i ? "Северный узор" : "Бытовка"} ${i && !P.achievements.length ? "· Закрыто" : ""}</span></button>`).join("")}</div>`),
     );
   }
   function rules() {
@@ -292,6 +290,37 @@
         `<article class="paper rules"><h2>Классика</h2><p>36 карт, от шестёрки до туза. По 6 карт каждому. Первый ход — у обладателя младшего козыря; если козырей на руках нет, начинает первый участник.</p><p>Покрой карту более старшей той же масти или козырем. Козырь можно побить только старшим козырем. Подкидываются достоинства, уже лежащие на столе: и атакующие, и покрывающие.</p><p>За раунд — не больше 6 атакующих карт и не больше размера руки защитника на начало раунда. Подкидывание идёт по очереди; каждый атакующий может завершить его. «Взять» не закрывает подкидывание немедленно.</p><p>После «бито» атакует защитник. После взятия — следующий за ним активный участник. Добирает начинавший атаку, затем остальные по часовой стрелке, защитник последним. Открытый козырь — последняя карта колоды.</p><h2>Переводной</h2><p>Пока ни одна карта не покрыта, положи карту того же достоинства и нажми «Перевести». Следующий участник должен иметь достаточно карт для новой атаки. Не больше 6 атакующих карт. Вдвоём перевод тоже разрешён.</p><h2>Беспредел</h2><p>Отдельная колода из 30 происшествий. В обычном стоке скрыты 2, 4 или 6 жетонов, не заменяющих игральные карты. Жетон не попадает в руку. Эффект открывается после добора, не более одного между раундами. Остальные ждут очереди. Сильные происшествия выпадают реже.</p><p>Точный эффект написан на карточке. Выбирай цель и карту, если нужно. Вышедшие участники не возвращаются. Пропуск атаки не отменяет обязанность защищаться. Пустой сток не создаёт карты из воздуха.</p><h2>Управление</h2><p>Выбери карту нажатием, затем кнопку атаки или непокрытую карту на столе. Все кнопки доступны с клавиатуры: Tab и Enter. Кнопка «Рассмотреть» увеличивает выбранную карту. Перетаскивание не требуется.</p><h2>Конец партии</h2><p>Когда сток пуст, участники без карт выходят. Последний с картами — дурак. Если последний эпизод оставил всех без карт — ничья. При выходе игрока боты честно доигрывают партию.</p><h2>Без интернета</h2><p>Все изображения, звук, правила и сохранения находятся на устройстве. Для резервной копии используй экспорт в профиле. Сбрасывать прогресс можно только после подтверждения.</p></article>`,
     );
   }
+  // Overlapping rows expose an opaque rank/suit strip for every card. Never scroll.
+  function layoutHands() {
+    document.querySelectorAll(".hand, .event-hand").forEach((hand) => {
+      const cards = [...hand.querySelectorAll(".playing-card")];
+      const width = hand.clientWidth - 8;
+      if (!cards.length || width < 1) return;
+      const compact = innerHeight <= 600 && innerWidth > innerHeight;
+      const cw = compact ? 62 : innerWidth <= 500 ? 72 : 94,
+        ch = Math.round(cw * 1.44);
+      const strip = compact ? 23 : 26;
+      const capacity = Math.max(1, Math.floor((width - cw) / strip) + 1);
+      const rows = Math.ceil(cards.length / capacity);
+      const perRow = Math.ceil(cards.length / rows);
+      const rowStep = compact ? 36 : 44;
+      hand.style.height = ch + (rows - 1) * rowStep + 19 + "px";
+      hand.style.setProperty("--fan-card-width", cw + "px");
+      hand.style.setProperty("--fan-card-height", ch + "px");
+      cards.forEach((card, i) => {
+        const row = Math.floor(i / perRow),
+          col = i % perRow,
+          count = Math.min(perRow, cards.length - row * perRow);
+        const step =
+          count > 1 ? Math.min(cw + 7, (width - cw) / (count - 1)) : 0;
+        const left = (width - (cw + step * (count - 1))) / 2 + 4;
+        card.style.left = left + col * step + "px";
+        card.style.top = 13 + row * rowStep + "px";
+        card.style.zIndex = String(row * 40 + col + 1);
+      });
+    });
+  }
+  window.addEventListener("resize", layoutHands);
   function fillNames() {
     document.querySelectorAll("[data-name]").forEach((el) => {
       const i = Number(el.dataset.name);
@@ -322,6 +351,7 @@
     $("#overlay").innerHTML =
       screen === "game" && G?.phase === "event" ? eventView() : "";
     fillNames();
+    layoutHands();
     if (screen === "menu")
       $("#menu-quote").textContent =
         P.settings.dialogs === "off"
@@ -607,11 +637,6 @@
       case "close-modal":
         render();
         break;
-      case "event-gallery":
-        galleryMode = "events";
-        returnScreen = "game";
-        show("gallery");
-        break;
       case "event-target":
         eventTarget = Number(el.dataset.id);
         render();
@@ -693,7 +718,6 @@
         );
         break;
       case "gallery-cards":
-      case "gallery-events":
       case "gallery-backs":
         galleryMode = action.slice(8);
         render();
@@ -701,12 +725,6 @@
       case "gallery-card":
         inspect(Number(el.dataset.card));
         break;
-      case "gallery-event": {
-        const e = EC[Number(el.dataset.id)];
-        $("#overlay").innerHTML =
-          `<div class="modal compact-modal event-preview" role="dialog" aria-modal="true">${sprite("events", e.id, 6, 5, "event-art")}<h2>${esc(clean(e.title))}</h2><p>${esc(clean(e.story))}</p><p class="effect-box">${esc(clean(e.effect))}</p>${button("Закрыть", "close-modal", "primary")}</div>`;
-        break;
-      }
       case "back-skin": {
         const n = Number(el.dataset.id);
         if (n === 1 && !P.achievements.length) return;

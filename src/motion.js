@@ -25,9 +25,6 @@
             document.querySelector(".human-caption");
     }
 
-    status(text) {
-      this.message.textContent = text;
-    }
     async wait(ms) {
       if (document.hidden) return;
       await new Promise((r) => setTimeout(r, this.duration(ms)));
@@ -127,12 +124,7 @@
         });
       const pairs = document.querySelector(".pairs");
       if (!pairs) return;
-      const actor = before.actor,
-        who = before.players[actor].name;
-      this.message = document.createElement("div");
-      this.message.className = "motion-announcement";
-      this.message.setAttribute("role", "status");
-      document.body.append(this.message);
+      const actor = before.actor;
       const sourceSeat = this.seat(actor);
       sourceSeat?.closest(".opponent")?.classList.add("moving-player");
       const visual = structuredClone(before.table);
@@ -170,31 +162,18 @@
             to = this.rect(targetEl);
           const rotation = 0;
           measuring.remove();
-          this.status(
-            `${who} ${a.type === "defend" ? "отбивается" : a.type === "transfer" ? "переводит" : "ходит"} — ${VahtaEngine.label(a.card)}`,
-          );
           if (source) source.style.visibility = "hidden";
           await this.fly(this.card(a.card), from, to, { rotation });
           pairs.innerHTML = this.tableHTML(visual);
           this.layout?.(pairs, visual.length);
           await this.wait(250);
         } else {
-          this.status(
-            a.type === "take"
-              ? `${who} берёт. Остальные ещё могут подкинуть.`
-              : `${who} завершает подкидывание`,
-          );
           await this.wait(450);
         }
         const resolved = visual.length > 0 && after.table.length === 0;
         if (resolved) {
           const taking = before.taking || a.type === "take",
             defender = before.defender;
-          this.status(
-            taking
-              ? `${before.players[defender].name} забирает ${visual.flatMap((p) => (p.defense == null ? [p.attack] : [p.attack, p.defense])).length} карт`
-              : "Бито — карты уходят в отбой",
-          );
           await this.wait(500);
           const target = this.rect(
             taking
@@ -220,7 +199,6 @@
           .filter(VahtaEngine.ordinary)
           .filter((c) => !after.deck.includes(c));
         if (drawn.length) {
-          this.status("Добор карт — атакующие по очереди, защитник последним");
           const from = this.rect(
             document.querySelector(".stock-pile .back-card") ||
               document.querySelector(".stock-pile"),
@@ -242,7 +220,6 @@
       } finally {
         if (source) source.style.visibility = "";
         sourceSeat?.closest(".opponent")?.classList.remove("moving-player");
-        this.message.remove();
       }
     }
   }

@@ -84,6 +84,19 @@ function fixture(kind) {
       await page.goto("http://127.0.0.1:8790/index.html");
       await page.locator('[data-action="continue"]').click();
       assert.equal(await page.locator(".trump-label").count(), 0);
+      await page.evaluate(() => {
+        window.motionLogCount = 0;
+        new MutationObserver((records) => {
+          for (const r of records)
+            for (const n of r.addedNodes)
+              if (
+                n.nodeType === 1 &&
+                (n.matches(".motion-announcement") ||
+                  n.querySelector(".motion-announcement"))
+              )
+                window.motionLogCount++;
+        }).observe(document, { childList: true, subtree: true });
+      });
       await page
         .locator(".hand .playing-card")
         .click({ position: { x: 10, y: 10 } });
@@ -105,6 +118,11 @@ function fixture(kind) {
         .first()
         .evaluate((el) => el.getBoundingClientRect().left);
       assert.ok(Math.abs(a - c) > 5, "card really moves");
+      assert.equal(
+        await page.evaluate(() => window.motionLogCount),
+        0,
+        "no automatic move log during card flight",
+      );
       assert.equal(
         await page.evaluate(
           () =>

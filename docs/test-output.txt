@@ -1,0 +1,72 @@
+
+> durak-na-vahte@1.0.0 test
+> node tests/rules.test.cjs && node tests/simulate.cjs
+
+✔ 36 unique cards, standard ranks and four suits (3.524974ms)
+✔ deal 2: six each; visible trump remains last once; lowest trump leads (1.0148ms)
+✔ deal 3: six each; visible trump remains last once; lowest trump leads (0.343184ms)
+✔ deal 4: six each; visible trump remains last once; lowest trump leads (0.222967ms)
+✔ defense strictly higher same suit, trump beats non-trump, no equal or lower trump (0.191211ms)
+✔ validator rejects out-of-turn and wrong defense without changing state (0.997564ms)
+✔ throw ranks can match defense; initial hand limit retained (0.657065ms)
+✔ attack cap is six and cannot increase after taking (0.503729ms)
+✔ next attacker after beaten and taken / 2 players (1.090631ms)
+✔ refill order / 2 players: original attacker first, defender last (0.484432ms)
+✔ next attacker after beaten and taken / 3 players (0.425826ms)
+✔ refill order / 3 players: original attacker first, defender last (0.44959ms)
+✔ next attacker after beaten and taken / 4 players (0.349924ms)
+✔ refill order / 4 players: original attacker first, defender last (0.398094ms)
+✔ transfer: matching rank before defense; subsequent transfer; recipient capacity (0.603887ms)
+✔ no transfer after any defense; two-player transfer obeys opponent hand size (3.720531ms)
+✔ last defense produces draw; last taker loses, outcome cannot change (0.436281ms)
+✔ chaos rare: 2 non-card triggers, trump last; classic none (0.452204ms)
+✔ chaos normal: 4 non-card triggers, trump last; classic none (0.167386ms)
+✔ chaos mad: 6 non-card triggers, trump last; classic none (0.283215ms)
+✔ triggers queued during refill, never inside defense; one event per boundary (1.409379ms)
+✔ event 1: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.68779ms)
+✔ event 2: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.402621ms)
+✔ event 3: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.441848ms)
+✔ event 4: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.295003ms)
+✔ event 5: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.382371ms)
+✔ event 6: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.479965ms)
+✔ event 7: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.709982ms)
+✔ event 8: normal, empty stock, no peer, eliminated recipient; 36-card invariant (1.277095ms)
+✔ event 9: normal, empty stock, no peer, eliminated recipient; 36-card invariant (1.894341ms)
+✔ event 10: normal, empty stock, no peer, eliminated recipient; 36-card invariant (1.246529ms)
+✔ event 11: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.527704ms)
+✔ event 12: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.271819ms)
+✔ event 13: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.300251ms)
+✔ event 14: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.317245ms)
+✔ event 15: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.293581ms)
+✔ event 16: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.209157ms)
+✔ event 17: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.280452ms)
+✔ event 18: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.437482ms)
+✔ event 19: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.329323ms)
+✔ event 20: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.534916ms)
+✔ event 21: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.230909ms)
+✔ event 22: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.657104ms)
+✔ event 23: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.360379ms)
+✔ event 24: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.355832ms)
+✔ event 25: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.264518ms)
+✔ event 26: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.291468ms)
+✔ event 27: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.264408ms)
+✔ event 28: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.255375ms)
+✔ event 29: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.356874ms)
+✔ event 30: normal, empty stock, no peer, eliminated recipient; 36-card invariant (0.533183ms)
+✔ invalid choice/target/card cannot mutate event state (0.300862ms)
+✔ skip consumes one attack opportunity, never defense; all-skip is finite (0.257989ms)
+✔ RNG and restore preserve future exactly; bot observation omits hidden zones (14.925931ms)
+✔ name validation, 70 contextual dialogues and safe/real swearing modes (1.1102ms)
+✔ profile JSON roundtrip, broken import rejection, honest stats and one-time rewards (1.273349ms)
+✔ all 30 events apply their actual documented card-count/skip effects (6.235904ms)
+✔ choice events: alternative branches do real different things (0.828866ms)
+✔ restore rejects malformed event metadata and missing options (0.678796ms)
+ℹ tests 59
+ℹ suites 0
+ℹ pass 59
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 72.923832
+{"simulations":1000,"totalActions":95088,"maxActions":246,"events":1980,"illegalMoves":0,"cardInvariantFailures":0}

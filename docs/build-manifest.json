@@ -1,0 +1,142 @@
+[
+  {
+    "file": "index.html",
+    "bytes": 850,
+    "sha256": "c8f329e42cf1af6465e59fa90f50bed00ca18e9e9e41c87f45f5f4ab8f905291"
+  },
+  {
+    "file": "public/assets/audio/button.wav",
+    "bytes": 3572,
+    "sha256": "c9824a6ec35c2bbcf482e4a16c6b6580bf3f5105f0bfe952c9268d4fd46c9b6c"
+  },
+  {
+    "file": "public/assets/audio/card.wav",
+    "bytes": 6658,
+    "sha256": "57a608e10d14ad2fe418216028e91d42b0c78ccf3252eddc9768f30c3a5f1bc2"
+  },
+  {
+    "file": "public/assets/audio/cover.wav",
+    "bytes": 7100,
+    "sha256": "71bb569bd0d065e122f2f16b0f112c9f14dbec28e3d2c05e0eaab3cb0cbe7769"
+  },
+  {
+    "file": "public/assets/audio/deal.wav",
+    "bytes": 13274,
+    "sha256": "790f61de7d8d6b5cd5dba7e06d8ce29754d8eb5bb4dff6040e1623506b704952"
+  },
+  {
+    "file": "public/assets/audio/event.wav",
+    "bytes": 28708,
+    "sha256": "0245c16a53b7afc908218a936b2f378b5b7b8b1af06534a0b8173d88129eab92"
+  },
+  {
+    "file": "public/assets/audio/kettle.wav",
+    "bytes": 44144,
+    "sha256": "e24ae5c514ca7379fc8a0ce20553ce5942210df53ab80e078427af20988a2c22"
+  },
+  {
+    "file": "public/assets/audio/music.wav",
+    "bytes": 705644,
+    "sha256": "3689fda76ee95372403fb546998123d81dc402ca36ce29a685a12b0921037f93"
+  },
+  {
+    "file": "public/assets/audio/take.wav",
+    "bytes": 11068,
+    "sha256": "45277c4bbbe27f082f0827a88f25f4286aa8df4eb0d31e2303a971aaa278475c"
+  },
+  {
+    "file": "public/assets/audio/win.wav",
+    "bytes": 39734,
+    "sha256": "65c2f963aa145b142f00e6242558351a976b31ee77257f9019d975ab94004d71"
+  },
+  {
+    "file": "public/assets/audio/wind.wav",
+    "bytes": 132344,
+    "sha256": "d5f8092decd619e9350ad70681945329f794ef84d3f7246bd24f7fd9b737a1e3"
+  },
+  {
+    "file": "public/assets/cards.webp",
+    "bytes": 746002,
+    "sha256": "45879168395bc91b9fe99f65d910c18b897068f87d8787d6fe61f3cd36b7efed"
+  },
+  {
+    "file": "public/assets/decor.webp",
+    "bytes": 660140,
+    "sha256": "afb5f9cd6c95063b2bd01045ae9e2b8e862661085ea387ca9eca242a96c2c119"
+  },
+  {
+    "file": "public/assets/events.webp",
+    "bytes": 731734,
+    "sha256": "cd6ec3d6557b0187aedc31f8ea2bfeb68e047ac6fe0a76d48c2daa18b6ea17e6"
+  },
+  {
+    "file": "public/assets/fonts/LICENSE.txt",
+    "bytes": 3859,
+    "sha256": "63d3ba759d12804c5b31a9d5940d855c1820d1f5999e6b0872eb1c7ff045fbc9"
+  },
+  {
+    "file": "public/assets/fonts/body.ttf",
+    "bytes": 759720,
+    "sha256": "57f73e11f51999432bf7ab22ce55b6f945d5eca1bf824404cfa9ec2e3718c84e"
+  },
+  {
+    "file": "public/assets/fonts/heading.ttf",
+    "bytes": 667844,
+    "sha256": "21f02ebcea75529d3ed9d26e089cd1b9c59a4b784119ba3a96e9bc83cf755ec7"
+  },
+  {
+    "file": "public/assets/npc.webp",
+    "bytes": 590176,
+    "sha256": "b5d606ba202cec1f87a25cdaba4d708c8246b8b0fe275e747c7a2b758580cc9b"
+  },
+  {
+    "file": "public/assets/room.webp",
+    "bytes": 560830,
+    "sha256": "619e46387472e2693c0d694fe201638bee463a74f269ba3726e6ccfea38853c2"
+  },
+  {
+    "file": "src/audio.js",
+    "bytes": 1786,
+    "sha256": "e32c5f8f19b028438f9412e5d660a257ee2ee0696c9f8fc86ac0d842b65a5318"
+  },
+  {
+    "file": "src/content/characters.js",
+    "bytes": 9703,
+    "sha256": "d81d82a860d886106a0b3ab5aa33cc6c14030112c2360ae8d67a5a061409881f"
+  },
+  {
+    "file": "src/content/events.js",
+    "bytes": 17123,
+    "sha256": "8df85452e2e82f489991e6d756d3e24c3e5640b8ed9a6f5e319dc9398f9f0e9b"
+  },
+  {
+    "file": "src/game/engine.js",
+    "bytes": 19822,
+    "sha256": "1ffa020174a75c878422b323c38bf28c54067d0cbf37ecc14d2e857e54495c8b"
+  },
+  {
+    "file": "src/game/events.js",
+    "bytes": 9394,
+    "sha256": "bbe3b7da6e464de4c5374a15ef85e27ad8b8cdb01029dda8e1fafbf17a100178"
+  },
+  {
+    "file": "src/game/save.js",
+    "bytes": 6104,
+    "sha256": "4c6d788cc04c1ae2453fa788dee387b1b7856040ac032f1f739ffa0401d89b10"
+  },
+  {
+    "file": "src/main.js",
+    "bytes": 47712,
+    "sha256": "fe4e8bf2e3249489c66cbd5d40309203c749a6db067d1395567778d909533cdf"
+  },
+  {
+    "file": "src/styles/main.css",
+    "bytes": 38643,
+    "sha256": "89ea461cb1ba748ef28331636f90638e8ca8bbbf993e6e7e8acd0d067be3cca6"
+  },
+  {
+    "file": "sw.js",
+    "bytes": 1349,
+    "sha256": "0206f84caf9dc97d2b72c22786e3310714070a5113a37b780ef1a0abe74bd2b3"
+  }
+]

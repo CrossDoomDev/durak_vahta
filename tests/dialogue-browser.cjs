@@ -189,6 +189,18 @@ function fixture(kind) {
         assert.equal(await speech.evaluate(el => el.tagName), "DIV");
         // Clicking the message or its text must neither pause play nor open an overlay.
         if (await speech.isVisible()) {
+          const fullText = await page.locator("#dialog-text").evaluate(el => {
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            const text = range.getBoundingClientRect(), box = el.getBoundingClientRect(),
+              bubble = el.closest(".speech").getBoundingClientRect(),
+              table = el.closest(".table-zone").getBoundingClientRect();
+            return {clamp:getComputedStyle(el).webkitLineClamp,
+              fits:el.scrollHeight <= el.clientHeight + 1 && text.bottom <= box.bottom + 1 &&
+                box.bottom <= bubble.bottom + 1 && bubble.bottom <= table.bottom + 1};
+          });
+          assert.equal(fullText.clamp, "none", "speech must not end with a CSS ellipsis");
+          assert.ok(fullText.fits, "entire message must fit its visible bubble and table");
           const beforeClick = await page.evaluate(() => JSON.parse(localStorage.getItem("durak-vahta-v1")).game.sequence);
           await speech.click();
           await page.locator("#dialog-text").click();

@@ -1,10 +1,10 @@
 @font-face {
   font-family: Vahta;
-  src: url("../../public/assets/fonts/heading.ttf?v=a95acb478969f48e");
+  src: url("../../public/assets/fonts/heading.ttf?v=37fdfd93b1e9504b");
 }
 @font-face {
   font-family: Local;
-  src: url("../../public/assets/fonts/body.ttf?v=a95acb478969f48e");
+  src: url("../../public/assets/fonts/body.ttf?v=37fdfd93b1e9504b");
 }
 * {
   box-sizing: border-box;
@@ -21,14 +21,14 @@ body {
   line-height: 1.5;
   background:
     linear-gradient(90deg, rgba(11, 26, 25, 0.9), rgba(11, 26, 25, 0.28)),
-    url("../../public/assets/room.webp?v=a95acb478969f48e") center/cover fixed;
+    url("../../public/assets/room.webp?v=37fdfd93b1e9504b") center/cover fixed;
   min-height: 100vh;
 }
 body[data-screen="game"],
 body[data-screen="results"] {
   background:
     linear-gradient(#102722bd, #102722b0),
-    url("../../public/assets/room.webp?v=a95acb478969f48e") center/cover fixed;
+    url("../../public/assets/room.webp?v=37fdfd93b1e9504b") center/cover fixed;
 }
 button,
 input,
@@ -3471,10 +3471,10 @@ body[data-screen="game"] .game-scene {
 .speech p {
   font-size: 14px;
   line-height: 1.35;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  overflow: visible;
 }
 .speech strong {
   font-size: 12px;
@@ -5071,12 +5071,7 @@ html {
   border-bottom: 2px solid #77d2e7;
 }
 
-/* Roomier viewports show more of the punchline; full dialogue stays available on tap. */
-@media (min-height: 850px), (min-width: 1000px) {
-  .speech p {
-    -webkit-line-clamp: 4;
-  }
-}
+/* Dialogue always wraps fully within its own table row. */
 
 /* All dealt cards share a single camera; pair origins never reflow. */
 .table-world .playing-card .corner,

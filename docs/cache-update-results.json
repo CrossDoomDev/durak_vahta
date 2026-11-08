@@ -1,6 +1,6 @@
 {
-  "current": "2586d60e8d9d4d43",
-  "future": "4832d2fc370d02e2",
+  "current": "0c842669d4b13d93",
+  "future": "f0d6c3e2d2c61d71",
   "scenarios": [
     "Reproduced old HTML/JS/CSS served by legacy cache-first worker",
     "Immediate refresh during legacy-worker migration keeps the new release",

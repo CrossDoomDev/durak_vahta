@@ -2801,3 +2801,9 @@ body[data-animating="true"] .game-actions {
     font-size: 32px;
   }
 }
+
+/* Local event cues stay attached to participants, never a top move-log banner. */
+.event-source { outline: 3px solid #f2b758 !important; outline-offset: 3px; }
+.event-target { outline: 3px solid #81e0c5 !important; outline-offset: 3px; }
+.event-seat-label { position: fixed; z-index: 310; pointer-events: none; max-width: min(240px, calc(100vw - 12px)); padding: 6px 9px; border-radius: 8px; background: #122e27; border: 1px solid #81e0c5; color: #fff; font: 700 12px/1.25 sans-serif; text-align: center; box-shadow: 0 3px 12px #0009; }
+.event-seat-label.source { border-color: #f2b758; }

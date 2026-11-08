@@ -681,6 +681,28 @@
     settings: () => P.settings,
     layout: layoutPairs,
   });
+  function paintEvent(visual, incoming, counters) {
+    const hand = $(".hand");
+    if (hand) {
+      hand.innerHTML = visual.players[0].hand.slice().sort((a,b) =>
+        (E.card(a).suit === G.trump) - (E.card(b).suit === G.trump) ||
+        E.card(a).suit - E.card(b).suit || E.card(a).rank - E.card(b).rank)
+        .map(c => card(c)).join("");
+      if (incoming != null) hand.querySelector(`[data-card="${incoming}"]`).style.visibility = "hidden";
+      layoutHands();
+    }
+    if (!counters) return;
+    visual.players.forEach((p,i) => {
+      const el = i === 0 ? $(".human-caption small") : $(`.opponent[data-seat="${i}"] .hand-count`);
+      if (el) el.textContent = p.hand.length + " карт";
+    });
+    const stock = $(".stocks > strong");
+    if (stock) stock.textContent = E.stockCount(visual) + " в колоде";
+    if (!E.stockCount(visual)) {
+      const pile = $(".stock-pile");
+      if (pile) pile.innerHTML = `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" aria-label="Козырная масть"><span>${E.SUITS[G.trump]}</span></div>`;
+    }
+  }
   async function act(a) {
     if (paused || animating || !G || screen !== "game") return;
     const before = structuredClone(G),
@@ -790,7 +812,7 @@
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  function handle(action, el) {
+  async function handle(action, el) {
     if (animating) return;
     switch (action) {
       case "talk":
@@ -933,10 +955,28 @@
             ? { choice: eventChoice, target: eventTarget, card: eventCard }
             : F.botEvent(G);
         const resolvedKind = v.choices.length ? eventAction.choice : v.kind;
-        const r = F.eventAction(G, eventAction);
+        const before = structuredClone(G), next = structuredClone(G);
+        const r = F.eventAction(next, eventAction);
         if (!r.ok) {
           toast(r.error);
           return;
+        }
+        clearTimeout(timer);
+        animating = true;
+        document.body.dataset.animating = "true";
+        $("#app").inert = true;
+        G = next;
+        if (G.finished) newAchievements = S.finish(P, G);
+        persist();
+        $("#overlay").innerHTML = "";
+        try {
+          await motion.playEvent(before, next, { ...r, title: v.content?.title }, paintEvent);
+        } catch (error) {
+          console.warn("Event animation interrupted", error);
+        } finally {
+          animating = false;
+          document.body.dataset.animating = "false";
+          $("#app").inert = false;
         }
         const record = G.metrics.events.at(-1);
         const category =
@@ -957,7 +997,6 @@
             who === 0,
           );
         if (G.finished) {
-          newAchievements = S.finish(P, G);
           persist();
           show("results");
         } else {

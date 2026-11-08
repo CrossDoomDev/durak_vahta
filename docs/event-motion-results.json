@@ -1,0 +1,213 @@
+[
+  {
+    "id": 2,
+    "empty": false,
+    "flights": [
+      {
+        "back": true,
+        "phase": "event"
+      }
+    ],
+    "labels": [
+      "Отдаёт",
+      "Получает"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 10,
+    "empty": false,
+    "flights": [
+      {
+        "back": true,
+        "phase": "event"
+      },
+      {
+        "back": true,
+        "phase": "event"
+      }
+    ],
+    "labels": [
+      "Отдаёт",
+      "Получает",
+      "Отдаёт",
+      "Получает"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 12,
+    "reload": "passed"
+  },
+  {
+    "id": 3,
+    "empty": false,
+    "flights": [
+      {
+        "back": true,
+        "phase": "event"
+      },
+      {
+        "back": true,
+        "phase": "event"
+      },
+      {
+        "back": true,
+        "phase": "event"
+      },
+      {
+        "back": false,
+        "phase": "event"
+      }
+    ],
+    "labels": [
+      "Добор из колоды",
+      "Получает",
+      "Добор из колоды",
+      "Получает",
+      "Добор из колоды",
+      "Получает",
+      "Добор из колоды",
+      "Получает"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 6,
+    "empty": false,
+    "flights": [
+      {
+        "back": false,
+        "phase": "event"
+      }
+    ],
+    "labels": [
+      "Отдаёт",
+      "Списание карты"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 0,
+    "empty": false,
+    "flights": [],
+    "labels": [
+      "Пропуск следующей атаки"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 1,
+    "empty": true,
+    "flights": [],
+    "labels": [
+      "Колода пуста"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 19,
+    "empty": false,
+    "flights": [],
+    "labels": [
+      "Без изменений"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 5,
+    "empty": false,
+    "flights": [
+      {
+        "back": false,
+        "phase": "event"
+      },
+      {
+        "back": true,
+        "phase": "event"
+      },
+      {
+        "back": true,
+        "phase": "event"
+      }
+    ],
+    "labels": [
+      "Отдаёт",
+      "Получает",
+      "Отдаёт",
+      "Получает",
+      "Отдаёт",
+      "Получает"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 12,
+    "empty": true,
+    "flights": [
+      {
+        "back": false,
+        "phase": "event"
+      },
+      {
+        "back": true,
+        "phase": "event"
+      },
+      {
+        "back": true,
+        "phase": "event"
+      },
+      {
+        "back": false,
+        "phase": "event"
+      }
+    ],
+    "labels": [
+      "Отдаёт",
+      "Получает",
+      "Отдаёт",
+      "Получает",
+      "Отдаёт",
+      "Получает",
+      "Отдаёт",
+      "Получает"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 6,
+    "empty": true,
+    "flights": [
+      {
+        "back": false,
+        "phase": "event"
+      }
+    ],
+    "labels": [
+      "Отдаёт",
+      "Списание карты",
+      "Вышел без карт"
+    ],
+    "overflow": false,
+    "logs": 0
+  },
+  {
+    "id": 29,
+    "empty": true,
+    "flights": [],
+    "labels": [
+      "Участник уже вышел"
+    ],
+    "overflow": false,
+    "logs": 0
+  }
+]

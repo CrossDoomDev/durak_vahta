@@ -101,6 +101,80 @@
         el.remove();
       }
     }
+    // Replay the engine's exact operations against a presentation snapshot only.
+    async playEvent(before, after, result, paint) {
+      const visual = structuredClone(before);
+      const labels = [];
+      const mark = (seat, text, role) => {
+        const anchor = typeof seat === "number" ? this.seat(seat) :
+          document.querySelector(seat === "stock" ? ".stock-pile" : ".discard-target");
+        if (!anchor) return;
+        anchor.classList.add("event-" + role);
+        const label = document.createElement("div");
+        label.className = "event-seat-label " + role;
+        label.textContent = text;
+        document.body.append(label);
+        const r = anchor.getBoundingClientRect();
+        label.style.left = Math.max(6, Math.min(innerWidth - label.offsetWidth - 6,
+          r.left + (r.width - label.offsetWidth) / 2)) + "px";
+        label.style.top = Math.max(6, Math.min(innerHeight - label.offsetHeight - 6,
+          (typeof seat === "number" && seat !== 0 ? r.bottom - 5 : r.top - label.offsetHeight - 5))) + "px";
+        labels.push([anchor, role, label]);
+      };
+      const clear = () => {
+        for (const [anchor, role, label] of labels.splice(0)) {
+          anchor.classList.remove("event-" + role);
+          label.remove();
+        }
+      };
+      const endpoint = (seat) => this.rect(typeof seat === "number" ? this.seat(seat) :
+        document.querySelector(seat === "stock" ? ".stock-pile" : ".discard-target"));
+      const title = document.querySelector(".turn-label strong");
+      if (title) title.textContent = "Происшествие: " + (result.title || "распоряжение вахты");
+      const hint = document.querySelector(".turn-label small");
+      if (hint) hint.textContent = "Следи за картами — распоряжение исполняется";
+      try {
+        for (const effect of result.effects) {
+          clear();
+          if (effect.type === "card") {
+            const { card: c, from, to } = effect;
+            const source = from === 0 ? document.querySelector(`.hand [data-card="${c}"]`) : null;
+            const start = this.rect(source) || endpoint(from);
+            if (from === "stock") visual.deck.splice(visual.deck.indexOf(c), 1);
+            else visual.players[from].hand.splice(visual.players[from].hand.indexOf(c), 1);
+            if (to === "effectDiscard") visual.effectDiscard.push(c);
+            else visual.players[to].hand.push(c);
+            // Prepare a hidden landing slot while counters still show the previous step.
+            paint(visual, to === 0 ? c : null, false);
+            const target = to === 0 ? document.querySelector(`.hand [data-card="${c}"]`) : null;
+            const end = this.rect(target) || endpoint(to);
+            mark(from, from === "stock" ? "Добор из колоды" : "Отдаёт", "source");
+            mark(to, to === "effectDiscard" ? "Списание карты" : "Получает", "target");
+            await this.wait(220);
+            await this.fly(from === 0 || to === 0 || to === "effectDiscard" ? this.card(c) : this.back(),
+              start, end && { ...end, left:end.left + (target ? 0 : (end.width - 64) / 2), top:end.top + (target ? 0 : (end.height - 92) / 2),
+                width:target ? end.width : 64, height:target ? end.height : 92 },
+              { phase: "event", exit: to === "effectDiscard" });
+            paint(visual, null, true);
+            await this.wait(300);
+          } else {
+            const text = effect.type === "out" ? "Вышел без карт" : effect.type === "skip" ?
+              (after.players[effect.seat].skip ? "Пропуск следующей атаки" : "Атака пропущена") :
+              ({cancelled:"Участник уже вышел", "empty-stock":"Колода пуста", none:"Без изменений",
+                unavailable:"Нет подходящих карт или участников"}[effect.reason]);
+            mark(effect.seat, text, "target");
+            const anchor = this.seat(effect.seat);
+            if (anchor) {
+              const animation = anchor.animate([{filter:"brightness(1)"},{filter:"brightness(1.8)"},
+                {filter:"brightness(1)"}], {duration:document.hidden ? 0 : this.duration(1100), iterations:1});
+              this.running.add(animation);
+              try { await animation.finished; } catch {} finally { this.running.delete(animation); }
+            }
+            await this.wait(650);
+          }
+        }
+      } finally { clear(); }
+    }
     tableHTML(table) {
       return table
         .map(

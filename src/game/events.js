@@ -160,6 +160,7 @@
       !v.targets.includes(a.target)
     )
       return { ok: false, error: "Выберите активного соперника" };
+    const effects = [], outBefore = s.players.map(p=>p.out);
     const before = s.players.map((p) => p.hand.length),
       who = v.recipient,
       hand = s.players[who].hand;
@@ -172,6 +173,7 @@
         return;
       E.remove(s, from, c);
       s.players[to].hand.push(c);
+      effects.push({type:"card",card:c,from,to});
     };
     const swap = (i, j, c) => {
       if (j == null || s.players[j].out || s.players[i].out) return;
@@ -181,13 +183,16 @@
       E.remove(s, j, d);
       s.players[i].hand.push(d);
       s.players[j].hand.push(c);
+      effects.push({type:"card",card:c,from:i,to:j},{type:"card",card:d,from:j,to:i});
     };
     const draw = (i, n) => {
       let got = 0;
       while (got < n) {
         let at = s.deck.findIndex(E.ordinary);
         if (at < 0) break;
-        s.players[i].hand.push(s.deck.splice(at, 1)[0]);
+        const c=s.deck.splice(at, 1)[0];
+        s.players[i].hand.push(c);
+        effects.push({type:"card",card:c,from:"stock",to:i});
         got++;
       }
       if (!got)
@@ -197,9 +202,10 @@
       switch (kind) {
         case "skip":
           s.players[who].skip = 1;
+          effects.push({type:"skip",seat:who});
           break;
         case "skip_target":
-          if (canTarget) s.players[a.target].skip = 1;
+          if (canTarget) {s.players[a.target].skip = 1;effects.push({type:"skip",seat:a.target});}
           break;
         case "draw":
           draw(who, 1);
@@ -214,6 +220,7 @@
           if (available.length) {
             E.remove(s, who, a.card);
             s.effectDiscard.push(a.card);
+            effects.push({type:"card",card:a.card,from:who,to:"effectDiscard"});
           }
           break;
         case "all":
@@ -256,7 +263,11 @@
             if (c != null) E.remove(s, ids[k], c);
           });
           cards.forEach((c, k) => {
-            if (c != null) s.players[ids[(k + 1) % ids.length]].hand.push(c);
+            if (c != null) {
+              const to=ids[(k+1)%ids.length];
+              s.players[to].hand.push(c);
+              effects.push({type:"card",card:c,from:ids[k],to});
+            }
           });
           break;
         }
@@ -266,6 +277,7 @@
           throw Error("Незарегистрированный эффект");
       }
     }
+    if(!effects.length) effects.push({type:"noop",seat:who,reason:v.cancelled?"cancelled":(["draw","draw2","all","smallest"].includes(kind)?"empty-stock":kind==="none"?"none":"unavailable")});
     s.sequence++;
     s.metrics.events.push({
       id: v.id,
@@ -296,7 +308,8 @@
     if (E.active(s).length <= 1 && E.beginEvent(s)) {
     } else if (!E.endIf(s)) E.newRound(s, s.nextCandidate);
     E.invariant(s);
-    return { ok: true };
+    s.players.forEach((p,i)=>{if(p.out&&!outBefore[i])effects.push({type:"out",seat:i});});
+    return { ok: true, effects, event: {id:v.id,recipient:who,kind,cancelled:v.cancelled} };
   }
   function botEvent(s) {
     const v = spec(s);

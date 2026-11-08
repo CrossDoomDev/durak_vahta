@@ -804,6 +804,7 @@
       !v.targets.includes(a.target)
     )
       return { ok: false, error: "Выберите активного соперника" };
+    const effects = [], outBefore = s.players.map(p=>p.out);
     const before = s.players.map((p) => p.hand.length),
       who = v.recipient,
       hand = s.players[who].hand;
@@ -816,6 +817,7 @@
         return;
       E.remove(s, from, c);
       s.players[to].hand.push(c);
+      effects.push({type:"card",card:c,from,to});
     };
     const swap = (i, j, c) => {
       if (j == null || s.players[j].out || s.players[i].out) return;
@@ -825,13 +827,16 @@
       E.remove(s, j, d);
       s.players[i].hand.push(d);
       s.players[j].hand.push(c);
+      effects.push({type:"card",card:c,from:i,to:j},{type:"card",card:d,from:j,to:i});
     };
     const draw = (i, n) => {
       let got = 0;
       while (got < n) {
         let at = s.deck.findIndex(E.ordinary);
         if (at < 0) break;
-        s.players[i].hand.push(s.deck.splice(at, 1)[0]);
+        const c=s.deck.splice(at, 1)[0];
+        s.players[i].hand.push(c);
+        effects.push({type:"card",card:c,from:"stock",to:i});
         got++;
       }
       if (!got)
@@ -841,9 +846,10 @@
       switch (kind) {
         case "skip":
           s.players[who].skip = 1;
+          effects.push({type:"skip",seat:who});
           break;
         case "skip_target":
-          if (canTarget) s.players[a.target].skip = 1;
+          if (canTarget) {s.players[a.target].skip = 1;effects.push({type:"skip",seat:a.target});}
           break;
         case "draw":
           draw(who, 1);
@@ -858,6 +864,7 @@
           if (available.length) {
             E.remove(s, who, a.card);
             s.effectDiscard.push(a.card);
+            effects.push({type:"card",card:a.card,from:who,to:"effectDiscard"});
           }
           break;
         case "all":
@@ -900,7 +907,11 @@
             if (c != null) E.remove(s, ids[k], c);
           });
           cards.forEach((c, k) => {
-            if (c != null) s.players[ids[(k + 1) % ids.length]].hand.push(c);
+            if (c != null) {
+              const to=ids[(k+1)%ids.length];
+              s.players[to].hand.push(c);
+              effects.push({type:"card",card:c,from:ids[k],to});
+            }
           });
           break;
         }
@@ -910,6 +921,7 @@
           throw Error("Незарегистрированный эффект");
       }
     }
+    if(!effects.length) effects.push({type:"noop",seat:who,reason:v.cancelled?"cancelled":(["draw","draw2","all","smallest"].includes(kind)?"empty-stock":kind==="none"?"none":"unavailable")});
     s.sequence++;
     s.metrics.events.push({
       id: v.id,
@@ -940,7 +952,8 @@
     if (E.active(s).length <= 1 && E.beginEvent(s)) {
     } else if (!E.endIf(s)) E.newRound(s, s.nextCandidate);
     E.invariant(s);
-    return { ok: true };
+    s.players.forEach((p,i)=>{if(p.out&&!outBefore[i])effects.push({type:"out",seat:i});});
+    return { ok: true, effects, event: {id:v.id,recipient:who,kind,cancelled:v.cancelled} };
   }
   function botEvent(s) {
     const v = spec(s);
@@ -2517,6 +2530,80 @@
         el.remove();
       }
     }
+    // Replay the engine's exact operations against a presentation snapshot only.
+    async playEvent(before, after, result, paint) {
+      const visual = structuredClone(before);
+      const labels = [];
+      const mark = (seat, text, role) => {
+        const anchor = typeof seat === "number" ? this.seat(seat) :
+          document.querySelector(seat === "stock" ? ".stock-pile" : ".discard-target");
+        if (!anchor) return;
+        anchor.classList.add("event-" + role);
+        const label = document.createElement("div");
+        label.className = "event-seat-label " + role;
+        label.textContent = text;
+        document.body.append(label);
+        const r = anchor.getBoundingClientRect();
+        label.style.left = Math.max(6, Math.min(innerWidth - label.offsetWidth - 6,
+          r.left + (r.width - label.offsetWidth) / 2)) + "px";
+        label.style.top = Math.max(6, Math.min(innerHeight - label.offsetHeight - 6,
+          (typeof seat === "number" && seat !== 0 ? r.bottom - 5 : r.top - label.offsetHeight - 5))) + "px";
+        labels.push([anchor, role, label]);
+      };
+      const clear = () => {
+        for (const [anchor, role, label] of labels.splice(0)) {
+          anchor.classList.remove("event-" + role);
+          label.remove();
+        }
+      };
+      const endpoint = (seat) => this.rect(typeof seat === "number" ? this.seat(seat) :
+        document.querySelector(seat === "stock" ? ".stock-pile" : ".discard-target"));
+      const title = document.querySelector(".turn-label strong");
+      if (title) title.textContent = "Происшествие: " + (result.title || "распоряжение вахты");
+      const hint = document.querySelector(".turn-label small");
+      if (hint) hint.textContent = "Следи за картами — распоряжение исполняется";
+      try {
+        for (const effect of result.effects) {
+          clear();
+          if (effect.type === "card") {
+            const { card: c, from, to } = effect;
+            const source = from === 0 ? document.querySelector(`.hand [data-card="${c}"]`) : null;
+            const start = this.rect(source) || endpoint(from);
+            if (from === "stock") visual.deck.splice(visual.deck.indexOf(c), 1);
+            else visual.players[from].hand.splice(visual.players[from].hand.indexOf(c), 1);
+            if (to === "effectDiscard") visual.effectDiscard.push(c);
+            else visual.players[to].hand.push(c);
+            // Prepare a hidden landing slot while counters still show the previous step.
+            paint(visual, to === 0 ? c : null, false);
+            const target = to === 0 ? document.querySelector(`.hand [data-card="${c}"]`) : null;
+            const end = this.rect(target) || endpoint(to);
+            mark(from, from === "stock" ? "Добор из колоды" : "Отдаёт", "source");
+            mark(to, to === "effectDiscard" ? "Списание карты" : "Получает", "target");
+            await this.wait(220);
+            await this.fly(from === 0 || to === 0 || to === "effectDiscard" ? this.card(c) : this.back(),
+              start, end && { ...end, left:end.left + (target ? 0 : (end.width - 64) / 2), top:end.top + (target ? 0 : (end.height - 92) / 2),
+                width:target ? end.width : 64, height:target ? end.height : 92 },
+              { phase: "event", exit: to === "effectDiscard" });
+            paint(visual, null, true);
+            await this.wait(300);
+          } else {
+            const text = effect.type === "out" ? "Вышел без карт" : effect.type === "skip" ?
+              (after.players[effect.seat].skip ? "Пропуск следующей атаки" : "Атака пропущена") :
+              ({cancelled:"Участник уже вышел", "empty-stock":"Колода пуста", none:"Без изменений",
+                unavailable:"Нет подходящих карт или участников"}[effect.reason]);
+            mark(effect.seat, text, "target");
+            const anchor = this.seat(effect.seat);
+            if (anchor) {
+              const animation = anchor.animate([{filter:"brightness(1)"},{filter:"brightness(1.8)"},
+                {filter:"brightness(1)"}], {duration:document.hidden ? 0 : this.duration(1100), iterations:1});
+              this.running.add(animation);
+              try { await animation.finished; } catch {} finally { this.running.delete(animation); }
+            }
+            await this.wait(650);
+          }
+        }
+      } finally { clear(); }
+    }
     tableHTML(table) {
       return table
         .map(
@@ -3327,6 +3414,28 @@
     settings: () => P.settings,
     layout: layoutPairs,
   });
+  function paintEvent(visual, incoming, counters) {
+    const hand = $(".hand");
+    if (hand) {
+      hand.innerHTML = visual.players[0].hand.slice().sort((a,b) =>
+        (E.card(a).suit === G.trump) - (E.card(b).suit === G.trump) ||
+        E.card(a).suit - E.card(b).suit || E.card(a).rank - E.card(b).rank)
+        .map(c => card(c)).join("");
+      if (incoming != null) hand.querySelector(`[data-card="${incoming}"]`).style.visibility = "hidden";
+      layoutHands();
+    }
+    if (!counters) return;
+    visual.players.forEach((p,i) => {
+      const el = i === 0 ? $(".human-caption small") : $(`.opponent[data-seat="${i}"] .hand-count`);
+      if (el) el.textContent = p.hand.length + " карт";
+    });
+    const stock = $(".stocks > strong");
+    if (stock) stock.textContent = E.stockCount(visual) + " в колоде";
+    if (!E.stockCount(visual)) {
+      const pile = $(".stock-pile");
+      if (pile) pile.innerHTML = `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" aria-label="Козырная масть"><span>${E.SUITS[G.trump]}</span></div>`;
+    }
+  }
   async function act(a) {
     if (paused || animating || !G || screen !== "game") return;
     const before = structuredClone(G),
@@ -3436,7 +3545,7 @@
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  function handle(action, el) {
+  async function handle(action, el) {
     if (animating) return;
     switch (action) {
       case "talk":
@@ -3579,10 +3688,28 @@
             ? { choice: eventChoice, target: eventTarget, card: eventCard }
             : F.botEvent(G);
         const resolvedKind = v.choices.length ? eventAction.choice : v.kind;
-        const r = F.eventAction(G, eventAction);
+        const before = structuredClone(G), next = structuredClone(G);
+        const r = F.eventAction(next, eventAction);
         if (!r.ok) {
           toast(r.error);
           return;
+        }
+        clearTimeout(timer);
+        animating = true;
+        document.body.dataset.animating = "true";
+        $("#app").inert = true;
+        G = next;
+        if (G.finished) newAchievements = S.finish(P, G);
+        persist();
+        $("#overlay").innerHTML = "";
+        try {
+          await motion.playEvent(before, next, { ...r, title: v.content?.title }, paintEvent);
+        } catch (error) {
+          console.warn("Event animation interrupted", error);
+        } finally {
+          animating = false;
+          document.body.dataset.animating = "false";
+          $("#app").inert = false;
         }
         const record = G.metrics.events.at(-1);
         const category =
@@ -3603,7 +3730,6 @@
             who === 0,
           );
         if (G.finished) {
-          newAchievements = S.finish(P, G);
           persist();
           show("results");
         } else {

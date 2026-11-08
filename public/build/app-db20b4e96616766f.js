@@ -2959,7 +2959,7 @@
         ),
       )
       .join("");
-    return `${header()}<main class="game-scene"><div class="game-toolbar"><span class="eyebrow"><span class="mode-label">${G.options.variant === "transfer" ? "ПЕРЕВОДНОЙ" : "ПОДКИДНОЙ"} · ${G.options.chaos ? "БЕСПРЕДЕЛ" : "КЛАССИКА"}</span><span class="round-label">РАУНД ${G.round}</span></span><div>${button("Реплики", "talk", "small")}${button("Пауза", "pause", "small")}${button("Настройки", "settings", "small")}</div></div><div class="opponents">${G.players
+    return `${header()}<main class="game-scene"><div class="game-toolbar"><span class="eyebrow"><span class="mode-label">${G.options.variant === "transfer" ? "ПЕРЕВОДНОЙ" : "ПОДКИДНОЙ"} · ${G.options.chaos ? "БЕСПРЕДЕЛ" : "КЛАССИКА"}</span><span class="round-label">РАУНД ${G.round}</span></span><div>${button("Пауза", "pause", "small")}${button("Настройки", "settings", "small")}</div></div><div class="opponents">${G.players
       .slice(1)
       .map(
         (p, j) =>

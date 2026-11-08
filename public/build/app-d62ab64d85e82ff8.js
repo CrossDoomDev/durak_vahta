@@ -2913,7 +2913,7 @@
   }
   const lowScreen = () => innerHeight < 500;
   function setupPage() {
-    const roster = slicePage("roster", C.NPC, innerWidth >= 1000 ? 4 : 2);
+    const roster = slicePage("roster", C.NPC, innerWidth > innerHeight && innerHeight <= 340 ? 1 : innerWidth >= 1000 ? 4 : 2);
     return panelPage(
       heading("НАРЯД НА ВЕЧЕР", "Новая партия") +
         tabs("setup", [

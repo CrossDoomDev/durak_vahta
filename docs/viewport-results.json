@@ -1,5 +1,470 @@
 [
   {
+    "viewport": "568x320",
+    "screen": "welcome",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "name field with reduced keyboard viewport",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "menu",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "saved menu rotated to portrait",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "saved menu rotated back to landscape",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "new match confirmation",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "setup conditions",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 6",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 7",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 8",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "crew page 9",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "settings general",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "settings motion",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "settings audio",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "profile identity",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "avatars second page",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "profile stats",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "profile saves",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "achievements page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "achievements page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "achievements page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "achievements page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "achievements page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "achievements page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "gallery page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "gallery page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "gallery page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "gallery page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "gallery page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "gallery page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "inspect",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "backs",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 6",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 7",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 8",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "rules page 9",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "welcome",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "name field with reduced keyboard viewport",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "menu",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "saved menu rotated to portrait",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "saved menu rotated back to landscape",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "new match confirmation",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "setup conditions",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "crew page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "crew page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "crew page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "crew page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "crew page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "settings general",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "settings motion",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "settings audio",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "profile identity",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "avatars second page",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "profile stats",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "profile saves",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "achievements page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "achievements page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "achievements page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "achievements page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "achievements page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "achievements page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "gallery page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "gallery page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "gallery page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "gallery page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "gallery page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "gallery page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "inspect",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "backs",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 6",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 7",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 8",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "rules page 9",
+    "noScrollOrClippedControls": true
+  },
+  {
     "viewport": "360x640",
     "screen": "welcome",
     "noScrollOrClippedControls": true
@@ -12,6 +477,16 @@
   {
     "viewport": "360x640",
     "screen": "menu",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "360x640",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "360x640",
+    "screen": "new match confirmation",
     "noScrollOrClippedControls": true
   },
   {
@@ -201,6 +676,16 @@
   },
   {
     "viewport": "360x800",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "360x800",
+    "screen": "new match confirmation",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "360x800",
     "screen": "setup conditions",
     "noScrollOrClippedControls": true
   },
@@ -386,6 +871,16 @@
   },
   {
     "viewport": "390x844",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "390x844",
+    "screen": "new match confirmation",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "390x844",
     "screen": "setup conditions",
     "noScrollOrClippedControls": true
   },
@@ -567,6 +1062,16 @@
   {
     "viewport": "412x915",
     "screen": "menu",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "412x915",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "412x915",
+    "screen": "new match confirmation",
     "noScrollOrClippedControls": true
   },
   {
@@ -752,6 +1257,26 @@
   {
     "viewport": "740x360",
     "screen": "menu",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "740x360",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "740x360",
+    "screen": "saved menu rotated to portrait",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "740x360",
+    "screen": "saved menu rotated back to landscape",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "740x360",
+    "screen": "new match confirmation",
     "noScrollOrClippedControls": true
   },
   {
@@ -956,6 +1481,26 @@
   },
   {
     "viewport": "844x390",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "844x390",
+    "screen": "saved menu rotated to portrait",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "844x390",
+    "screen": "saved menu rotated back to landscape",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "844x390",
+    "screen": "new match confirmation",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "844x390",
     "screen": "setup conditions",
     "noScrollOrClippedControls": true
   },
@@ -1156,6 +1701,16 @@
   },
   {
     "viewport": "1366x768",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "1366x768",
+    "screen": "new match confirmation",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "1366x768",
     "screen": "setup conditions",
     "noScrollOrClippedControls": true
   },
@@ -1327,6 +1882,16 @@
   {
     "viewport": "1920x1080",
     "screen": "menu",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "1920x1080",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "1920x1080",
+    "screen": "new match confirmation",
     "noScrollOrClippedControls": true
   },
   {

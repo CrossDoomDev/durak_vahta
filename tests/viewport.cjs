@@ -40,7 +40,9 @@ const server = http
   try {
     for (const [w, h] of process.env.EVENTS_ONLY
       ? []
-      : [
+      : process.env.SCREEN_VIEWPORTS ? JSON.parse(process.env.SCREEN_VIEWPORTS) : [
+          [568, 320],
+          [667, 375],
           [360, 640],
           [360, 800],
           [390, 844],
@@ -72,7 +74,7 @@ const server = http
             issues.push("root scroll");
           for (const x of document.querySelectorAll(
             (overlay ? "#overlay" : "#app") +
-              " :is(.page,.screen-content,.npc-card,.npc-info,.event-stage,.event-copy,.modal,.game-scene,.table-zone)",
+              " :is(.menu,.menu-actions,.menu-grid,.page,.screen-content,.npc-card,.npc-info,.event-stage,.event-copy,.modal,.game-scene,.table-zone)",
           )) {
             if (!x.getClientRects().length) continue;
             if (
@@ -147,7 +149,31 @@ const server = http
       await click("#name-submit");
       await page.locator(".menu").waitFor();
       await check("menu");
+      // An unfinished saved game exposes the additional Continue button.
+      const savedMenu = await page.evaluate(() => {
+        const p = JSON.parse(localStorage.getItem("durak-vahta-v1"));
+        p.game = VahtaEngine.start({seed:42, count:4, names:[p.name,"Палыч","Санёк","Артём"]});
+        return p;
+      });
+      await page.addInitScript(p => {
+        if (!sessionStorage.getItem("viewport-saved-menu")) {
+          localStorage.setItem("durak-vahta-v1", JSON.stringify(p));
+          sessionStorage.setItem("viewport-saved-menu", "1");
+        }
+      }, savedMenu);
+      await page.reload();
+      await page.locator("[data-action=continue]").waitFor();
+      await check("menu with saved match");
+      if (w > h && w < 1000) {
+        await page.setViewportSize({width:h,height:w});
+        await check("saved menu rotated to portrait");
+        await page.setViewportSize({width:w,height:h});
+        await check("saved menu rotated back to landscape");
+        await page.screenshot({path:path.join(root, `docs/screenshots/menu-landscape-${w}x${h}.png`)});
+      }
       await click("[data-action=setup]");
+      await check("new match confirmation");
+      await click("[data-action=confirm-modal]");
       await check("setup conditions");
       await click("[data-value=crew]");
       const ids = new Set();
@@ -218,10 +244,7 @@ const server = http
     }
     // Controlled valid states cover six covered pairs and event decision stages, with genuine 36-card invariants.
     for (const [w, h] of [
-      [360, 640],
-      [390, 844],
-      [740, 360],
-      [1366, 768],
+      ...(process.env.SCREENS_ONLY ? [] : [[360, 640], [390, 844], [740, 360], [1366, 768]])
     ]) {
       for (const id of [-1, ...Array.from({ length: 30 }, (_, i) => i), 31]) {
         const ctx = await b.newContext({ viewport: { width: w, height: h } }),
@@ -302,7 +325,8 @@ const server = http
               `docs/screenshots/viewport-six-pairs-${w}.png`,
             ),
           });
-          await page.locator("[data-action=talk]").first().click();
+          assert.equal(await page.locator("[data-action=talk]").count(), 0);
+          await page.locator("[data-action=pause]").click();
           await page.locator("[data-action=unpause]").click();
         } else {
           let guard = 0;

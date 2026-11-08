@@ -1,10 +1,10 @@
 @font-face {
   font-family: Vahta;
-  src: url("../../public/assets/fonts/heading.ttf?v=37fdfd93b1e9504b");
+  src: url("../../public/assets/fonts/heading.ttf?v=d62ab64d85e82ff8");
 }
 @font-face {
   font-family: Local;
-  src: url("../../public/assets/fonts/body.ttf?v=37fdfd93b1e9504b");
+  src: url("../../public/assets/fonts/body.ttf?v=d62ab64d85e82ff8");
 }
 * {
   box-sizing: border-box;
@@ -21,14 +21,14 @@ body {
   line-height: 1.5;
   background:
     linear-gradient(90deg, rgba(11, 26, 25, 0.9), rgba(11, 26, 25, 0.28)),
-    url("../../public/assets/room.webp?v=37fdfd93b1e9504b") center/cover fixed;
+    url("../../public/assets/room.webp?v=d62ab64d85e82ff8") center/cover fixed;
   min-height: 100vh;
 }
 body[data-screen="game"],
 body[data-screen="results"] {
   background:
     linear-gradient(#102722bd, #102722b0),
-    url("../../public/assets/room.webp?v=37fdfd93b1e9504b") center/cover fixed;
+    url("../../public/assets/room.webp?v=d62ab64d85e82ff8") center/cover fixed;
 }
 button,
 input,
@@ -5123,4 +5123,79 @@ html {
   .loss-results blockquote { font-size: 14px; }
   .loss-results .result-players .avatar { width: 28px; height: 28px; }
   .loss-results .result-actions .btn { min-height: 36px; padding: 5px 12px; }
+}
+
+/* A saved match adds Continue: reserve the whole landscape height for the action column. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .menu {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    align-items: stretch;
+    padding: 8px 20px;
+    gap: 8px 22px;
+  }
+  .menu-copy { display: contents; }
+  .menu-copy > h1 {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    font-size: clamp(26px, 9dvh, 40px);
+    letter-spacing: -1px;
+  }
+  .menu-actions {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: center;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    display: grid;
+    gap: 7px;
+  }
+  .menu-actions > .btn {
+    margin: 0;
+    min-height: 42px;
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+  .menu-grid { gap: 7px; min-width: 0; }
+  .menu-grid .btn { min-height: 40px; padding: 7px 8px; font-size: 13px; }
+  .menu-crew {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+  }
+  .menu .crew-pictures { width: 100%; height: clamp(55px, 24dvh, 110px); min-width: 0; padding: 0; }
+  .menu .crew-pictures .crew-main { width: clamp(50px, 22dvh, 100px); height: clamp(55px, 24dvh, 110px); }
+  .menu .crew-pictures .crew-side { width: clamp(42px, 17dvh, 80px); height: clamp(48px, 20dvh, 90px); }
+  .menu-crew blockquote { margin: 0; font-size: 13px; line-height: 1.3; overflow-wrap: anywhere; }
+  .menu-crew > small { display: none; }
+  .menu-foot {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 0;
+    min-width: 0;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    line-height: 1.35;
+  }
+}
+/* Very short landscape phones browse one readable colleague at a time. */
+@media (max-height: 340px) and (orientation: landscape) {
+  .npc-grid { grid-template-columns: minmax(0, 1fr); }
+  .npc-portrait { width: 28%; }
+  .npc-info { padding: 5px 8px; }
+  .npc-info strong { font-size: 14px; }
+  .npc-info small, .npc-info b { font-size: 12px; }
+  .npc-info p { display: none; }
+  .rules { padding: 6px 12px; }
+  .rules h2, .rules h2:not(:first-child) { margin: 3px 0; }
+  .rules > .eyebrow { display: none; }
+  .rules p { line-height: 1.35; }
 }

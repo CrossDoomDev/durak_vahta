@@ -13,10 +13,11 @@ const server = http.createServer((req,res) => {
 function fixture(kind) {
   const p = S.fresh(); p.name = 'Роман'; p.settings.music = p.settings.sfx = 0;
   const s = E.start({seed:11,count:3,names:['Роман','Палыч','Санёк']});
-  const defending = kind === 'defend', adding = kind === 'add';
+  const defending = ['defend','auto','auto-later'].includes(kind), adding = kind === 'add';
   const hands = defending ? [[1,3,18],[5,6,7],[14,15,16]] : adding ? [[9,10,11],[3,5,6],[14,15,16]] : [[0,1,9],[3,5,6],[14,15,16]];
   s.players.forEach((p,i) => {p.hand=hands[i];p.out=false;p.skip=0;});
   s.table = defending ? [{attack:0,defense:null},{attack:2,defense:null}] : adding ? [{attack:0,defense:1}] : [];
+  if(kind === 'auto-later')s.table.reverse();
   s.deck = [27,28,29,30,31,32,33,34,35]; s.trump=3;s.trumpCard=35;
   s.discard = Array.from({length:36},(_,i)=>i).filter(c=>!hands.flat().includes(c)&&!s.deck.includes(c)&&!s.table.some(t=>t.attack===c||t.defense===c));
   s.effectDiscard=[];s.phase=defending?'defending':adding?'adding':'attacking';s.actor=0;
@@ -46,22 +47,31 @@ async function dragCard(page,id,target,touch,{cancel=false,mid=false}={}) {
 (async()=>{
  const browser=await pw.chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox'],headless:true});const report=[];
  try{
-  for(const [touch, width, height] of [[true,390,844],[true,844,390],[false,1100,800]]) for(const kind of ['attack','add','defend']){
+  for(const [touch, width, height] of [[true,390,844],[true,844,390],[false,1100,800]]) for(const kind of ['attack','add','auto','auto-later','defend']){
    const context=await browser.newContext({viewport:{width,height},isMobile:touch,hasTouch:touch});
    const page=await context.newPage();page.setDefaultTimeout(12000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
    const p=fixture(kind);await page.addInitScript(p=>localStorage.setItem('durak-vahta-v1',JSON.stringify(p)),p);
    await page.goto('http://127.0.0.1:8803/index.html');await page.locator('[data-action="continue"]').click();
+   assert.equal(await page.locator('.table-empty').count(),0);
+   assert.equal(await page.getByText('Стол свободен',{exact:true}).count(),0);
    const saved=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('durak-vahta-v1')).game);
-   if(kind !== 'defend'){
+   if(!['defend','auto','auto-later'].includes(kind)){
     const id=kind==='add'?9:0;
     await tapCard(page,id,touch);assert.equal((await saved()).sequence,p.game.sequence,'single tap only selects');
     await page.waitForTimeout(430);await tapCard(page,id,touch);assert.equal((await saved()).sequence,p.game.sequence,'slow repeat only selects');
     await tapCard(page,id,touch);const next=await saved();
     assert.equal(next.sequence,p.game.sequence+1);assert.equal(next.table.at(-1).attack,id);assert.ok(!next.players[0].hand.includes(id));
     await page.locator('.flight-card[data-flight="play"]').waitFor({state:'visible'});
+   }else if(kind.startsWith('auto')){
+    const chosen=kind==='auto'?3:1,pair=kind==='auto'?0:1;
+    await tapCard(page,chosen,touch);await tapCard(page,chosen,touch);
+    await page.waitForFunction(()=>document.body.dataset.animating==='false');
+    const next=await saved();assert.equal(next.sequence,p.game.sequence+1);
+    assert.equal(next.table[pair].defense,chosen,'double tap chooses first legal uncovered pair');
+    assert.equal(next.table[1-pair].defense,null);E.invariant(next);
    }else{
-    await tapCard(page,1,touch);await tapCard(page,1,touch);
-    assert.equal((await saved()).sequence,p.game.sequence,'double tap never picks a defense target');
+    await tapCard(page,18,touch);await tapCard(page,18,touch);
+    assert.equal((await saved()).sequence,p.game.sequence,'double tap with no legal defense has no effect');
     const attack=await page.locator('.pairs [data-pair="0"]').boundingBox();
     const target={x:attack.x+attack.width/2,y:attack.y+attack.height/2};
     await dragCard(page,18,target,touch);await page.waitForFunction(()=>!document.querySelector('.drag-card'));
@@ -81,6 +91,6 @@ async function dragCard(page,id,target,touch,{cancel=false,mid=false}={}) {
    assert.deepEqual(errors,[]);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth||document.documentElement.scrollHeight>innerHeight),false);
    report.push({input:touch?'Android touch':'mouse',viewport:`${width}x${height}`,kind,result:'passed'});await context.close();
   }
-  fs.writeFileSync(path.resolve(__dirname,'../docs/gesture-results.json'),JSON.stringify(report,null,2));console.log('PASS touch + mouse: double tap attack/add, drag defense, invalid/outside/cancelled/covered drop');
+  fs.writeFileSync(path.resolve(__dirname,'../docs/gesture-results.json'),JSON.stringify(report,null,2));console.log('PASS touch + mouse: double tap attack/add/auto-defense, drag defense, invalid/outside/cancelled/covered drop');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;server.close();});

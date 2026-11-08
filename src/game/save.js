@@ -15,6 +15,7 @@
       back: 0,
       achievements: [],
       completed: [],
+      lossBanter: null,
       stats: {
         classic: {
           played: 0,
@@ -57,6 +58,13 @@
     p.completed = Array.isArray(raw.completed)
       ? raw.completed.filter((x) => typeof x === "string").slice(-100)
       : [];
+    const banter = raw.lossBanter;
+    if (banter && typeof banter.gameId === "string" && banter.gameId.length <= 160 &&
+      Number.isInteger(banter.choice) && banter.choice >= 0 && banter.choice < 100) {
+      p.lossBanter = {gameId:banter.gameId, choice:banter.choice,
+        remaining:[...new Set(Array.isArray(banter.remaining) ? banter.remaining : [])]
+          .filter(i=>Number.isInteger(i) && i >= 0 && i < 100).slice(0,100)};
+    }
     p.back = raw.back === 1 && p.achievements.length > 0 ? 1 : 0;
     for (const mode of ["classic", "chaos"])
       for (const field in p.stats[mode]) {

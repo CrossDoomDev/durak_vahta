@@ -184,10 +184,12 @@ function fixture(kind) {
           await page.screenshot({
             path: path.join(root, "docs/screenshots/dialogue-npc-to-npc.png"),
           });
-        await page.locator(".game-toolbar [data-action=talk]").click();
-        assert.ok(
-          (await page.locator(".talk-modal").textContent()).includes(recipient),
-        );
+        assert.equal(await page.locator(".game-toolbar [data-action=talk]").count(), 0);
+        // Compact layouts may hide speech to reserve space for cards. No toolbar history button.
+        if (await speech.isVisible()) {
+          await speech.click();
+          assert.ok((await page.locator(".talk-modal").textContent()).includes(recipient));
+        }
         assert.deepEqual(errors, []);
         report.push({
           viewport: `${w}x${h}`,

@@ -2284,3 +2284,31 @@ html {
 .camera-tight .turn-label small {
   display: none;
 }
+
+/* Defeat gets a dedicated illustrated layout, with the same working result actions. */
+.results.loss-results { display: grid; grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(100px,1fr) auto; gap: 10px; align-items: stretch; width: 100%; max-width: 1080px; margin: 0 auto; }
+.loss-art { margin: 0; min-width: 0; min-height: 0; overflow: hidden; border-radius: 14px; }
+.loss-art img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; }
+.loss-copy { display: flex; flex-direction: column; gap: 9px; align-items: center; justify-content: center; min-width: 0; min-height: 0; text-align: center; }
+.loss-results .section-heading h1 { font-size: 26px; }
+.loss-results blockquote { font-size: 16px; line-height: 1.35; max-width: 640px; overflow-wrap: anywhere; }
+.loss-results .result-players { gap: 6px; }
+.loss-results .result-players article { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.loss-results .result-players .avatar { width: 40px; height: 40px; }
+.loss-results .result-players strong { font-size: 12px; overflow-wrap: anywhere; }
+.loss-results .result-players small { display: none; }
+.loss-results .loss-stats { font-size: 12px; }
+.loss-results .result-actions { flex-wrap: wrap; justify-content: center; gap: 8px; }
+.loss-results .result-actions .btn { min-height: 40px; padding: 7px 16px; }
+@media (orientation: landscape) and (min-width: 600px) {
+  .results.loss-results { grid-template-columns: minmax(0,1fr) minmax(0,1fr); grid-template-rows: minmax(0,1fr); gap: 18px; }
+  .loss-art img { object-position: center; }
+}
+@media (max-height: 420px) and (orientation: landscape) {
+  .loss-copy { gap: 5px; }
+  .loss-results .section-heading h1 { font-size: 22px; }
+  .loss-results .section-heading .eyebrow { font-size: 9px; }
+  .loss-results blockquote { font-size: 14px; }
+  .loss-results .result-players .avatar { width: 28px; height: 28px; }
+  .loss-results .result-actions .btn { min-height: 36px; padding: 5px 12px; }
+}

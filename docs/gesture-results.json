@@ -14,6 +14,18 @@
   {
     "input": "Android touch",
     "viewport": "390x844",
+    "kind": "auto",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "390x844",
+    "kind": "auto-later",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "390x844",
     "kind": "defend",
     "result": "passed"
   },
@@ -32,6 +44,18 @@
   {
     "input": "Android touch",
     "viewport": "844x390",
+    "kind": "auto",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "844x390",
+    "kind": "auto-later",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "844x390",
     "kind": "defend",
     "result": "passed"
   },
@@ -45,6 +69,18 @@
     "input": "mouse",
     "viewport": "1100x800",
     "kind": "add",
+    "result": "passed"
+  },
+  {
+    "input": "mouse",
+    "viewport": "1100x800",
+    "kind": "auto",
+    "result": "passed"
+  },
+  {
+    "input": "mouse",
+    "viewport": "1100x800",
+    "kind": "auto-later",
     "result": "passed"
   },
   {

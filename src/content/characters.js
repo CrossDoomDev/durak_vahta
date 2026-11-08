@@ -647,7 +647,39 @@
       ? target
       : otherSeat(before, who);
   }
-  Object.assign(data, { clean, dialogue, otherSeat, actionAudience });
+  // Separate clean versions keep the punchline without relying on a profanity filter.
+  const lossTaunts = [
+    ["{playerName}, дрочи колоду, пока не протрётся до премии. Мы пошли чай пить.", "{playerName}, тасуй колоду, пока не протрётся до премии. Мы пошли чай пить."],
+    ["{playerName}, ты не проиграл — ты, блядь, принял весь карточный склад без накладной.", "{playerName}, ты не проиграл — ты принял весь карточный склад без накладной."],
+    ["{playerName}, козыри кончились, а ты остался. Пиздец, какая надёжная кадровая политика!", "{playerName}, козыри кончились, а ты остался. Вот это надёжная кадровая политика!"],
+    ["{playerName}, карты неси в сушилку. От твоей тактики они, блядь, вспотели.", "{playerName}, карты неси в сушилку. От твоей тактики они вспотели."],
+    ["{playerName}, с такой рукой только снег в мешки фасовать. Причём, сука, дырявые.", "{playerName}, с такой рукой только снег в мешки фасовать. Причём дырявые."],
+    ["{playerName}, тебя колода усыновила. Теперь плати ей алименты, блядь, по шесть карт.", "{playerName}, тебя колода усыновила. Теперь плати ей алименты по шесть карт."],
+    ["{playerName}, начальство просило найти крайнего. Спасибо, блядь, что сам подписался!", "{playerName}, начальство просило найти крайнего. Спасибо, что сам подписался!"],
+    ["{playerName}, тебе даже швабра козыря не подаст. Сказала: «Я с этим, блядь, в паре не работаю».", "{playerName}, тебе даже швабра козыря не подаст. Сказала: «Я с этим в паре не работаю»."],
+    ["{playerName}, ты не дурак. Ты, блядь, начальник отдела оставшихся карт. Отдел — один человек.", "{playerName}, ты не дурак. Ты начальник отдела оставшихся карт. Отдел — один человек."],
+    ["{playerName}, мы тебе подкидывали, а ты коллекцию собирал. Открывай, нахуй, музей неудачных решений!", "{playerName}, мы тебе подкидывали, а ты коллекцию собирал. Открывай музей неудачных решений!"],
+    ["{playerName}, чайник уже вскипел, остыл и уволился. А ты всё, блядь, с картами.", "{playerName}, чайник уже вскипел, остыл и уволился. А ты всё с картами."],
+    ["{playerName}, твой козырь ушёл в отпуск без содержания. Содержание, блядь, у тебя на руках.", "{playerName}, твой козырь ушёл в отпуск без содержания. Содержание у тебя на руках."]
+  ];
+  function lossBanter(profile, gameId, name, humor = "full") {
+    let state = profile.lossBanter;
+    if (!state || state.gameId !== gameId || !lossTaunts[state.choice]) {
+      let remaining = [...new Set(state?.remaining || [])].filter(i=>Number.isInteger(i) && lossTaunts[i]);
+      if (!remaining.length) {
+        remaining = lossTaunts.map((_,i)=>i);
+        for (let i=remaining.length-1;i>0;i--) {
+          const j=Math.floor(Math.random()*(i+1));
+          [remaining[i],remaining[j]]=[remaining[j],remaining[i]];
+        }
+        if (remaining.at(-1) === state?.choice)
+          [remaining[0],remaining[remaining.length-1]]=[remaining.at(-1),remaining[0]];
+      }
+      state = profile.lossBanter = {gameId, choice:remaining.pop(), remaining};
+    }
+    return lossTaunts[state.choice][humor === "full" ? 0 : 1].replaceAll("{playerName}", name);
+  }
+  Object.assign(data, { clean, dialogue, otherSeat, actionAudience, lossBanter, lossTaunts });
   if (typeof module === "object") module.exports = data;
   else root.VahtaContent = data;
 })(globalThis);

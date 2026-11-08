@@ -1,0 +1,32 @@
+[
+  {
+    "viewport": "320x568",
+    "realFinalAction": true,
+    "noOverflow": true
+  },
+  {
+    "viewport": "360x640",
+    "realFinalAction": true,
+    "noOverflow": true
+  },
+  {
+    "viewport": "390x844",
+    "realFinalAction": true,
+    "noOverflow": true
+  },
+  {
+    "viewport": "740x360",
+    "realFinalAction": true,
+    "noOverflow": true
+  },
+  {
+    "viewport": "844x390",
+    "realFinalAction": true,
+    "noOverflow": true
+  },
+  {
+    "viewport": "1366x768",
+    "realFinalAction": true,
+    "noOverflow": true
+  }
+]

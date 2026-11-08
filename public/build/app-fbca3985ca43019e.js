@@ -992,6 +992,7 @@
       back: 0,
       achievements: [],
       completed: [],
+      lossBanter: null,
       stats: {
         classic: {
           played: 0,
@@ -1034,6 +1035,13 @@
     p.completed = Array.isArray(raw.completed)
       ? raw.completed.filter((x) => typeof x === "string").slice(-100)
       : [];
+    const banter = raw.lossBanter;
+    if (banter && typeof banter.gameId === "string" && banter.gameId.length <= 160 &&
+      Number.isInteger(banter.choice) && banter.choice >= 0 && banter.choice < 100) {
+      p.lossBanter = {gameId:banter.gameId, choice:banter.choice,
+        remaining:[...new Set(Array.isArray(banter.remaining) ? banter.remaining : [])]
+          .filter(i=>Number.isInteger(i) && i >= 0 && i < 100).slice(0,100)};
+    }
     p.back = raw.back === 1 && p.achievements.length > 0 ? 1 : 0;
     for (const mode of ["classic", "chaos"])
       for (const field in p.stats[mode]) {
@@ -2216,7 +2224,39 @@
       ? target
       : otherSeat(before, who);
   }
-  Object.assign(data, { clean, dialogue, otherSeat, actionAudience });
+  // Separate clean versions keep the punchline without relying on a profanity filter.
+  const lossTaunts = [
+    ["{playerName}, дрочи колоду, пока не протрётся до премии. Мы пошли чай пить.", "{playerName}, тасуй колоду, пока не протрётся до премии. Мы пошли чай пить."],
+    ["{playerName}, ты не проиграл — ты, блядь, принял весь карточный склад без накладной.", "{playerName}, ты не проиграл — ты принял весь карточный склад без накладной."],
+    ["{playerName}, козыри кончились, а ты остался. Пиздец, какая надёжная кадровая политика!", "{playerName}, козыри кончились, а ты остался. Вот это надёжная кадровая политика!"],
+    ["{playerName}, карты неси в сушилку. От твоей тактики они, блядь, вспотели.", "{playerName}, карты неси в сушилку. От твоей тактики они вспотели."],
+    ["{playerName}, с такой рукой только снег в мешки фасовать. Причём, сука, дырявые.", "{playerName}, с такой рукой только снег в мешки фасовать. Причём дырявые."],
+    ["{playerName}, тебя колода усыновила. Теперь плати ей алименты, блядь, по шесть карт.", "{playerName}, тебя колода усыновила. Теперь плати ей алименты по шесть карт."],
+    ["{playerName}, начальство просило найти крайнего. Спасибо, блядь, что сам подписался!", "{playerName}, начальство просило найти крайнего. Спасибо, что сам подписался!"],
+    ["{playerName}, тебе даже швабра козыря не подаст. Сказала: «Я с этим, блядь, в паре не работаю».", "{playerName}, тебе даже швабра козыря не подаст. Сказала: «Я с этим в паре не работаю»."],
+    ["{playerName}, ты не дурак. Ты, блядь, начальник отдела оставшихся карт. Отдел — один человек.", "{playerName}, ты не дурак. Ты начальник отдела оставшихся карт. Отдел — один человек."],
+    ["{playerName}, мы тебе подкидывали, а ты коллекцию собирал. Открывай, нахуй, музей неудачных решений!", "{playerName}, мы тебе подкидывали, а ты коллекцию собирал. Открывай музей неудачных решений!"],
+    ["{playerName}, чайник уже вскипел, остыл и уволился. А ты всё, блядь, с картами.", "{playerName}, чайник уже вскипел, остыл и уволился. А ты всё с картами."],
+    ["{playerName}, твой козырь ушёл в отпуск без содержания. Содержание, блядь, у тебя на руках.", "{playerName}, твой козырь ушёл в отпуск без содержания. Содержание у тебя на руках."]
+  ];
+  function lossBanter(profile, gameId, name, humor = "full") {
+    let state = profile.lossBanter;
+    if (!state || state.gameId !== gameId || !lossTaunts[state.choice]) {
+      let remaining = [...new Set(state?.remaining || [])].filter(i=>Number.isInteger(i) && lossTaunts[i]);
+      if (!remaining.length) {
+        remaining = lossTaunts.map((_,i)=>i);
+        for (let i=remaining.length-1;i>0;i--) {
+          const j=Math.floor(Math.random()*(i+1));
+          [remaining[i],remaining[j]]=[remaining[j],remaining[i]];
+        }
+        if (remaining.at(-1) === state?.choice)
+          [remaining[0],remaining[remaining.length-1]]=[remaining.at(-1),remaining[0]];
+      }
+      state = profile.lossBanter = {gameId, choice:remaining.pop(), remaining};
+    }
+    return lossTaunts[state.choice][humor === "full" ? 0 : 1].replaceAll("{playerName}", name);
+  }
+  Object.assign(data, { clean, dialogue, otherSeat, actionAudience, lossBanter, lossTaunts });
   if (typeof module === "object") module.exports = data;
   else root.VahtaContent = data;
 })(globalThis);
@@ -2967,7 +3007,7 @@
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Перетащи свою карту на ту, которую хочешь побить." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Ходи кнопкой или двойным нажатием на карту"}</small></div><div class="pairs" data-game="${esc(G.gameId)}" data-round="${G.round}">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : `<div class="table-empty"><span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><button data-action="talk" data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Перетащи карту на ту, которую хочешь побить." : selectedMoves.length ? "Нажми кнопку или дважды нажми на карту." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Перетащи карту на цель или дважды нажми на свою карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Ходи кнопкой или двойным нажатием на карту"}</small></div><div class="pairs" data-game="${esc(G.gameId)}" data-round="${G.round}">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : ""}</div><button data-action="talk" data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Перетащи на цель или дважды нажми для защиты." : selectedMoves.length ? "Нажми кнопку или дважды нажми на карту." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
@@ -3012,6 +3052,9 @@
     if (!G?.finished) return menu();
     const r = G.result,
       win = !r.draw && r.loser !== 0;
+    if (!r.draw && r.loser === 0) return panelPage(
+      `<div class="results loss-results"><figure class="loss-art"><img src="public/assets/loss-crew.webp?v=${globalThis.VahtaBuild?.id || "dev"}" alt="Вахтовики в бытовке смеются и показывают пальцем прямо на тебя"></figure><section class="loss-copy">${heading("ДУРАК СМЕНЫ НАЙДЕН", "Ну что, доигрался?")}<blockquote id="result-quote"></blockquote><div class="result-players">${G.players.map((p,i)=>`<article>${avatar(i === 0 ? P.avatar : p.npc, i === 0 ? 2 : 1)}<strong>${name(i)}</strong><small>${p.out ? "Вышел без карт" : p.hand.length + " карт на руках"}</small></article>`).join("")}</div><p class="loss-stats">${G.round} раундов · ${G.metrics.events.length} происшествий · +35 опыта</p>${newAchievements.length ? "<p>Открыто: " + newAchievements.map(k=>S.achievements.find(a=>a[0]===k)[1]).join(", ") + "</p>" : ""}<div class="result-actions">${button("Отыграться", "rematch", "primary")}${button("В меню", "menu")}</div></section></div>`
+    );
     return panelPage(
       `<div class="results">${sprite("cards", 23, 6, 4, "result-badge")}${heading("СМЕНА ЗАКРЫТА", r.draw ? "Ничья. Все свободны." : win ? "Вахта пережита!" : "Дежурный найден.", r.draw ? "Последние карты ушли одновременно." : win ? "Ты вышел из партии. Кипяти чай, пока коллеги разбираются." : "Завтра отыграешься. А сегодня — чайник и швабра.")}<h2>${r.draw ? "Никто не остался с картами." : "Дурак партии — " + name(r.loser)}</h2><div class="result-players">${G.players.map((p, i) => `<article>${avatar(i === 0 ? P.avatar : p.npc, i === 0 ? 0 : r.loser === i ? 2 : 1)}<strong>${name(i)}</strong><small>${p.out ? "Вышел без карт" : p.hand.length + " карт на руках"}</small></article>`).join("")}</div><p>${G.round} раундов · ${G.metrics.events.length} происшествий · +${win ? 120 : r.draw ? 60 : 35} опыта</p>${newAchievements.length ? "<p>Открыто: " + newAchievements.map((k) => S.achievements.find((a) => a[0] === k)[1]).join(", ") + "</p>" : ""}<blockquote id="result-quote"></blockquote><div class="result-actions">${button("Ещё партия", "rematch", "primary")}${button("В меню", "menu")}</div></div>`,
     );
@@ -3121,7 +3164,7 @@
     ],
     [
       "Управление",
-      "Выбери карту нажатием, затем кнопку атаки или непокрытую карту на столе. Все кнопки доступны с клавиатуры: Tab и Enter. Кнопка «Рассмотреть» увеличивает выбранную карту. Перетаскивание не требуется.",
+      "Двойное нажатие на карту делает ход, подкидывает или бьёт первую подходящую непокрытую карту. Для точного выбора цели защиты перетащи свою карту на атакующую. Можно выбрать карту и нажать кнопку атаки или карту цели. Tab и Enter управляют кнопками; «Рассмотреть» увеличивает карту.",
     ],
     [
       "Конец партии",
@@ -3309,7 +3352,10 @@
       const loser = G.result.loser;
       const speaker =
         loser > 0 ? loser : G.players.findIndex((p, i) => i > 0 && p.out);
-      $("#result-quote").textContent = G.result.draw
+      if (!G.result.draw && loser === 0) {
+        $("#result-quote").textContent = C.lossBanter(P, G.gameId || "seed-" + G.startedSeed + "-" + G.rng, P.name, P.settings.humor);
+        persist();
+      } else $("#result-quote").textContent = G.result.draw
         ? "Никто не дурак. Сейчас главное — не начать выяснять, кто был ближе."
         : C.dialogue(
             loser > 0 ? "lose" : "win",
@@ -3638,9 +3684,9 @@
           lastTap.sequence === G.sequence && now - lastTap.at <= 380;
         lastTap = {card, at: now, game: G.gameId, sequence: G.sequence};
         selected = card;
-        // Defense and transfer need an explicit target/decision, never a double tap.
-        const move = twice && G.actor === 0 && G.phase !== "defending" &&
-          E.legal(G, 0).find(a => a.card === card && a.type === "attack");
+        // Engine order chooses the first legal uncovered pair. Transfer stays explicit.
+        const move = twice && G.actor === 0 && E.legal(G, 0).find(a =>
+          a.card === card && a.type === (G.phase === "defending" ? "defend" : "attack"));
         if (move) { lastTap = null; act(move); }
         else render();
         break;

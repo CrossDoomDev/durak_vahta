@@ -3007,7 +3007,7 @@
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Перетащи карту на цель или дважды нажми на свою карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Ходи кнопкой или двойным нажатием на карту"}</small></div><div class="pairs" data-game="${esc(G.gameId)}" data-round="${G.round}">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : ""}</div><button data-action="talk" data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Перетащи на цель или дважды нажми для защиты." : selectedMoves.length ? "Нажми кнопку или дважды нажми на карту." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Перетащи карту на цель или дважды нажми на свою карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Ходи кнопкой или двойным нажатием на карту"}</small></div><div class="pairs" data-game="${esc(G.gameId)}" data-round="${G.round}">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : ""}</div><div data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></div></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Перетащи на цель или дважды нажми для защиты." : selectedMoves.length ? "Нажми кнопку или дважды нажми на карту." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
@@ -3262,35 +3262,6 @@
       el.textContent = P.name;
       el.title = P.name;
     });
-  }
-  function openTalk() {
-    paused = true;
-    clearTimeout(timer);
-    audio.pause(true);
-    const entries = [
-      ...(dialog
-        ? [
-            {
-              title: G.players[dialog.who]?.name || "Бригада",
-              text: dialog.text,
-            },
-          ]
-        : []),
-      ...(G?.log || [])
-        .slice(-10)
-        .reverse()
-        .map((text) => ({ title: "Журнал смены", text: clean(text) })),
-    ];
-    const r = slicePage(
-      "talk",
-      entries.length
-        ? entries
-        : [{ title: "Бригада", text: "Чай налит. Карты на стол!" }],
-      1,
-    );
-    const e = r.items[0];
-    $("#overlay").innerHTML =
-      `<div class="modal compact-modal talk-modal" role="dialog" aria-modal="true"><h2>${esc(e.title)}</h2><p>${esc(e.text)}</p>${r.nav}${button("К игре", "unpause", "primary")}</div>`;
   }
   function render() {
     if (animating) return;
@@ -3601,10 +3572,6 @@
   async function handle(action, el) {
     if (animating) return;
     switch (action) {
-      case "talk":
-        pageIndex.talk = 0;
-        openTalk();
-        break;
       case "view-tab":
         view[el.dataset.key] = el.dataset.value;
         render();
@@ -3615,8 +3582,7 @@
           0,
           (pageIndex[el.dataset.key] || 0) + (action === "page-next" ? 1 : -1),
         );
-        if (el.dataset.key === "talk") openTalk();
-        else render();
+        render();
         break;
       case "menu":
         if (G && !G.finished) persist();

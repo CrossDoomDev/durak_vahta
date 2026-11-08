@@ -1,10 +1,10 @@
 @font-face {
   font-family: Vahta;
-  src: url("../../public/assets/fonts/heading.ttf?v=fbca3985ca43019e");
+  src: url("../../public/assets/fonts/heading.ttf?v=a95acb478969f48e");
 }
 @font-face {
   font-family: Local;
-  src: url("../../public/assets/fonts/body.ttf?v=fbca3985ca43019e");
+  src: url("../../public/assets/fonts/body.ttf?v=a95acb478969f48e");
 }
 * {
   box-sizing: border-box;
@@ -21,14 +21,14 @@ body {
   line-height: 1.5;
   background:
     linear-gradient(90deg, rgba(11, 26, 25, 0.9), rgba(11, 26, 25, 0.28)),
-    url("../../public/assets/room.webp?v=fbca3985ca43019e") center/cover fixed;
+    url("../../public/assets/room.webp?v=a95acb478969f48e") center/cover fixed;
   min-height: 100vh;
 }
 body[data-screen="game"],
 body[data-screen="results"] {
   background:
     linear-gradient(#102722bd, #102722b0),
-    url("../../public/assets/room.webp?v=fbca3985ca43019e") center/cover fixed;
+    url("../../public/assets/room.webp?v=a95acb478969f48e") center/cover fixed;
 }
 button,
 input,

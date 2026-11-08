@@ -185,10 +185,16 @@ function fixture(kind) {
             path: path.join(root, "docs/screenshots/dialogue-npc-to-npc.png"),
           });
         assert.equal(await page.locator(".game-toolbar [data-action=talk]").count(), 0);
-        // Compact layouts may hide speech to reserve space for cards. No toolbar history button.
+        assert.equal(await speech.getAttribute("data-action"), null);
+        assert.equal(await speech.evaluate(el => el.tagName), "DIV");
+        // Clicking the message or its text must neither pause play nor open an overlay.
         if (await speech.isVisible()) {
+          const beforeClick = await page.evaluate(() => JSON.parse(localStorage.getItem("durak-vahta-v1")).game.sequence);
           await speech.click();
-          assert.ok((await page.locator(".talk-modal").textContent()).includes(recipient));
+          await page.locator("#dialog-text").click();
+          assert.equal(await page.locator("#overlay").evaluate(el => el.childElementCount), 0);
+          assert.equal(await page.locator("#app").evaluate(el => el.inert), false);
+          assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("durak-vahta-v1")).game.sequence), beforeClick);
         }
         assert.deepEqual(errors, []);
         report.push({

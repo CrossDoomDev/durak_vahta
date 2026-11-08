@@ -85,7 +85,7 @@
       ];
       const duration = document.hidden
         ? 0
-        : this.duration(phase === "draw" ? 550 : 950);
+        : this.duration(phase === "drop" ? 260 : phase === "draw" ? 550 : 950);
       const anim = el.animate(frames, {
         duration,
         delay: document.hidden ? 0 : this.duration(delay),
@@ -183,7 +183,7 @@
         )
         .join("");
     }
-    async play(before, after, a) {
+    async play(before, after, a, releaseRect = null) {
       // Local font loading and viewport resize can otherwise move the target mid-flight.
       await document.fonts.ready;
       if (!document.hidden)
@@ -215,7 +215,7 @@
                 )
               : null;
           await this.layout?.(pairs, visual.length);
-          const from = this.rect(source || sourceSeat);
+          const from = releaseRect || this.rect(source || sourceSeat);
           const measuring = pairs.cloneNode(false),
             bounds = pairs.getBoundingClientRect();
           Object.assign(measuring.style, {
@@ -238,7 +238,7 @@
           const rotation = 0;
           measuring.remove();
           if (source) source.style.visibility = "hidden";
-          await this.fly(this.card(a.card), from, to, { rotation });
+          await this.fly(this.card(a.card), from, to, { rotation, phase: releaseRect ? "drop" : "play" });
           pairs.innerHTML = this.tableHTML(visual);
           this.layout?.(pairs, visual.length);
           await this.wait(250);

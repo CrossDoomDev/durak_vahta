@@ -1,10 +1,10 @@
 @font-face {
   font-family: Vahta;
-  src: url("../../public/assets/fonts/heading.ttf?v=2b87c4432cbc4907");
+  src: url("../../public/assets/fonts/heading.ttf?v=fca7a3f2470fd5c2");
 }
 @font-face {
   font-family: Local;
-  src: url("../../public/assets/fonts/body.ttf?v=2b87c4432cbc4907");
+  src: url("../../public/assets/fonts/body.ttf?v=fca7a3f2470fd5c2");
 }
 * {
   box-sizing: border-box;
@@ -21,14 +21,14 @@ body {
   line-height: 1.5;
   background:
     linear-gradient(90deg, rgba(11, 26, 25, 0.9), rgba(11, 26, 25, 0.28)),
-    url("../../public/assets/room.webp?v=2b87c4432cbc4907") center/cover fixed;
+    url("../../public/assets/room.webp?v=fca7a3f2470fd5c2") center/cover fixed;
   min-height: 100vh;
 }
 body[data-screen="game"],
 body[data-screen="results"] {
   background:
     linear-gradient(#102722bd, #102722b0),
-    url("../../public/assets/room.webp?v=2b87c4432cbc4907") center/cover fixed;
+    url("../../public/assets/room.webp?v=fca7a3f2470fd5c2") center/cover fixed;
 }
 button,
 input,
@@ -2807,6 +2807,13 @@ body[data-animating="true"] .game-actions {
 .event-target { outline: 3px solid #81e0c5 !important; outline-offset: 3px; }
 .event-seat-label { position: fixed; z-index: 310; pointer-events: none; max-width: min(240px, calc(100vw - 12px)); padding: 6px 9px; border-radius: 8px; background: #122e27; border: 1px solid #81e0c5; color: #fff; font: 700 12px/1.25 sans-serif; text-align: center; box-shadow: 0 3px 12px #0009; }
 .event-seat-label.source { border-color: #f2b758; }
+
+/* Pointer gestures work on Android touch screens and with a mouse. */
+.hand [data-action="select-card"] { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.drag-card { pointer-events: none !important; box-shadow: 0 10px 24px #0009; }
+.pairs .drop-allowed { outline: 3px dashed #81e0c5; outline-offset: 3px; }
+.pairs .drop-hover { outline: 4px solid #b2ffe4; box-shadow: 0 0 18px #81e0c5; }
+.pairs .drop-rejected { outline: 4px solid #e77c66; }
 
 /* Every screen owns the viewport. Long collections use explicit pages, never a scroll area. */
 html,

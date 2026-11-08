@@ -1,6 +1,6 @@
 {
   "name": "durak-na-vahte",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "private": true,
   "description": "Офлайн дурак с вахтовыми происшествиями",
   "scripts": {
@@ -10,6 +10,7 @@
     "serve": "python3 -m http.server 8080 --bind 127.0.0.1",
     "package": "node scripts/package.cjs",
     "test:mobile": "node tests/mobile.cjs",
+    "test:gestures": "node tests/gestures.cjs",
     "test:events": "node tests/event-effects.test.cjs && node tests/event-motion.cjs",
     "test:motion": "node tests/motion.cjs",
     "test:crew": "node tests/crew.cjs",

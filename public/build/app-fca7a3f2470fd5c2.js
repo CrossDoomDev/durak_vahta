@@ -2514,7 +2514,7 @@
       ];
       const duration = document.hidden
         ? 0
-        : this.duration(phase === "draw" ? 550 : 950);
+        : this.duration(phase === "drop" ? 260 : phase === "draw" ? 550 : 950);
       const anim = el.animate(frames, {
         duration,
         delay: document.hidden ? 0 : this.duration(delay),
@@ -2612,7 +2612,7 @@
         )
         .join("");
     }
-    async play(before, after, a) {
+    async play(before, after, a, releaseRect = null) {
       // Local font loading and viewport resize can otherwise move the target mid-flight.
       await document.fonts.ready;
       if (!document.hidden)
@@ -2644,7 +2644,7 @@
                 )
               : null;
           await this.layout?.(pairs, visual.length);
-          const from = this.rect(source || sourceSeat);
+          const from = releaseRect || this.rect(source || sourceSeat);
           const measuring = pairs.cloneNode(false),
             bounds = pairs.getBoundingClientRect();
           Object.assign(measuring.style, {
@@ -2667,7 +2667,7 @@
           const rotation = 0;
           measuring.remove();
           if (source) source.style.visibility = "hidden";
-          await this.fly(this.card(a.card), from, to, { rotation });
+          await this.fly(this.card(a.card), from, to, { rotation, phase: releaseRect ? "drop" : "play" });
           pairs.innerHTML = this.tableHTML(visual);
           this.layout?.(pairs, visual.length);
           await this.wait(250);
@@ -2759,6 +2759,9 @@
     timer = null,
     paused = false,
     animating = false,
+    drag = null,
+    lastTap = null,
+    suppressCardClickUntil = 0,
     dialog = null,
     lastDialog = -9,
     recent = [],
@@ -2834,6 +2837,8 @@
   }
   function show(next) {
     clearTimeout(timer);
+    cancelDrag();
+    lastTap = null;
     screen = next;
     selected = null;
     lastActionAt = Date.now();
@@ -2962,7 +2967,7 @@
       )
       .join(
         "",
-      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Выбери карту в руке и нажми на атакующую карту." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Выбери карту и нажми «Ходить»"}</small></div><div class="pairs" data-game="${esc(G.gameId)}" data-round="${G.round}">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : `<div class="table-empty"><span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><button data-action="talk" data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Нажми на непокрытую карту на столе, которую хочешь побить." : selectedMoves.length ? "Подтверди действие кнопкой над рукой." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
+      )}</div><section class="table-zone"><aside class="stocks"><div class="stock-pile">${E.stockCount(G) > 0 ? backCard() : ""}${E.stockCount(G) > 0 ? card(G.trumpCard, { classes: "trump-show" }) : `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" role="img" aria-label="Козырная масть ${E.SUITS[G.trump]}"><span>${E.SUITS[G.trump]}</span></div>`}</div><strong>${E.stockCount(G)} в колоде</strong><div class="discard-target" aria-label="Отбой">Отбой · ${G.discard.length}</div></aside><div class="battle"><div class="turn-label"><strong>${nameRole}<span class="defender-line">${G.defender === 0 ? (G.taking ? "Ты берёшь карты" : "Атакуют тебя") : (G.taking ? "Берёт: " : "Отбивается: ") + name(G.defender)}</span></strong><small>${paused ? "Партия на паузе" : G.phase === "defending" ? (G.actor === 0 ? "Перетащи свою карту на ту, которую хочешь побить." : "Защита в процессе") : G.phase === "taking" ? "Подкидывание перед взятием" : G.phase === "adding" ? "Все атакующие могут подкинуть или завершить" : "Ходи кнопкой или двойным нажатием на карту"}</small></div><div class="pairs" data-game="${esc(G.gameId)}" data-round="${G.round}">${G.table.length ? G.table.map((pair, i) => `<div class="card-pair">${card(pair.attack, { action: G.actor === 0 && G.phase === "defending" && pair.defense == null ? "cover" : "", extra: `data-pair="${i}"`, classes: pair.defense == null ? "uncovered" : "covered" })}${pair.defense != null ? card(pair.defense, { classes: "defense-card" }) : ""}</div>`).join("") : `<div class="table-empty"><span>Стол свободен</span><small>До ${G.limit} атакующих карт за раунд</small></div>`}</div><button data-action="talk" data-speaker="${dialog?.who ?? ""}" data-addressee="${dialog?.target ?? ""}" class="speech" aria-label="Прочитать реплику целиком" ${dialog ? "" : "hidden"}>${dialog ? avatar(G.players[dialog.who]?.npc ?? 0, emotion[dialog.who] || 0) : ""}<div><strong>${dialog ? name(dialog.who) + " → " + name(dialog.target) : ""}</strong><p id="dialog-text"></p></div></button></div><aside class="table-log"><h3>Журнал смены</h3><ol id="game-log"></ol><span class="discard-count">В отбое: ${G.discard.length}<br>Списано эффектами: ${G.effectDiscard.length}</span></aside></section><section class="human-zone ${G.defender === 0 ? "defending-player" : ""}"><div class="human-caption">${avatar(P.avatar)}<div><strong>${playerName()}</strong><small>${my.hand.length} карт</small></div><div class="game-actions">${actionButtons}${take ? button("Взять", "take", "danger") : ""}${pass ? button(G.taking ? "Готово" : "Бито", "pass", "primary") : ""}${selected != null ? button("Рассмотреть", "inspect", "small") : ""}${my.out ? '<span class="finished-note">Ты вышел. Бригада доигрывает.</span>' : ""}</div></div><div class="hand" role="group" aria-label="Твои карты" style="--hand-count:${Math.max(6, hand.length)}">${hand.map((c) => card(c, { action: "select-card", selected: c === selected, classes: canAct && !moves.some((a) => a.card === c) ? "not-playable" : "" })).join("")}</div><p class="hand-help">${canAct ? (selected == null ? "Выбери карту. Подсвечены карты с разрешённым действием." : selectedMoves.some((a) => a.type === "defend") ? "Перетащи карту на ту, которую хочешь побить." : selectedMoves.length ? "Нажми кнопку или дважды нажми на карту." : "Эта карта сейчас не подходит. Выбери другую.") : "Можно рассматривать свои карты, пока коллеги ходят."}</p></section></main>`;
   }
   function eventView() {
     const v = F.spec(G);
@@ -3197,6 +3202,7 @@
       ? new ResizeObserver(() => layoutTable())
       : null;
   window.addEventListener("resize", () => {
+    cancelDrag();
     // Android keyboards resize the visual viewport: preserve the active text field and draft.
     const typing = document.activeElement?.matches(
       "#player-name, #profile-name",
@@ -3245,6 +3251,7 @@
   }
   function render() {
     if (animating) return;
+    cancelDrag();
     clearTimeout(timer);
     document.body.classList.toggle("reduced", P.settings.reduced);
     document.body.classList.toggle("fast", P.settings.fast);
@@ -3436,7 +3443,7 @@
       if (pile) pile.innerHTML = `<div class="empty-trump ${G.trump === 1 || G.trump === 2 ? "red" : "black"}" aria-label="Козырная масть"><span>${E.SUITS[G.trump]}</span></div>`;
     }
   }
-  async function act(a) {
+  async function act(a, releaseRect = null) {
     if (paused || animating || !G || screen !== "game") return;
     const before = structuredClone(G),
       next = structuredClone(G),
@@ -3457,7 +3464,7 @@
     G = next;
     persist();
     try {
-      await motion.play(before, next, a);
+      await motion.play(before, next, a, releaseRect);
     } catch (error) {
       console.warn("Card animation interrupted", error);
     } finally {
@@ -3625,10 +3632,19 @@
         render();
         break;
       }
-      case "select-card":
-        selected = Number(el.dataset.card);
-        render();
+      case "select-card": {
+        const card = Number(el.dataset.card), now = performance.now();
+        const twice = lastTap?.card === card && lastTap.game === G.gameId &&
+          lastTap.sequence === G.sequence && now - lastTap.at <= 380;
+        lastTap = {card, at: now, game: G.gameId, sequence: G.sequence};
+        selected = card;
+        // Defense and transfer need an explicit target/decision, never a double tap.
+        const move = twice && G.actor === 0 && G.phase !== "defending" &&
+          E.legal(G, 0).find(a => a.card === card && a.type === "attack");
+        if (move) { lastTap = null; act(move); }
+        else render();
         break;
+      }
       case "play-selected":
         if (G.actor === 0) act({ type: el.dataset.type, card: selected });
         break;
@@ -3645,6 +3661,7 @@
         if (G.actor === 0) act({ type: action });
         break;
       case "pause":
+        cancelDrag();
         paused = true;
         clearTimeout(timer);
         audio.pause(true);
@@ -3805,9 +3822,102 @@
       }
     }
   }
+  function clearDropTargets() {
+    document.querySelectorAll(".drop-allowed, .drop-hover, .drop-rejected").forEach(el =>
+      el.classList.remove("drop-allowed", "drop-hover", "drop-rejected"));
+  }
+  function cancelDrag() {
+    if (!drag) return;
+    const old = drag;
+    drag = null;
+    old.preview?.remove();
+    old.el.style.visibility = "";
+    clearDropTargets();
+    try { old.el.releasePointerCapture(old.pointer); } catch {}
+    if (old.moved) suppressCardClickUntil = performance.now() + 500;
+  }
+  function defenseTarget(x, y) {
+    return document.elementFromPoint(x, y)?.closest(".pairs .uncovered[data-pair]");
+  }
+  document.addEventListener("pointerdown", e => {
+    const el = e.target.closest('.hand [data-action="select-card"]');
+    if (!el || e.button !== 0 || !e.isPrimary || drag || animating || paused ||
+      screen !== "game" || G?.actor !== 0 || G.phase !== "defending" ||
+      $("#overlay").childElementCount) return;
+    drag = {el, pointer:e.pointerId, card:Number(el.dataset.card), x:e.clientX, y:e.clientY,
+      start:el.getBoundingClientRect(), moved:false};
+    el.setPointerCapture(e.pointerId);
+  });
+  document.addEventListener("pointermove", e => {
+    if (!drag || e.pointerId !== drag.pointer || drag.returning) return;
+    const d = drag, dx = e.clientX - d.x, dy = e.clientY - d.y;
+    if (!d.moved && Math.hypot(dx,dy) < 9) return;
+    e.preventDefault();
+    if (!d.moved) {
+      d.moved = true;
+      $("#toast").classList.remove("visible");
+      lastTap = null;
+      selected = d.card;
+      d.preview = d.el.cloneNode(true);
+      d.preview.removeAttribute("data-action");
+      d.preview.classList.add("drag-card");
+      d.preview.classList.remove("selected", "not-playable");
+      d.preview.setAttribute("aria-hidden", "true");
+      Object.assign(d.preview.style, {position:"fixed", left:"0px", top:"0px", margin:"0",
+        width:d.start.width+"px", height:d.start.height+"px", minWidth:"0", zIndex:"350",
+        pointerEvents:"none", transition:"none", animation:"none"});
+      document.body.append(d.preview);
+      d.el.style.visibility = "hidden";
+      d.moves = E.legal(G,0).filter(a=>a.type === "defend" && a.card === d.card);
+      for (const move of d.moves)
+        $(`.pairs .uncovered[data-pair="${move.pair}"]`)?.classList.add("drop-allowed");
+    }
+    d.preview.style.transform = `translate(${d.start.left+dx}px,${d.start.top+dy}px)`;
+    document.querySelectorAll(".drop-hover, .drop-rejected").forEach(el=>
+      el.classList.remove("drop-hover", "drop-rejected"));
+    const target = defenseTarget(e.clientX,e.clientY);
+    if (target) target.classList.add(d.moves.some(a=>a.pair === Number(target.dataset.pair)) ?
+      "drop-hover" : "drop-rejected");
+  }, {passive:false});
+  document.addEventListener("pointerup", async e => {
+    if (!drag || e.pointerId !== drag.pointer || drag.returning) return;
+    const d = drag;
+    if (!d.moved) { cancelDrag(); return; }
+    e.preventDefault();
+    suppressCardClickUntil = performance.now() + 500;
+    const target = defenseTarget(e.clientX,e.clientY),
+      move = target && d.moves.find(a=>a.pair === Number(target.dataset.pair)),
+      release = d.preview.getBoundingClientRect();
+    clearDropTargets();
+    if (move) {
+      cancelDrag();
+      d.el.style.visibility = "hidden";
+      audio.unlock();
+      act(move, release);
+    } else {
+      d.returning = true;
+      if (target) toast("Этой картой не побить. Выбери подходящую карту.");
+      const animation = d.preview.animate([
+        {transform:d.preview.style.transform},
+        {transform:`translate(${d.start.left}px,${d.start.top}px)`}
+      ], {duration:document.hidden ? 0 : motion.duration(240), easing:"ease-out", fill:"forwards"});
+      motion.running.add(animation);
+      try { await animation.finished; } catch {} finally {
+        motion.running.delete(animation);
+        if (drag === d) { cancelDrag(); render(); }
+      }
+    }
+  });
+  for (const type of ["pointercancel", "lostpointercapture"])
+    document.addEventListener(type, e => { if (drag?.pointer === e.pointerId && !drag.returning) cancelDrag(); });
+  document.addEventListener("dragstart", e => {
+    if (e.target.closest(".hand .playing-card")) e.preventDefault();
+  });
   document.addEventListener("click", (e) => {
     const el = e.target.closest("[data-action]");
     if (!el || el.disabled) return;
+    if ((el.dataset.action === "select-card" || el.dataset.action === "cover") &&
+      performance.now() < suppressCardClickUntil) { e.preventDefault(); return; }
     audio.unlock();
     audio.play("button");
     handle(el.dataset.action, el);
@@ -3885,6 +3995,7 @@
     clearTimeout(timer);
     audio.pause(document.hidden || paused);
     if (document.hidden) {
+      cancelDrag();
       tableCamera.finish();
       motion.finish();
       persist();
@@ -3892,6 +4003,7 @@
   });
   window.addEventListener("pagehide", persist);
   window.addEventListener("blur", () => {
+    cancelDrag();
     clearTimeout(timer);
     audio.pause(true);
   });

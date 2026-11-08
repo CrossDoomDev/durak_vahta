@@ -1,0 +1,56 @@
+[
+  {
+    "input": "Android touch",
+    "viewport": "390x844",
+    "kind": "attack",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "390x844",
+    "kind": "add",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "390x844",
+    "kind": "defend",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "844x390",
+    "kind": "attack",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "844x390",
+    "kind": "add",
+    "result": "passed"
+  },
+  {
+    "input": "Android touch",
+    "viewport": "844x390",
+    "kind": "defend",
+    "result": "passed"
+  },
+  {
+    "input": "mouse",
+    "viewport": "1100x800",
+    "kind": "attack",
+    "result": "passed"
+  },
+  {
+    "input": "mouse",
+    "viewport": "1100x800",
+    "kind": "add",
+    "result": "passed"
+  },
+  {
+    "input": "mouse",
+    "viewport": "1100x800",
+    "kind": "defend",
+    "result": "passed"
+  }
+]

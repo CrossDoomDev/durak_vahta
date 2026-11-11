@@ -1,0 +1,27 @@
+[
+  {
+    "viewport": "320x568",
+    "input": "touch",
+    "selectionKeyboardCancelDisabledRotationAndSavedOptions": "passed"
+  },
+  {
+    "viewport": "390x844",
+    "input": "touch",
+    "selectionKeyboardCancelDisabledRotationAndSavedOptions": "passed"
+  },
+  {
+    "viewport": "568x320",
+    "input": "touch",
+    "selectionKeyboardCancelDisabledRotationAndSavedOptions": "passed"
+  },
+  {
+    "viewport": "740x360",
+    "input": "touch",
+    "selectionKeyboardCancelDisabledRotationAndSavedOptions": "passed"
+  },
+  {
+    "viewport": "1366x768",
+    "input": "mouse",
+    "selectionKeyboardCancelDisabledRotationAndSavedOptions": "passed"
+  }
+]

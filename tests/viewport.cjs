@@ -92,7 +92,7 @@ const server = http
             if (
               !x.getClientRects().length ||
               x.disabled ||
-              x.closest(".hand,.event-hand")
+              x.closest(".hand,.event-hand") || x.matches("select[data-select-enhanced]")
             )
               continue;
             const r = x.getBoundingClientRect();

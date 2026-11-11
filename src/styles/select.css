@@ -1,0 +1,54 @@
+/* One local dropdown style across desktop Chrome and Android WebView. */
+.select-control { position: relative; min-width: 0; width: 100%; }
+.select-control select[data-select-enhanced] {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0;
+  opacity: 0; pointer-events: none;
+}
+.select-trigger {
+  width: 100%; min-width: 0; min-height: 44px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; padding: 10px 12px;
+  border: 1px solid #c5ad7759; border-radius: 13px; background: #102a22;
+  color: #f6e9cf; font: inherit; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.select-trigger:disabled { cursor: not-allowed; }
+.select-value { min-width: 0; }
+.select-chevron { flex: 0 0 7px; width: 7px; height: 7px; margin-right: 3px;
+  border: solid #dfba7d; border-width: 0 1.5px 1.5px 0; transform: translateY(-2px) rotate(45deg); }
+.select-trigger[aria-expanded="true"] .select-chevron { transform: translateY(2px) rotate(225deg); }
+.select-trigger:focus-visible { outline: 2px solid #f0c882; outline-offset: 3px; }
+.setup-field:has(.select-control)::after { display: none; }
+.setup-field .select-trigger { min-height: 36px; padding: 0; gap: 4px; border: 0; border-radius: 6px;
+  background: transparent; color: #faf0d8; font-size: 16px; font-weight: 600; box-shadow: none; }
+.setup-field .select-value { white-space: nowrap; }
+.setup-field .select-chevron { flex-basis: 6px; width: 6px; height: 6px; margin-right: 0; }
+.select-popup {
+  position: fixed; z-index: 650; padding: 6px; display: grid; gap: 4px;
+  border: 1px solid #d2b78199; border-radius: 17px;
+  background: linear-gradient(150deg, #254439, #102a22);
+  box-shadow: 0 16px 40px #0009, inset 0 1px #e7e6cc14;
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  color: #f2e7d2;
+}
+.select-option {
+  min-height: 40px; display: grid; grid-template-columns: minmax(0,1fr) 20px;
+  align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid transparent;
+  border-radius: 11px; font-size: 14px; line-height: 20px; cursor: pointer;
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.select-option span { overflow-wrap: anywhere; }
+.select-option[aria-selected="true"] { color: #f3cf92; background: #d7b16d12; }
+.select-option[aria-selected="true"]::after { content: "✓"; font-size: 16px; text-align: center; }
+.select-option.is-active { background: #3a5745; border-color: #dfbc7666; color: #fff0cf; }
+.select-option[aria-disabled="true"] { opacity: .4; cursor: not-allowed; }
+body.reduced .setup-field .select-value { white-space: nowrap; }
+.setup-field .select-chevron { flex-basis: 6px; width: 6px; height: 6px; margin-right: 0; }
+.select-popup { animation: none; }
+@keyframes select-reveal { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 500px) { .setup-field .select-trigger { font-size: 15px; } }
+@media (max-height: 500px) and (orientation: landscape) {
+  .setup-field .select-trigger { min-height: 30px; font-size: 14px; }
+  .settings-grid .select-trigger { min-height: 38px; padding: 6px 10px; font-size: 14px; }
+}
+@media (max-width: 350px) and (orientation: portrait) {
+  .setup-controls.paper { padding: 10px; gap: 8px; }
+}

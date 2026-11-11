@@ -494,6 +494,7 @@
   }
   function render() {
     if (animating) return;
+    VahtaSelect.close(false);
     cancelDrag();
     clearTimeout(timer);
     document.body.classList.toggle("reduced", P.settings.reduced);
@@ -564,6 +565,7 @@
             P.settings.humor,
           );
     }
+    VahtaSelect.enhance($("#app"));
     layoutHands();
     tableResizeObserver?.disconnect();
     for (const el of document.querySelectorAll(".battle, .pairs"))

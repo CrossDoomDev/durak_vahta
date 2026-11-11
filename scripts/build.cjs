@@ -13,9 +13,10 @@ const scripts = [
   "src/audio.js",
   "src/table-camera.js",
   "src/motion.js",
+  "src/select.js",
   "src/main.js",
 ];
-const styles = ["src/styles/main.css", "src/styles/viewport.css", "src/styles/setup.css"];
+const styles = ["src/styles/main.css", "src/styles/viewport.css", "src/styles/setup.css", "src/styles/select.css"];
 const read = (p) => fs.readFileSync(path.join(root, p), "utf8");
 function walk(dir) {
   return fs

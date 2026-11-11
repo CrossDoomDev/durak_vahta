@@ -140,7 +140,9 @@
   }
   const lowScreen = () => innerHeight < 500;
   function setupPage() {
-    const roster = slicePage("roster", C.NPC, innerWidth > innerHeight && innerHeight <= 340 ? 1 : innerWidth >= 1000 ? 4 : 2);
+    const compactRoster = (innerWidth > innerHeight && innerHeight <= 340) ||
+      (innerWidth <= 350 && innerHeight <= 620);
+    const roster = slicePage("roster", C.NPC, compactRoster ? 1 : innerWidth >= 1000 ? 4 : 2);
     return panelPage(
       heading("НАРЯД НА ВЕЧЕР", "Новая партия") +
         tabs("setup", [
@@ -148,7 +150,7 @@
           ["crew", "Бригада"],
         ]) +
         (view.setup === "conditions"
-          ? `<section class="paper setup-controls screen-content"><div class="form-grid"><label>Правила<select id="variant"><option value="standard">Подкидной</option><option value="transfer">Переводной</option></select></label><label>За столом<select id="count">${[2, 3, 4].map((n) => `<option value="${n}">${n} участника</option>`).join("")}</select></label><label>Боты<select id="difficulty"><option value="easy">Новичок</option><option value="medium">Бывалый</option><option value="hard">Палыч</option></select></label><label>Происшествия<select id="frequency"><option value="rare">Редко</option><option value="normal">Обычно</option><option value="mad">Беспредел</option></select></label><label class="check wide"><input type="checkbox" id="chaos">Вахтовый беспредел</label></div><p class="fine setup-note">Секретная колода: сюрпризы между раундами. Без галочки — классический дурак.</p>${button("Выбрать бригаду →", "view-tab", "", 'data-key="setup" data-value="crew"')}</section>`
+          ? `<section class="paper setup-controls screen-content"><div class="form-grid"><label class="setup-field"><span>Правила</span><select id="variant"><option value="standard">Подкидной</option><option value="transfer">Переводной</option></select></label><label class="setup-field"><span>За столом</span><select id="count">${[2, 3, 4].map((n) => `<option value="${n}">${n} участника</option>`).join("")}</select></label><label class="setup-field"><span>Уровень ботов</span><select id="difficulty"><option value="easy">Новичок</option><option value="medium">Бывалый</option><option value="hard">Палыч</option></select></label><label class="setup-field"><span>Происшествия</span><select id="frequency"><option value="rare">Редко</option><option value="normal">Обычно</option><option value="mad">Беспредел</option></select></label></div><label class="setup-chaos"><span class="chaos-copy"><strong>Вахтовый беспредел</strong><small class="setup-note">Секретная колода. Смена обещает быть интересной.</small></span><input type="checkbox" role="switch" id="chaos"></label>${button("Выбрать бригаду →", "view-tab", "", 'data-key="setup" data-value="crew"')}</section>`
           : `<section class="roster-screen screen-content"><div class="roster-top"><h2>Выбери соперников</h2>${button("Случайно", "random-roster", "small")}</div><div class="npc-grid">${roster.items.map((n) => `<button class="npc-card ${setup.npcs.includes(n.id) ? "chosen" : ""}" data-action="npc" data-id="${n.id}" aria-pressed="${setup.npcs.includes(n.id)}"><span class="npc-portrait">${avatar(n.id)}</span><span class="npc-info"><strong>${n.name}</strong><small>${n.job}</small><p>${n.style}</p><b>${setup.npcs.includes(n.id) ? "✓ В бригаде" : "Выбрать"}</b></span></button>`).join("")}</div>${roster.nav}</section>`) +
         `<footer class="setup-footer"><div><strong>За столом: ${setup.npcs.map((id) => esc(C.NPC.find((n) => n.id === id).name)).join(", ") || "выбери коллег"}</strong><small id="roster-help"></small></div>${button("Играть", "start", "primary")}</footer>`,
     );

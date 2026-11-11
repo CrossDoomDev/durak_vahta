@@ -14,7 +14,9 @@ body {
 #app {
   height: 100%;
   min-height: 0;
+  min-width: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 60px minmax(0, 1fr);
 }
 #app > header {
@@ -421,6 +423,7 @@ label {
   font-size: 26px;
   margin: 12px 0;
 }
+.rules h2:not(:first-child) { margin-top: 12px; }
 .rules p {
   font-size: 18px;
   line-height: 1.6;
@@ -2381,4 +2384,7 @@ html {
   .rules h2, .rules h2:not(:first-child) { margin: 3px 0; }
   .rules > .eyebrow { display: none; }
   .rules p { line-height: 1.35; }
+}
+@media (max-width: 350px) and (orientation: portrait) {
+  .rules p { font-size: 16px; line-height: 1.45; }
 }

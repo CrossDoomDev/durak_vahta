@@ -43,6 +43,7 @@ const server = http
       : process.env.SCREEN_VIEWPORTS ? JSON.parse(process.env.SCREEN_VIEWPORTS) : [
           [568, 320],
           [667, 375],
+          [320, 568],
           [360, 640],
           [360, 800],
           [390, 844],
@@ -124,6 +125,20 @@ const server = http
               clip = clip.parentElement;
             }
           }
+          const setup = document.querySelector(".setup-controls");
+          if (setup && !overlay) {
+            const bounds = setup.getBoundingClientRect();
+            for (const el of setup.querySelectorAll(".form-grid,.setup-field,.setup-chaos,select,input")) {
+              const r = el.getBoundingClientRect();
+              if (r.top < bounds.top - 1 || r.bottom > bounds.bottom + 1 ||
+                r.left < bounds.left - 1 || r.right > bounds.right + 1)
+                issues.push(`setup element outside its card: ${el.className || el.id}`);
+            }
+            const toggle = document.querySelector("#chaos").getBoundingClientRect(),
+              row = document.querySelector(".setup-chaos").getBoundingClientRect();
+            if (toggle.width <= toggle.height || toggle.left < row.left + row.width / 2)
+              issues.push("setup switch must be a horizontal pill at the right of its label");
+          }
           return [...new Set(issues)];
         });
         assert.deepEqual(issues, [], `${w}x${h}: ${label}`);
@@ -175,6 +190,22 @@ const server = http
       await check("new match confirmation");
       await click("[data-action=confirm-modal]");
       await check("setup conditions");
+      assert.equal(await page.locator("#chaos").getAttribute("role"), "switch");
+      await page.locator("#chaos").uncheck();
+      assert.equal(await page.locator("#frequency").isDisabled(), true);
+      await check("styled setup with chaos disabled");
+      if ([320,360,390,568,740,844,1366].includes(w))
+        await page.screenshot({path:path.join(root, `docs/screenshots/setup-styled-${w}x${h}.png`)});
+      await page.locator("#chaos").focus();
+      await page.keyboard.press("Space");
+      assert.equal(await page.locator("#chaos").isChecked(), true);
+      assert.equal(await page.locator("#frequency").isEnabled(), true);
+      await page.locator("#difficulty").selectOption("hard");
+      assert.equal(await page.locator("#difficulty").inputValue(), "hard");
+      await page.locator("#difficulty").selectOption("medium");
+      await check("styled setup with chaos enabled");
+      if ([390,740].includes(w))
+        await page.screenshot({path:path.join(root, `docs/screenshots/setup-styled-active-${w}x${h}.png`)});
       await click("[data-value=crew]");
       const ids = new Set();
       let n = 0;

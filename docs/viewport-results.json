@@ -41,6 +41,16 @@
   },
   {
     "viewport": "568x320",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "568x320",
     "screen": "crew page 0",
     "noScrollOrClippedControls": true
   },
@@ -286,6 +296,16 @@
   },
   {
     "viewport": "667x375",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "667x375",
     "screen": "crew page 0",
     "noScrollOrClippedControls": true
   },
@@ -465,6 +485,236 @@
     "noScrollOrClippedControls": true
   },
   {
+    "viewport": "320x568",
+    "screen": "welcome",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "name field with reduced keyboard viewport",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "menu",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "menu with saved match",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "new match confirmation",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "setup conditions",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 6",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 7",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 8",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "crew page 9",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "settings general",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "settings motion",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "settings audio",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "profile identity",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "avatars second page",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "profile stats",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "profile saves",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "achievements page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "achievements page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "achievements page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "gallery page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "gallery page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "gallery page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "gallery page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "gallery page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "gallery page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "inspect",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "backs",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 0",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 1",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 2",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 3",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 4",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 5",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 6",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 7",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 8",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "320x568",
+    "screen": "rules page 9",
+    "noScrollOrClippedControls": true
+  },
+  {
     "viewport": "360x640",
     "screen": "welcome",
     "noScrollOrClippedControls": true
@@ -492,6 +742,16 @@
   {
     "viewport": "360x640",
     "screen": "setup conditions",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "360x640",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "360x640",
+    "screen": "styled setup with chaos enabled",
     "noScrollOrClippedControls": true
   },
   {
@@ -691,6 +951,16 @@
   },
   {
     "viewport": "360x800",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "360x800",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "360x800",
     "screen": "crew page 0",
     "noScrollOrClippedControls": true
   },
@@ -886,6 +1156,16 @@
   },
   {
     "viewport": "390x844",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "390x844",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "390x844",
     "screen": "crew page 0",
     "noScrollOrClippedControls": true
   },
@@ -1077,6 +1357,16 @@
   {
     "viewport": "412x915",
     "screen": "setup conditions",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "412x915",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "412x915",
+    "screen": "styled setup with chaos enabled",
     "noScrollOrClippedControls": true
   },
   {
@@ -1286,6 +1576,16 @@
   },
   {
     "viewport": "740x360",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "740x360",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "740x360",
     "screen": "crew page 0",
     "noScrollOrClippedControls": true
   },
@@ -1506,6 +1806,16 @@
   },
   {
     "viewport": "844x390",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "844x390",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "844x390",
     "screen": "crew page 0",
     "noScrollOrClippedControls": true
   },
@@ -1716,6 +2026,16 @@
   },
   {
     "viewport": "1366x768",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "1366x768",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "1366x768",
     "screen": "crew page 0",
     "noScrollOrClippedControls": true
   },
@@ -1901,6 +2221,16 @@
   },
   {
     "viewport": "1920x1080",
+    "screen": "styled setup with chaos disabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "1920x1080",
+    "screen": "styled setup with chaos enabled",
+    "noScrollOrClippedControls": true
+  },
+  {
+    "viewport": "1920x1080",
     "screen": "crew page 0",
     "noScrollOrClippedControls": true
   },
@@ -2053,645 +2383,5 @@
     "viewport": "1920x1080",
     "screen": "rules page 9",
     "noScrollOrClippedControls": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "six pairs",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 0",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 1",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 2",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 3",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 4",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 5",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 6",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 7",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 8",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 9",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 10",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 11",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 12",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 13",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 14",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 15",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 16",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 17",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 18",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 19",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 20",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 21",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 22",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 23",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 24",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 25",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 26",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 27",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 28",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event 29",
-    "passed": true
-  },
-  {
-    "viewport": "360x640",
-    "scenario": "event with 35 cards",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "six pairs",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 0",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 1",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 2",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 3",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 4",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 5",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 6",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 7",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 8",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 9",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 10",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 11",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 12",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 13",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 14",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 15",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 16",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 17",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 18",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 19",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 20",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 21",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 22",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 23",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 24",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 25",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 26",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 27",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 28",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event 29",
-    "passed": true
-  },
-  {
-    "viewport": "390x844",
-    "scenario": "event with 35 cards",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "six pairs",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 0",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 1",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 2",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 3",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 4",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 5",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 6",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 7",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 8",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 9",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 10",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 11",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 12",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 13",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 14",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 15",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 16",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 17",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 18",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 19",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 20",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 21",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 22",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 23",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 24",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 25",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 26",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 27",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 28",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event 29",
-    "passed": true
-  },
-  {
-    "viewport": "740x360",
-    "scenario": "event with 35 cards",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "six pairs",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 0",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 1",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 2",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 3",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 4",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 5",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 6",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 7",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 8",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 9",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 10",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 11",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 12",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 13",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 14",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 15",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 16",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 17",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 18",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 19",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 20",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 21",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 22",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 23",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 24",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 25",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 26",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 27",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 28",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event 29",
-    "passed": true
-  },
-  {
-    "viewport": "1366x768",
-    "scenario": "event with 35 cards",
-    "passed": true
   }
 ]

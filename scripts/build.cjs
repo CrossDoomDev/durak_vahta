@@ -15,7 +15,7 @@ const scripts = [
   "src/motion.js",
   "src/main.js",
 ];
-const styles = ["src/styles/main.css", "src/styles/viewport.css"];
+const styles = ["src/styles/main.css", "src/styles/viewport.css", "src/styles/setup.css"];
 const read = (p) => fs.readFileSync(path.join(root, p), "utf8");
 function walk(dir) {
   return fs
